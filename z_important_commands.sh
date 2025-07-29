@@ -1,4 +1,7 @@
 # Important Commands for Vite Projects
+echo -e "This Script Should Be Run\n"
+chmod -x "$0" # make this script non-executable
+exit 1
 
 # How to Start a Vite Dev Server (i.e. get the localhost running)
 npm install # if not already installed
