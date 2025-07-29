@@ -1,14 +1,18 @@
 # START BY RUNNING THIS SCRIPT (should launch the app)
 git init 
+repo_name="REMOTE-REPO-NAME"
 
 git add .
 git commit -m "initial commit"
-gh auth login # Authenticate with GitHub CLI
-gh repo create REMOTE-REPO-NAME --public --source=. --remote=origin --push --web
+gh repo create $repo_name --public --source=. --remote=origin --push --web
+if [ $? -ne 0 ]; then
+  gh auth login # Authenticate with GitHub CLI
+  gh repo create $repo_name --public --source=. --remote=origin --push --web
+fi
 git push -u origin master
 gh repo edit --default-branch master
 git push origin --delete main 
-# if you forget to rename REMOTE-REPO-NAME, you can run: gh repo rename NEW-REPO-NAME
+# if you forget to rename $repo_name, you can run: gh repo rename NEW-REPO-NAME
 
 npm install
 npm run dev
