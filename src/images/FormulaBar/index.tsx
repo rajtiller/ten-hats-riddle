@@ -11,6 +11,7 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
 }) => {
   const [formula, setFormula] = useState("");
   const [cursorPosition, setCursorPosition] = useState(0);
+  const [waitingForBracketNumber, setWaitingForBracketNumber] = useState(false);
 
   const insertAtCursor = (text: string) => {
     const { newText, newPosition } = insertTextAtPosition(
@@ -43,20 +44,125 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
   };
 
   const handleDelete = () => {
+    // Special delete behavior for bracket constructs
+    const charAtCursor = formula[cursorPosition - 1];
+    const charBeforeCursor = formula[cursorPosition - 2];
+    const charAfterCursor = formula[cursorPosition];
+    const charTwoAfterCursor = formula[cursorPosition + 1];
+
+    // Case 1: Cursor is after ] in a complete bracket like r[4]
+    if (charAtCursor === "]") {
+      // Find the start of the bracket construct
+      let bracketStart = cursorPosition - 2; // Start looking before the ]
+      while (bracketStart >= 0 && formula[bracketStart] !== "[") {
+        bracketStart--;
+      }
+
+      if (bracketStart > 0 && ["r", "l"].includes(formula[bracketStart - 1])) {
+        // Delete the entire construct (e.g., "r[4]")
+        const constructStart = bracketStart - 1;
+        const newFormula =
+          formula.slice(0, constructStart) + formula.slice(cursorPosition);
+        setFormula(newFormula);
+        setCursorPosition(constructStart);
+        setWaitingForBracketNumber(false);
+        return;
+      }
+    }
+
+    // Case 2: Cursor is after a number inside brackets like r[4|]
+    if (
+      charAtCursor &&
+      /^[1-9]$/.test(charAtCursor) &&
+      charAfterCursor === "]"
+    ) {
+      // Check if this is inside a bracket construct
+      let bracketStart = cursorPosition - 2;
+      while (bracketStart >= 0 && formula[bracketStart] !== "[") {
+        bracketStart--;
+      }
+
+      if (bracketStart > 0 && ["r", "l"].includes(formula[bracketStart - 1])) {
+        // Delete the entire construct
+        const constructStart = bracketStart - 1;
+        const newFormula =
+          formula.slice(0, constructStart) + formula.slice(cursorPosition + 1);
+        setFormula(newFormula);
+        setCursorPosition(constructStart);
+        setWaitingForBracketNumber(false);
+        return;
+      }
+    }
+
+    // Case 3: Cursor is right after r[ or l[ (waiting for number)
+    if (
+      charAtCursor === "[" &&
+      charBeforeCursor &&
+      ["r", "l"].includes(charBeforeCursor)
+    ) {
+      // Delete both characters (r[ or l[)
+      const newFormula =
+        formula.slice(0, cursorPosition - 2) +
+        formula.slice(cursorPosition + 1); // +1 to also remove the ]
+      setFormula(newFormula);
+      setCursorPosition(cursorPosition - 2);
+      setWaitingForBracketNumber(false);
+      return;
+    }
+
+    // Case 4: Cursor is right after ] in an empty bracket r[]
+    if (charAtCursor === "]" && charBeforeCursor === "[") {
+      let bracketTypePos = cursorPosition - 3;
+      if (bracketTypePos >= 0 && ["r", "l"].includes(formula[bracketTypePos])) {
+        // Delete the entire empty construct
+        const newFormula =
+          formula.slice(0, bracketTypePos) + formula.slice(cursorPosition);
+        setFormula(newFormula);
+        setCursorPosition(bracketTypePos);
+        setWaitingForBracketNumber(false);
+        return;
+      }
+    }
+
+    // Default delete behavior
     const { newText, newPosition } = deleteAtPosition(formula, cursorPosition);
     setFormula(newText);
     setCursorPosition(newPosition);
+    setWaitingForBracketNumber(false);
   };
 
   const handleButtonClick = (value: string) => {
+    // If waiting for bracket number, only allow 1-9 and del
+    if (waitingForBracketNumber) {
+      if (/^[1-9]$/.test(value)) {
+        // Insert the number
+        insertAtCursor(value);
+        // Move cursor after the closing bracket (which is already there)
+        setCursorPosition(cursorPosition + 2); // +1 for number, +1 to move past ]
+        setWaitingForBracketNumber(false);
+      } else if (value === "del") {
+        handleDelete();
+      }
+      return; // Ignore all other buttons when waiting
+    }
+
     switch (value) {
       case "(":
       case ")":
-      case "]":
-      case "r[":
-      case "l[":
       case "i":
         insertAtCursor(value);
+        break;
+      case "r[":
+        // Insert "r[]" and position cursor between brackets
+        insertAtCursor("r[]");
+        setCursorPosition(cursorPosition + 2); // Position cursor between [ and ]
+        setWaitingForBracketNumber(true);
+        break;
+      case "l[":
+        // Insert "l[]" and position cursor between brackets
+        insertAtCursor("l[]");
+        setCursorPosition(cursorPosition + 2); // Position cursor between [ and ]
+        setWaitingForBracketNumber(true);
         break;
       case "all":
         insertAtCursor("all");
@@ -172,7 +278,10 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
 
       {/* Button Container */}
       <div style={{ flex: "1 1 auto" }}>
-        <ButtonGrid onButtonClick={handleButtonClick} />
+        <ButtonGrid
+          onButtonClick={handleButtonClick}
+          waitingForBracketNumber={waitingForBracketNumber}
+        />
       </div>
     </div>
   );
