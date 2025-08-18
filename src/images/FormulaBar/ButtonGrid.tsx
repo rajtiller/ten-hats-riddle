@@ -6,8 +6,8 @@ interface ButtonGridProps {
 
 const ButtonGrid: React.FC<ButtonGridProps> = ({ onButtonClick }) => {
   const buttons = [
-    ["1", "2", "3", "4", "5", "6", "7", "8", "9", "]"],
-    ["r[", "l[", "(", ")", "mod", "+", "-", "x", "÷", "i", "del"],
+    ["i", "1", "2", "3", "4", "5", "6", "7", "8", "9", "del"],
+    ["(", ")", "r[", "l[", "p[", "]", "+", "-", "x", "÷", "mod"],
   ];
 
   return (

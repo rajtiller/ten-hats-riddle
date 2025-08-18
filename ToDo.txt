@@ -1,3 +1,4 @@
+make it so the l and r automatically close the brackets and shift to the left once you type something after them
 add hats to left side of screen where colors are mapped to numbers
 make it so har colors are randomized
 make it so hats for two people are black and white

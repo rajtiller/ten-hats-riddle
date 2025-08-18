@@ -55,6 +55,7 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
       case "]":
       case "r[":
       case "l[":
+      case "p[": // Keep p[ functionality even though button is removed
       case "i":
         insertAtCursor(value);
         break;
@@ -123,7 +124,7 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
           height: "32px",
           display: "flex",
           alignItems: "center",
-          gap: "4px",
+          gap: "0px",
           flex: "0 0 auto",
         }}
       >
@@ -138,12 +139,14 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
             display: "flex",
             alignItems: "center",
             userSelect: "none",
+            height: "100%",
+            boxSizing: "border-box",
           }}
         >
           Person i:
         </div>
 
-        {/* White input area - only this has a border */}
+        {/* White input area - complete border */}
         <div
           style={{
             flex: 1,
@@ -158,6 +161,7 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
             overflow: "hidden",
             cursor: "default",
             userSelect: "none",
+            boxSizing: "border-box",
           }}
         >
           <FormulaDisplay formula={formula} cursorPosition={cursorPosition} />

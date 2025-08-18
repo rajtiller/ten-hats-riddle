@@ -22,7 +22,7 @@ class Group {
     const people: Person[] = [];
     const angleStep = (2 * Math.PI) / this.numberOfPeople;
 
-    for (let i = 0; i < this.numberOfPeople; i++) {
+    for (let i = 0.5; i < this.numberOfPeople+1; i++) {
       const angle = i * angleStep;
       // Use default radius and center from Person class
       const defaultPerson = new Person();
