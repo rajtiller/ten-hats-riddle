@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { type FormulaBarProps } from "./types";
 import { insertTextAtPosition, deleteAtPosition } from "./utils";
 import { useKeyboardControls } from "./useKeyboardControls";
@@ -7,7 +7,7 @@ import ButtonGrid from "./ButtonGrid";
 
 const FormulaBar: React.FC<FormulaBarProps> = ({
   width = 600,
-  height = 180,
+  height = 120,
 }) => {
   const [formula, setFormula] = useState("");
   const [cursorPosition, setCursorPosition] = useState(0);
@@ -20,6 +20,26 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
     );
     setFormula(newText);
     setCursorPosition(newPosition);
+  };
+
+  const validateBracketContent = (text: string): boolean => {
+    // Check if inserting this would create invalid bracket content
+    const testFormula =
+      formula.slice(0, cursorPosition) + text + formula.slice(cursorPosition);
+
+    // Find all bracket pairs and validate their content
+    const bracketRegex = /[rl]\[([^\]]*)\]/g;
+    let match;
+
+    while ((match = bracketRegex.exec(testFormula)) !== null) {
+      const content = match[1];
+      // Content must be a single digit 1-9
+      if (!/^[1-9]$/.test(content)) {
+        return false;
+      }
+    }
+
+    return true;
   };
 
   const handleDelete = () => {
@@ -35,7 +55,6 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
       case "]":
       case "r[":
       case "l[":
-      case "p[":
       case "i":
         insertAtCursor(value);
         break;
@@ -58,9 +77,11 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
         insertAtCursor(" ÷ ");
         break;
       default:
-        // Numbers 0-9
-        if (/^[0-9]$/.test(value)) {
-          insertAtCursor(value);
+        // Numbers 1-9 (validate if inside brackets)
+        if (/^[1-9]$/.test(value)) {
+          if (validateBracketContent(value)) {
+            insertAtCursor(value);
+          }
         }
         break;
     }
@@ -79,9 +100,12 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
         width,
         height,
         border: "2px solid #333",
-        padding: "10px",
+        padding: "5px",
         backgroundColor: "#f5f5f5",
         boxSizing: "border-box",
+        display: "flex",
+        flexDirection: "column",
+        gap: "2px",
       }}
     >
       <style>
@@ -93,28 +117,57 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
         `}
       </style>
 
-      {/* Formula Display */}
+      {/* Formula Display with Person i: prefix */}
       <div
         style={{
-          height: "50px",
-          border: "1px solid #666",
-          backgroundColor: "white",
-          padding: "10px",
-          marginBottom: "10px",
-          fontFamily: "monospace",
-          fontSize: "18px",
+          height: "32px",
           display: "flex",
           alignItems: "center",
-          minHeight: "30px",
-          overflow: "hidden",
-          cursor: "default",
-          userSelect: "none",
+          gap: "4px",
+          flex: "0 0 auto",
         }}
       >
-        <FormulaDisplay formula={formula} cursorPosition={cursorPosition} />
+        {/* Person i: label in gray area - no border */}
+        <div
+          style={{
+            backgroundColor: "#f5f5f5", // Same as surrounding
+            color: "black",
+            fontFamily: "monospace",
+            fontSize: "14px",
+            padding: "6px 8px",
+            display: "flex",
+            alignItems: "center",
+            userSelect: "none",
+          }}
+        >
+          Person i:
+        </div>
+
+        {/* White input area - only this has a border */}
+        <div
+          style={{
+            flex: 1,
+            height: "100%",
+            border: "1px solid #666",
+            backgroundColor: "white",
+            padding: "6px",
+            fontFamily: "monospace",
+            fontSize: "14px",
+            display: "flex",
+            alignItems: "center",
+            overflow: "hidden",
+            cursor: "default",
+            userSelect: "none",
+          }}
+        >
+          <FormulaDisplay formula={formula} cursorPosition={cursorPosition} />
+        </div>
       </div>
 
-      <ButtonGrid onButtonClick={handleButtonClick} />
+      {/* Button Container */}
+      <div style={{ flex: "1 1 auto" }}>
+        <ButtonGrid onButtonClick={handleButtonClick} />
+      </div>
     </div>
   );
 };

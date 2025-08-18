@@ -1,0 +1,5 @@
+add hats to left side of screen where colors are mapped to numbers
+make it so har colors are randomized
+make it so hats for two people are black and white
+make a system for generating hat combinations that disprove the users solution
+make it so the computer gives me a funciton I can implement to check user's solution

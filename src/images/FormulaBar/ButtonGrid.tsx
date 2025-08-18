@@ -6,19 +6,19 @@ interface ButtonGridProps {
 
 const ButtonGrid: React.FC<ButtonGridProps> = ({ onButtonClick }) => {
   const buttons = [
-    ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
-    ["(", ")", "r[", "l[", "p[", "]", "mod", "i", "+", "-", "x", "÷", "del"],
+    ["1", "2", "3", "4", "5", "6", "7", "8", "9", "]"],
+    ["r[", "l[", "(", ")", "mod", "+", "-", "x", "÷", "i", "del"],
   ];
 
   return (
-    <div style={{ display: "grid", gap: "3px", width: "100%" }}>
+    <div style={{ display: "grid", gap: "2px", width: "100%", height: "100%" }}>
       {buttons.map((row, rowIndex) => (
         <div
           key={rowIndex}
           style={{
             display: "grid",
             gridTemplateColumns: `repeat(${row.length}, 1fr)`,
-            gap: "3px",
+            gap: "2px",
             width: "100%",
           }}
         >
@@ -27,14 +27,14 @@ const ButtonGrid: React.FC<ButtonGridProps> = ({ onButtonClick }) => {
               key={buttonValue}
               onClick={() => onButtonClick(buttonValue)}
               style={{
-                padding: "10px 4px",
+                padding: "6px 4px",
                 border: "1px solid #666",
                 backgroundColor: "#e0e0e0",
                 cursor: "pointer",
-                fontSize: "14px",
+                fontSize: "12px",
                 fontFamily: "monospace",
                 borderRadius: "3px",
-                minHeight: "40px",
+                minHeight: "28px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
