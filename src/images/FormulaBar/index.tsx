@@ -55,9 +55,11 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
       case "]":
       case "r[":
       case "l[":
-      case "p[": // Keep p[ functionality even though button is removed
       case "i":
         insertAtCursor(value);
+        break;
+      case "all":
+        insertAtCursor("all");
         break;
       case "del":
         handleDelete();
