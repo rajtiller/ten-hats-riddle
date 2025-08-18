@@ -1,7 +1,8 @@
 import { useState } from "react";
 import "./App.css";
 import Group from "./images/Group";
-import FormulaBar from "./images/FormulaBar";
+import FormulaBar from "./images/FormulaBar/index"; // Use modular version for 10 hats
+import SimpleFormulaBar from "./images/SimpleFormulaBar"; // Use simple version for 2 hats
 
 function App() {
   const [selectedPage, setSelectedPage] = useState(0);
@@ -25,7 +26,9 @@ function App() {
       }}
     >
       {/* Dropdown in top right */}
-      <div style={{ position: "absolute", top: "20px", right: "30px" }}>
+      <div
+        style={{ position: "absolute", top: "20px", right: "30px", zIndex: 20 }}
+      >
         <select
           value={selectedPage}
           onChange={handlePageChange}
@@ -36,7 +39,7 @@ function App() {
             border: "1px solid red",
             backgroundColor: "red",
             color: "white",
-            paddingLeft: "2px", // 12px - 10px to shift left
+            paddingLeft: "2px",
           }}
         >
           <option value={0}>Ten Hats Riddle</option>
@@ -52,13 +55,25 @@ function App() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            justifyContent: "center",
             height: "100vh",
-            gap: "20px",
+            paddingTop: "60px",
+            paddingBottom: "200px", // Reserve space for formula bar
+            justifyContent: "center",
           }}
         >
           <Group numberOfPeople={10} radius={10} />
-          <FormulaBar />
+
+          {/* Full formula bar positioned at bottom */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: "10px",
+              left: "50%",
+              transform: "translateX(-50%)",
+            }}
+          >
+            <FormulaBar />
+          </div>
         </div>
       )}
 
@@ -68,18 +83,30 @@ function App() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            justifyContent: "center",
             height: "100vh",
-            gap: "20px",
+            paddingTop: "60px",
+            paddingBottom: "140px", // Reserve space for simple formula bar
+            justifyContent: "center",
           }}
         >
           <Group numberOfPeople={2} radius={5} />
-          <FormulaBar />
+
+          {/* Simple formula bar positioned at bottom */}
+          <div
+            style={{
+              position: "absolute",
+              bottom: "10px",
+              left: "50%",
+              transform: "translateX(-50%)",
+            }}
+          >
+            <SimpleFormulaBar />
+          </div>
         </div>
       )}
 
       {selectedPage === 2 && (
-        <div>
+        <div style={{ padding: "20px" }}>
           <h1>Explanation</h1>
           <p>This is where the explanation of the riddles would go...</p>
         </div>
