@@ -1,4 +1,8 @@
-add error check for no numbers in formula
+add error check for no numbers in formula: disregarding parantheses, we must start and end with a number, never have two operators in a row (+,x,-, divide), never have a variable number (i, all, r[], l[]) must never be adjacent to a number (there must always be a symbol between the two)
+seperate files to shorten each file
+make sure each person is labeled with a number
+implement test function
+make people light up when they are referenced (l[?], r[?], all, i)
 make it so evrerybody's guess is displayed in a text box
 make it so once calculations are done, everyone's calculations are shown to see how they go there
 make it so har colors are randomized

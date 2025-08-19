@@ -14,7 +14,7 @@ class Group {
 
   constructor({ numberOfPeople = 5, people, radius = 5 }: GroupProps = {}) {
     this.numberOfPeople = numberOfPeople;
-    this.radius = Math.max(1, Math.min(10, radius)); // Clamp between 1 and 10
+    this.radius = Math.max(1, Math.min(10, radius));
     this.people = people || this.createPeople();
   }
 
@@ -22,20 +22,19 @@ class Group {
     const people: Person[] = [];
     const angleStep = (2 * Math.PI) / this.numberOfPeople;
 
-    for (let i = 0.5; i < this.numberOfPeople+1; i++) {
-      const angle = i * angleStep;
-      // Use default radius and center from Person class
-      const defaultPerson = new Person();
-      // Scale the radius (multiply by 20 to convert to reasonable pixel spacing)
+    for (let i = 0; i < this.numberOfPeople; i++) {
+      // Start from bottom (person 0) and go clockwise
+      const angle = (i + 0.5) * angleStep;
       const scaledRadius = this.radius * 20;
-      const x = defaultPerson.centerX + scaledRadius * Math.cos(angle);
-      const y = defaultPerson.centerY + scaledRadius * Math.sin(angle);
+      const x = scaledRadius * Math.cos(angle);
+      const y = scaledRadius * Math.sin(angle);
 
-      // Keep angle at 0 so heads are always horizontal
       const person = new Person({
         x,
         y,
         angle: 0,
+        personNumber: i,
+        showPersonNumber: true,
       });
 
       people.push(person);
@@ -55,13 +54,10 @@ class Group {
   }
 }
 
-// React component wrapper
 const GroupComponent: React.FC<GroupProps> = (props = {}) => {
   const group = new Group(props);
-
-  // Calculate SVG dimensions based on the actual radius used
-  const padding = 80; // Extra padding for hats and shoulders
-  const scaledRadius = group.radius * 20; // Same scaling as used in createPeople
+  const padding = 80;
+  const scaledRadius = group.radius * 20;
   const canvasSize = (scaledRadius + padding) * 2;
   const viewBox = `-${canvasSize / 2} -${
     canvasSize / 2

@@ -10,14 +10,14 @@ const ButtonGrid: React.FC<ButtonGridProps> = ({
   waitingForBracketNumber = false,
 }) => {
   const buttons = [
-    ["i", "all", "1", "2", "3", "4", "5", "6", "7", "8", "9", "del"],
+    ["i", "all", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "del"],
     ["r[", "l[", "(", ")", "+", "-", "x", "÷"],
   ];
 
   const isButtonEnabled = (buttonValue: string): boolean => {
     if (!waitingForBracketNumber) return true;
 
-    // When waiting for bracket number, only allow 1-9 and del
+    // When waiting for bracket number, only allow 1-9 and del (not 0)
     return /^[1-9]$/.test(buttonValue) || buttonValue === "del";
   };
 

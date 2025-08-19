@@ -1,20 +1,18 @@
 import React, { type JSX } from "react";
 
-// Hat color to number mapping (matching HatLegend)
 const hatColorToNumber: { [color: string]: number } = {
-  "#000000": 0, // Black
-  "#808080": 1, // Gray
-  "#ff0000": 2, // Red
-  "#ffa500": 3, // Orange
-  "#008000": 4, // Green
-  "#0000ff": 5, // Blue
-  "#8b00ff": 6, // Violet
-  "#ff00ff": 7, // Magenta
-  "#d2b48c": 8, // Tan
-  "#8b4513": 9, // Brown
+  "#000000": 0,
+  "#808080": 1,
+  "#ff0000": 2,
+  "#ffa500": 3,
+  "#008000": 4,
+  "#0000ff": 5,
+  "#8b00ff": 6,
+  "#ff00ff": 7,
+  "#d2b48c": 8,
+  "#8b4513": 9,
 };
 
-// Hat class/interface
 interface Hat {
   color: string;
   type: "cap" | "beanie" | "fedora" | "cowboy" | "none";
@@ -36,20 +34,43 @@ class HatClass implements Hat {
     if (this.type === "none") return <></>;
 
     const transform = `translate(${x}, ${y}) rotate(${angle})`;
-    const clipId = `hat-clip-${Math.random().toString(36).substr(2, 9)}`;
     const hatNumber = hatColorToNumber[this.color] ?? "?";
+
+    const renderHatNumber = (yPos: number) => (
+      <>
+        <text
+          x="0"
+          y={yPos}
+          textAnchor="middle"
+          fontSize="18"
+          fontFamily="monospace"
+          fontWeight="900"
+          fill="white"
+          stroke="white"
+          strokeWidth="2"
+        >
+          {hatNumber}
+        </text>
+        <text
+          x="0"
+          y={yPos}
+          textAnchor="middle"
+          fontSize="18"
+          fontFamily="monospace"
+          fontWeight="900"
+          fill="black"
+          stroke="black"
+          strokeWidth="0.5"
+        >
+          {hatNumber}
+        </text>
+      </>
+    );
 
     switch (this.type) {
       case "cap":
         return (
           <g transform={transform}>
-            <defs>
-              <clipPath id={clipId}>
-                {/* Clip the head circle to not show above the hat brim */}
-                <rect x="-50" y="-9" width="100" height="100" />
-              </clipPath>
-            </defs>
-            {/* Main cap dome */}
             <ellipse
               cx="0"
               cy="-20"
@@ -59,7 +80,6 @@ class HatClass implements Hat {
               stroke="#000"
               strokeWidth="1"
             />
-            {/* Cap brim */}
             <ellipse
               cx="0"
               cy="-15"
@@ -69,33 +89,7 @@ class HatClass implements Hat {
               stroke="#000"
               strokeWidth="1"
             />
-            {/* Hat number - double layer for extra boldness */}
-            <text
-              x="0"
-              y="-14"
-              textAnchor="middle"
-              fontSize="18"
-              fontFamily="monospace"
-              fontWeight="900"
-              fill="white"
-              stroke="white"
-              strokeWidth="2"
-            >
-              {hatNumber}
-            </text>
-            <text
-              x="0"
-              y="-14"
-              textAnchor="middle"
-              fontSize="18"
-              fontFamily="monospace"
-              fontWeight="900"
-              fill="black"
-              stroke="black"
-              strokeWidth="0.5"
-            >
-              {hatNumber}
-            </text>
+            {renderHatNumber(-14)}
           </g>
         );
       case "beanie":
@@ -110,7 +104,6 @@ class HatClass implements Hat {
               stroke="#000"
               strokeWidth="1"
             />
-            {/* Beanie cuff */}
             <rect
               x="-22"
               y="-8"
@@ -120,39 +113,12 @@ class HatClass implements Hat {
               stroke="#000"
               strokeWidth="1"
             />
-            {/* Hat number - double layer for extra boldness */}
-            <text
-              x="0"
-              y="-14"
-              textAnchor="middle"
-              fontSize="18"
-              fontFamily="monospace"
-              fontWeight="900"
-              fill="white"
-              stroke="white"
-              strokeWidth="2"
-            >
-              {hatNumber}
-            </text>
-            <text
-              x="0"
-              y="-14"
-              textAnchor="middle"
-              fontSize="18"
-              fontFamily="monospace"
-              fontWeight="900"
-              fill="black"
-              stroke="black"
-              strokeWidth="0.5"
-            >
-              {hatNumber}
-            </text>
+            {renderHatNumber(-14)}
           </g>
         );
       case "fedora":
         return (
           <g transform={transform}>
-            {/* Hat brim */}
             <ellipse
               cx="0"
               cy="-15"
@@ -162,7 +128,6 @@ class HatClass implements Hat {
               stroke="#000"
               strokeWidth="1"
             />
-            {/* Hat crown */}
             <ellipse
               cx="0"
               cy="-25"
@@ -172,41 +137,13 @@ class HatClass implements Hat {
               stroke="#000"
               strokeWidth="1"
             />
-            {/* Hat band */}
             <rect x="-20" y="-20" width="40" height="3" fill="#333" />
-            {/* Hat number - double layer for extra boldness */}
-            <text
-              x="0"
-              y="-19"
-              textAnchor="middle"
-              fontSize="18"
-              fontFamily="monospace"
-              fontWeight="900"
-              fill="white"
-              stroke="white"
-              strokeWidth="2"
-            >
-              {hatNumber}
-            </text>
-            <text
-              x="0"
-              y="-19"
-              textAnchor="middle"
-              fontSize="18"
-              fontFamily="monospace"
-              fontWeight="900"
-              fill="black"
-              stroke="black"
-              strokeWidth="0.5"
-            >
-              {hatNumber}
-            </text>
+            {renderHatNumber(-19)}
           </g>
         );
       case "cowboy":
         return (
           <g transform={transform}>
-            {/* Hat brim */}
             <ellipse
               cx="0"
               cy="-12"
@@ -216,7 +153,6 @@ class HatClass implements Hat {
               stroke="#000"
               strokeWidth="1"
             />
-            {/* Hat crown */}
             <ellipse
               cx="0"
               cy="-28"
@@ -226,7 +162,6 @@ class HatClass implements Hat {
               stroke="#000"
               strokeWidth="1"
             />
-            {/* Crown crease */}
             <line
               x1="0"
               y1="-35"
@@ -235,33 +170,7 @@ class HatClass implements Hat {
               stroke="#000"
               strokeWidth="1"
             />
-            {/* Hat number - double layer for extra boldness */}
-            <text
-              x="0"
-              y="-22"
-              textAnchor="middle"
-              fontSize="18"
-              fontFamily="monospace"
-              fontWeight="900"
-              fill="white"
-              stroke="white"
-              strokeWidth="2"
-            >
-              {hatNumber}
-            </text>
-            <text
-              x="0"
-              y="-22"
-              textAnchor="middle"
-              fontSize="18"
-              fontFamily="monospace"
-              fontWeight="900"
-              fill="black"
-              stroke="black"
-              strokeWidth="0.5"
-            >
-              {hatNumber}
-            </text>
+            {renderHatNumber(-22)}
           </g>
         );
       default:
@@ -270,7 +179,6 @@ class HatClass implements Hat {
   }
 }
 
-// Person class
 interface PersonProps {
   x?: number;
   y?: number;
@@ -286,6 +194,8 @@ interface PersonProps {
   height?: number;
   hatType?: "cap" | "beanie" | "fedora" | "cowboy" | "none";
   hatColor?: string;
+  personNumber?: number;
+  showPersonNumber?: boolean;
 }
 
 class Person {
@@ -301,6 +211,8 @@ class Person {
   centerY: number;
   width: number;
   height: number;
+  personNumber: number;
+  showPersonNumber: boolean;
 
   constructor({
     x = 0,
@@ -317,6 +229,8 @@ class Person {
     height = 320,
     hatType = "cap",
     hatColor = "#ff0000",
+    personNumber = 0,
+    showPersonNumber = true,
   }: PersonProps = {}) {
     this.x = x;
     this.y = y;
@@ -330,6 +244,8 @@ class Person {
     this.centerY = centerY;
     this.width = width;
     this.height = height;
+    this.personNumber = personNumber;
+    this.showPersonNumber = showPersonNumber;
   }
 
   renderHead(): JSX.Element {
@@ -340,7 +256,6 @@ class Person {
       <g transform={transform}>
         <defs>
           <clipPath id={clipId}>
-            {/* Only show the head below the hat line */}
             <rect x="-25" y="-9" width="50" height="50" />
           </clipPath>
         </defs>
@@ -359,7 +274,6 @@ class Person {
 
   renderShoulders(): JSX.Element {
     const transform = `translate(${this.x}, ${this.y}) rotate(${this.angle})`;
-
     return (
       <g transform={transform}>
         <ellipse
@@ -379,23 +293,36 @@ class Person {
     if (!this.showFace) return <></>;
 
     const transform = `translate(${this.x}, ${this.y}) rotate(${this.angle})`;
-
-    // Adjust face features based on angle
     const eyeOffset = Math.cos((this.angle * Math.PI) / 180) * 6;
     const noseOffset = Math.sin((this.angle * Math.PI) / 180) * 3;
 
     return (
       <g transform={transform}>
-        {/* Eyes */}
         <circle cx={-eyeOffset} cy="-5" r="2" fill="#000" />
         <circle cx={eyeOffset} cy="-5" r="2" fill="#000" />
-
-        {/* Nose */}
         <ellipse cx={noseOffset} cy="0" rx="1.5" ry="3" fill="#d4a574" />
-
-        {/* Mouth */}
         <path d="M -4 6 Q 0 10 4 6" stroke="#000" strokeWidth="1" fill="none" />
       </g>
+    );
+  }
+
+  renderPersonNumber(): JSX.Element {
+    if (!this.showPersonNumber) return <></>;
+
+    return (
+      <text
+        x={this.x}
+        y={this.y + 55}
+        textAnchor="middle"
+        fontSize="14"
+        fontFamily="monospace"
+        fontWeight="bold"
+        fill="black"
+        stroke="white"
+        strokeWidth="0.5"
+      >
+        {this.personNumber}
+      </text>
     );
   }
 
@@ -406,15 +333,14 @@ class Person {
         {this.renderHead()}
         {this.renderFace()}
         {this.hat.render(this.x, this.y, this.angle)}
+        {this.renderPersonNumber()}
       </g>
     );
   }
 }
 
-// React component wrapper
 const PersonComponent: React.FC<PersonProps> = (props = {}) => {
   const person = new Person(props);
-
   return (
     <svg width="200" height="200" viewBox="-50 -50 100 100">
       {person.render()}
