@@ -98,18 +98,18 @@ export class Person {
     if (!this.isHighlighted || !this.showIndexLabels) return <></>;
 
     if (this.isCurrentPerson) {
-      const labelX = this.x + 25;
-      const labelY = this.y + 45;
+      const labelX = this.x + 20; // Reduced from 25 to 20
+      const labelY = this.y + 35; // Reduced from 45 to 35
 
       return (
         <g>
           <circle
             cx={labelX}
             cy={labelY - 3}
-            r="15"
+            r="12" // Reduced from 15 to 12
             fill="none"
             stroke="#ffeb3b"
-            strokeWidth="3"
+            strokeWidth="2" // Reduced from 3 to 2
             opacity="0.8"
             style={{
               animation: "pulse 1.5s ease-in-out infinite",
@@ -119,14 +119,14 @@ export class Person {
             {`
               @keyframes pulse {
                 0%, 100% { 
-                  stroke-width: 3;
+                  stroke-width: 2;
                   opacity: 0.8;
-                  r: 15;
+                  r: 12;
                 }
                 50% { 
-                  stroke-width: 4;
+                  stroke-width: 3;
                   opacity: 1;
-                  r: 18;
+                  r: 14;
                 }
               }
             `}
@@ -145,11 +145,11 @@ export class Person {
       <g>
         <circle
           cx={this.x}
-          cy={this.y - 20}
-          r="30"
+          cy={this.y - 15} // Reduced from -20 to -15
+          r="25" // Reduced from 30 to 25
           fill="none"
           stroke="#ffeb3b"
-          strokeWidth="4"
+          strokeWidth="3" // Reduced from 4 to 3
           opacity="0.8"
           style={{
             animation: "pulse 1.5s ease-in-out infinite",
@@ -159,14 +159,14 @@ export class Person {
           {`
             @keyframes pulse {
               0%, 100% { 
-                stroke-width: 4;
+                stroke-width: 3;
                 opacity: 0.8;
-                r: 30;
+                r: 25;
               }
               50% { 
-                stroke-width: 6;
+                stroke-width: 4;
                 opacity: 1;
-                r: 35;
+                r: 28;
               }
             }
           `}
@@ -193,13 +193,14 @@ export class Person {
       <g transform={transform}>
         <defs>
           <clipPath id={clipId}>
-            <rect x="-25" y="-9" width="50" height="50" />
+            <rect x="-20" y="-7" width="40" height="40" />{" "}
+            {/* Reduced from 50x50 to 40x40 */}
           </clipPath>
         </defs>
         <circle
           cx="0"
           cy="0"
-          r="20"
+          r="16" // Reduced from 20 to 16
           fill={this.skinColor}
           stroke="#000"
           strokeWidth="1"
@@ -215,9 +216,9 @@ export class Person {
       <g transform={transform}>
         <ellipse
           cx="0"
-          cy="35"
-          rx="30"
-          ry="15"
+          cy="28" // Reduced from 35 to 28
+          rx="24" // Reduced from 30 to 24
+          ry="12" // Reduced from 15 to 12
           fill={this.shirtColor}
           stroke="#000"
           strokeWidth="1"
@@ -230,15 +231,23 @@ export class Person {
     if (!this.showFace) return <></>;
 
     const transform = `translate(${this.x}, ${this.y}) rotate(${this.angle})`;
-    const eyeOffset = Math.cos((this.angle * Math.PI) / 180) * 6;
-    const noseOffset = Math.sin((this.angle * Math.PI) / 180) * 3;
+    const eyeOffset = Math.cos((this.angle * Math.PI) / 180) * 5; // Reduced from 6 to 5
+    const noseOffset = Math.sin((this.angle * Math.PI) / 180) * 2.5; // Reduced from 3 to 2.5
 
     return (
       <g transform={transform}>
-        <circle cx={-eyeOffset} cy="-5" r="2" fill="#000" />
-        <circle cx={eyeOffset} cy="-5" r="2" fill="#000" />
-        <ellipse cx={noseOffset} cy="0" rx="1.5" ry="3" fill="#d4a574" />
-        <path d="M -4 6 Q 0 10 4 6" stroke="#000" strokeWidth="1" fill="none" />
+        <circle cx={-eyeOffset} cy="-4" r="1.5" fill="#000" />{" "}
+        {/* Reduced size and position */}
+        <circle cx={eyeOffset} cy="-4" r="1.5" fill="#000" />
+        <ellipse cx={noseOffset} cy="0" rx="1.2" ry="2.4" fill="#d4a574" />{" "}
+        {/* Reduced size */}
+        <path
+          d="M -3 5 Q 0 8 3 5"
+          stroke="#000"
+          strokeWidth="1"
+          fill="none"
+        />{" "}
+        {/* Reduced size */}
       </g>
     );
   }
@@ -246,15 +255,15 @@ export class Person {
   renderPersonNumber(): JSX.Element {
     if (!this.showPersonNumber) return <></>;
 
-    const labelX = this.x + 25;
-    const labelY = this.y + 45;
+    const labelX = this.x + 20; // Reduced from 25 to 20
+    const labelY = this.y + 35; // Reduced from 45 to 35
 
     return (
       <g>
         <circle
           cx={labelX}
           cy={labelY - 3}
-          r="10"
+          r="8" // Reduced from 10 to 8
           fill="white"
           stroke="#333"
           strokeWidth="1"
@@ -264,7 +273,7 @@ export class Person {
           x={labelX}
           y={labelY}
           textAnchor="middle"
-          fontSize="12"
+          fontSize="10" // Reduced from 12 to 10
           fontFamily="monospace"
           fontWeight="bold"
           fill="black"
@@ -278,8 +287,8 @@ export class Person {
   renderIndexLabel(): JSX.Element {
     if (!this.showIndexLabels) return <></>;
 
-    const labelX = this.x + 25;
-    const labelY = this.y + 45;
+    const labelX = this.x + 20; // Reduced from 25 to 20
+    const labelY = this.y + 35; // Reduced from 45 to 35
 
     if (this.isCurrentPerson) {
       return (
@@ -287,7 +296,7 @@ export class Person {
           <circle
             cx={labelX}
             cy={labelY - 3}
-            r="10"
+            r="8" // Reduced from 10 to 8
             fill="white"
             stroke="#333"
             strokeWidth="1"
@@ -297,7 +306,7 @@ export class Person {
             x={labelX}
             y={labelY}
             textAnchor="middle"
-            fontSize="12"
+            fontSize="10" // Reduced from 12 to 10
             fontFamily="monospace"
             fontWeight="bold"
             fill="black"
@@ -325,7 +334,7 @@ export class Person {
           <circle
             cx={labelX}
             cy={labelY - 3}
-            r="10"
+            r="8" // Reduced from 10 to 8
             fill="white"
             stroke="#333"
             strokeWidth="1"
@@ -335,7 +344,7 @@ export class Person {
             x={labelX}
             y={labelY}
             textAnchor="middle"
-            fontSize="10"
+            fontSize="8" // Reduced from 10 to 8
             fontFamily="monospace"
             fontWeight="bold"
             fill="black"
@@ -348,7 +357,7 @@ export class Person {
   }
 
   renderPersonLabel(): JSX.Element {
-    const labelY = this.y + 85;
+    const labelY = this.y + 68; // Reduced from 85 to 68
 
     if (!this.showPersonNumber && !this.showIndexLabels) {
       return (
@@ -357,7 +366,7 @@ export class Person {
             x={this.x}
             y={labelY}
             textAnchor="middle"
-            fontSize="12"
+            fontSize="10" // Reduced from 12 to 10
             fontFamily="monospace"
             fontWeight="bold"
             fill="#0066cc"
@@ -404,29 +413,29 @@ export class Person {
   renderGuess(): JSX.Element {
     if (this.guess === undefined || this.guess === -1) return <></>;
 
-    // Position the guess above the person
-    const guessY = this.y - 60;
+    // Position the guess above the person - reduced distance
+    const guessY = this.y - 45; // Reduced from -60 to -45
     const guessColor = this.getGuessColor(this.guess);
     const textColor = this.getTextColor(guessColor);
 
     return (
       <g>
-        {/* Background circle for guess - now colored based on the guess */}
+        {/* Background circle for guess - smaller */}
         <circle
           cx={this.x}
           cy={guessY}
-          r="12"
+          r="10" // Reduced from 12 to 10
           fill={guessColor}
           stroke="#333"
-          strokeWidth="2"
+          strokeWidth="1.5" // Reduced from 2 to 1.5
           opacity="0.9"
         />
         {/* Guess text with contrasting color */}
         <text
           x={this.x}
-          y={guessY + 4}
+          y={guessY + 3} // Reduced offset from 4 to 3
           textAnchor="middle"
-          fontSize="14"
+          fontSize="12" // Reduced from 14 to 12
           fontFamily="monospace"
           fontWeight="bold"
           fill={textColor}
@@ -436,9 +445,9 @@ export class Person {
         {/* Small "guess" label */}
         <text
           x={this.x}
-          y={guessY - 18}
+          y={guessY - 14} // Reduced from -18 to -14
           textAnchor="middle"
-          fontSize="8"
+          fontSize="7" // Reduced from 8 to 7
           fontFamily="monospace"
           fill="#666"
         >

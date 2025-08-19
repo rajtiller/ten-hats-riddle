@@ -89,12 +89,12 @@ export class HatClass implements Hat {
             x="0"
             y={yPos}
             textAnchor="middle"
-            fontSize="18"
+            fontSize="14" // Reduced from 18 to 14
             fontFamily="monospace"
             fontWeight="900"
             fill="white"
             stroke="white"
-            strokeWidth="2"
+            strokeWidth="1.5" // Reduced from 2 to 1.5
           >
             {displayText}
           </text>
@@ -102,12 +102,12 @@ export class HatClass implements Hat {
             x="0"
             y={yPos}
             textAnchor="middle"
-            fontSize="18"
+            fontSize="14" // Reduced from 18 to 14
             fontFamily="monospace"
             fontWeight="900"
             fill="black"
             stroke="black"
-            strokeWidth="0.5"
+            strokeWidth="0.3" // Reduced from 0.5 to 0.3
           >
             {displayText}
           </text>
@@ -123,23 +123,23 @@ export class HatClass implements Hat {
             {isRainbow && this.createRainbowGradient(gradientId)}
             <ellipse
               cx="0"
-              cy="-20"
-              rx="22"
-              ry="15"
+              cy="-16" // Reduced from -20 to -16
+              rx="18" // Reduced from 22 to 18
+              ry="12" // Reduced from 15 to 12
               fill={fillColor}
               stroke="#000"
               strokeWidth="1"
             />
             <ellipse
               cx="0"
-              cy="-15"
-              rx="28"
-              ry="6"
+              cy="-12" // Reduced from -15 to -12
+              rx="22" // Reduced from 28 to 22
+              ry="5" // Reduced from 6 to 5
               fill={fillColor}
               stroke="#000"
               strokeWidth="1"
             />
-            {renderHatText(-14)}
+            {renderHatText(-11)} {/* Adjusted position */}
           </g>
         );
       case "beanie":
@@ -148,23 +148,23 @@ export class HatClass implements Hat {
             {isRainbow && this.createRainbowGradient(gradientId)}
             <ellipse
               cx="0"
-              cy="-20"
-              rx="22"
-              ry="15"
+              cy="-16"
+              rx="18"
+              ry="12"
               fill={fillColor}
               stroke="#000"
               strokeWidth="1"
             />
             <rect
-              x="-22"
-              y="-8"
-              width="44"
-              height="6"
+              x="-18"
+              y="-6"
+              width="36"
+              height="5"
               fill={fillColor}
               stroke="#000"
               strokeWidth="1"
             />
-            {renderHatText(-14)}
+            {renderHatText(-11)}
           </g>
         );
       case "fedora":
@@ -173,24 +173,24 @@ export class HatClass implements Hat {
             {isRainbow && this.createRainbowGradient(gradientId)}
             <ellipse
               cx="0"
-              cy="-15"
-              rx="32"
-              ry="8"
+              cy="-12"
+              rx="26"
+              ry="6"
               fill={fillColor}
               stroke="#000"
               strokeWidth="1"
             />
             <ellipse
               cx="0"
-              cy="-25"
-              rx="20"
-              ry="12"
+              cy="-20"
+              rx="16"
+              ry="10"
               fill={fillColor}
               stroke="#000"
               strokeWidth="1"
             />
-            <rect x="-20" y="-20" width="40" height="3" fill="#333" />
-            {renderHatText(-19)}
+            <rect x="-16" y="-16" width="32" height="2" fill="#333" />
+            {renderHatText(-15)}
           </g>
         );
       case "cowboy":
@@ -199,31 +199,31 @@ export class HatClass implements Hat {
             {isRainbow && this.createRainbowGradient(gradientId)}
             <ellipse
               cx="0"
-              cy="-12"
-              rx="38"
-              ry="10"
+              cy="-10"
+              rx="30"
+              ry="8"
               fill={fillColor}
               stroke="#000"
               strokeWidth="1"
             />
             <ellipse
               cx="0"
-              cy="-28"
-              rx="18"
-              ry="15"
+              cy="-22"
+              rx="14"
+              ry="12"
               fill={fillColor}
               stroke="#000"
               strokeWidth="1"
             />
             <line
               x1="0"
-              y1="-35"
+              y1="-28"
               x2="0"
-              y2="-20"
+              y2="-16"
               stroke="#000"
               strokeWidth="1"
             />
-            {renderHatText(-22)}
+            {renderHatText(-18)}
           </g>
         );
       default:

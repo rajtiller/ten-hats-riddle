@@ -165,11 +165,11 @@ const TenHatsRiddle: React.FC = () => {
         Ten Hats Riddle
       </div>
 
-      {/* State indicator with success rate */}
+      {/* State indicator with success rate - moved down to give more space */}
       <div
         style={{
           position: "absolute",
-          top: "60px",
+          top: "600px", // Increased from 60px to 100px
           fontSize: "16px",
           fontFamily: "monospace",
           color: "#666",
@@ -177,7 +177,7 @@ const TenHatsRiddle: React.FC = () => {
         }}
       >
         {appState === "input"
-          ? "🤔 Create a formula to determine your hat color"
+          ? ""
           : appState === "results" && testResult?.successCount !== undefined
           ? `Success Rate: ${formatSuccessRate(testResult.successCount)}`
           : "THIS SHOULD NOT APPEAR"}
@@ -186,19 +186,20 @@ const TenHatsRiddle: React.FC = () => {
       {/* Hat Legend */}
       <HatLegend />
 
-      {/* Main content area */}
+      {/* Main content area - moved down and adjusted spacing */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: "20px",
+          gap: "50px", // Increased gap from 30px to 50px to accommodate formula bar move
+          marginTop: "40px", // Added top margin to push content down
         }}
       >
-        {/* Group of people */}
+        {/* Group of people - increased radius again */}
         <Group
           numberOfPeople={10}
-          radius={10}
+          radius={9.5} // Increased from 9 to 9.5 (about 10px more radius)
           hatColors={getHatColorsForState()}
           showPersonNumbers={appState === "results"}
           currentPersonIndex={currentPersonIndex}
@@ -212,15 +213,21 @@ const TenHatsRiddle: React.FC = () => {
         {/* Formula bar - show in input state OR results state for failures */}
         {(appState === "input" ||
           (appState === "results" && !testResult?.isCorrect)) && (
-          <FormulaBar
-            width={600}
-            height={120}
-            onTestResult={handleTestResult}
-            onPersonHighlight={setPersonHighlight}
-            initialFormula={appState === "results" ? currentFormula : undefined}
-            showAsReadOnly={appState === "results"}
-            onTryAgain={appState === "results" ? handleGuessAgain : undefined}
-          />
+          <div style={{ marginTop: "20px" }}>
+            {" "}
+            {/* Added 20px margin to move formula bar down */}
+            <FormulaBar
+              width={600}
+              height={120}
+              onTestResult={handleTestResult}
+              onPersonHighlight={setPersonHighlight}
+              initialFormula={
+                appState === "results" ? currentFormula : undefined
+              }
+              showAsReadOnly={appState === "results"}
+              onTryAgain={appState === "results" ? handleGuessAgain : undefined}
+            />
+          </div>
         )}
 
         {/* Success message - only show for successful results */}
@@ -235,6 +242,7 @@ const TenHatsRiddle: React.FC = () => {
               maxWidth: "600px",
               textAlign: "center",
               fontFamily: "monospace",
+              marginTop: "20px", // Added margin to move success message down too
             }}
           >
             <div
