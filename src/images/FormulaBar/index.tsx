@@ -5,7 +5,7 @@ import { useKeyboardControls } from "./useKeyboardControls";
 import { validateFormula } from "./validation";
 import { handleDelete } from "./deleteHandlers";
 import { handleButtonClick } from "./buttonHandlers";
-import { testFormula, evaluateTestResult } from "./testFunction";
+import { testFormula } from "./testFunction";
 import FormulaDisplay, { type PersonHighlight } from "./FormulaDisplay";
 import ButtonGrid from "./ButtonGrid";
 

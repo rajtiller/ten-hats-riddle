@@ -76,7 +76,7 @@ export class HatClass implements Hat {
 
     // Show "???" for current person, number for others, nothing for rainbow
     let displayText = "?";
-    if (isCurrentPerson) {
+    if (isCurrentPerson && this.color === "#d3d3d3") {
       displayText = "???";
     } else if (!isRainbow) {
       displayText = hatNumber.toString();

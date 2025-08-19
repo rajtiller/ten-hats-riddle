@@ -21,7 +21,8 @@ export interface PersonProps {
   isCurrentPerson?: boolean;
   leftPosition?: number;
   isHighlighted?: boolean;
-  showIndexLabels?: boolean; // New prop for showing index labels
+  showIndexLabels?: boolean;
+  showAsUnknown?: boolean; // New prop to show ??? instead of hat
 }
 
 export class Person {
@@ -43,6 +44,7 @@ export class Person {
   leftPosition: number;
   isHighlighted: boolean;
   showIndexLabels: boolean;
+  showAsUnknown: boolean;
 
   constructor({
     x = 0,
@@ -65,6 +67,7 @@ export class Person {
     leftPosition = 0,
     isHighlighted = false,
     showIndexLabels = false,
+    showAsUnknown = false,
   }: PersonProps = {}) {
     this.x = x;
     this.y = y;
@@ -84,6 +87,7 @@ export class Person {
     this.leftPosition = leftPosition;
     this.isHighlighted = isHighlighted;
     this.showIndexLabels = showIndexLabels;
+    this.showAsUnknown = showAsUnknown;
   }
 
   renderIndexHighlight(): JSX.Element {
@@ -386,6 +390,7 @@ export class Person {
         {this.renderShoulders()}
         {this.renderHead()}
         {this.renderFace()}
+        {/* Always show the hat - no ??? logic */}
         {this.hat.render(this.x, this.y, this.angle, this.isCurrentPerson)}
         {/* Show either person numbers (absolute) OR index labels (relative), not both */}
         {this.showPersonNumber

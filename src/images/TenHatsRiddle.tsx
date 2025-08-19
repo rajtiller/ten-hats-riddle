@@ -92,7 +92,7 @@ const TenHatsRiddle: React.FC = () => {
         });
       return colors;
     } else if (appState === "results" && counterExampleHats.length > 0) {
-      // Show counter example colors
+      // Show counter example colors - ALL people get their colors from the test result
       return counterExampleHats;
     } else {
       // Fallback - show rainbow colors

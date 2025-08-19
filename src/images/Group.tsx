@@ -10,10 +10,11 @@ interface GroupProps {
   showPersonNumbers?: boolean;
   currentPersonIndex?: number;
   personHighlight?: PersonHighlight | null;
-  showIndexLabels?: boolean; // New prop for showing index labels
+  showIndexLabels?: boolean;
+  showCurrentPersonAsUnknown?: boolean; // New prop to show ??? for current person
 }
 
-class Group {
+export class Group {
   numberOfPeople: number;
   people: Person[];
   radius: number;
@@ -27,6 +28,7 @@ class Group {
     currentPersonIndex = 0,
     personHighlight = null,
     showIndexLabels = false,
+    showCurrentPersonAsUnknown = false,
   }: GroupProps = {}) {
     this.numberOfPeople = numberOfPeople;
     this.radius = Math.max(1, Math.min(10, radius));
@@ -40,7 +42,8 @@ class Group {
         showPersonNumbers,
         currentPersonIndex,
         personHighlight,
-        showIndexLabels
+        showIndexLabels,
+        showCurrentPersonAsUnknown
       );
   }
 
@@ -109,7 +112,8 @@ class Group {
     showPersonNumbers: boolean,
     currentPersonIndex: number,
     personHighlight: PersonHighlight | null = null,
-    showIndexLabels: boolean = false
+    showIndexLabels: boolean = false,
+    showCurrentPersonAsUnknown: boolean = false
   ): Person[] {
     const people: Person[] = [];
     const angleStep = (2 * Math.PI) / this.numberOfPeople;
@@ -136,13 +140,8 @@ class Group {
         `Person ${i}: isCurrentPerson=${isCurrentPerson}, isHighlighted=${isHighlighted}`
       );
 
-      // Use light gray for current person, provided colors for others
-      let hatColor;
-      if (isCurrentPerson) {
-        hatColor = "#d3d3d3"; // Light gray for current person
-      } else {
-        hatColor = hatColors[i] || "#ff0000";
-      }
+      // Use provided hat colors directly from the array, including for current person
+      const hatColor = hatColors[i] || "#ff0000";
 
       // Calculate left position relative to current person
       let leftPosition = 1;
@@ -167,6 +166,7 @@ class Group {
         leftPosition: leftPosition,
         isHighlighted: isHighlighted,
         showIndexLabels: showIndexLabels,
+        showAsUnknown: isCurrentPerson && showCurrentPersonAsUnknown,
       });
 
       people.push(person);
@@ -205,4 +205,3 @@ const GroupComponent: React.FC<GroupProps> = (props = {}) => {
 };
 
 export default GroupComponent;
-export { Group };
