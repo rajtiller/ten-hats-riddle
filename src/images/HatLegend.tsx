@@ -1,5 +1,5 @@
 import React from "react";
-import { HatClass } from "./Person";
+import { HatClass } from "./Hat";
 
 interface HatLegendProps {
   counts?: { [color: string]: number };
@@ -21,7 +21,6 @@ const HatLegend: React.FC<HatLegendProps> = ({ counts = {} }) => {
 
   const renderHat = (color: string) => {
     const hat = new HatClass(color, "cap");
-
     return (
       <svg width="40" height="30" viewBox="-25 -35 50 35">
         {hat.render(0, 0, 0)}
@@ -59,7 +58,7 @@ const HatLegend: React.FC<HatLegendProps> = ({ counts = {} }) => {
           textAlign: "center",
           borderBottom: "1px solid #666",
           paddingBottom: "8px",
-          color: "#999", // Gray color for the title
+          color: "#999",
         }}
       >
         Hat Colors
@@ -96,7 +95,7 @@ const HatLegend: React.FC<HatLegendProps> = ({ counts = {} }) => {
               borderRadius: "3px",
               minWidth: "30px",
               textAlign: "center",
-              color: "black", // Ensure numbers are black
+              color: "black",
             }}
           >
             {hatInfo.value}

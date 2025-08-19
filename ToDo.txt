@@ -1,12 +1,18 @@
-add error check for no numbers in formula: disregarding parantheses, we must start and end with a number, never have two operators in a row (+,x,-, divide), never have a variable number (i, all, r[], l[]) must never be adjacent to a number (there must always be a symbol between the two)
+for error handling, make sure parantheses sandwich numbers
 seperate files to shorten each file
 make sure each person is labeled with a number
 implement test function
 make the numbers text box not look editable
+consider removing gray as a color to it can be used for the unknown hat
+make it so the current person's hat is unknown (dark gray)
+make is clear other peoples hats are known (light gray)
+make it clear all refers to all other peoples hats
+make it clear i refers to the current person's number, not hat
+make it so people are only labeled iwth an index after the test button is hit
+consider making square braces like round parentheses
 make people light up when they are referenced (l[?], r[?], all, i)
 make it so evrerybody's guess is displayed in a text box
+make spacing in fomular bar consistent, especially after deleting
 make it so once calculations are done, everyone's calculations are shown to see how they go there
 make it so har colors are randomized
 make it so hats for two people are black and white
-make a system for generating hat combinations that disprove the users solution
-make it so the computer gives me a funciton I can implement to check user's solution

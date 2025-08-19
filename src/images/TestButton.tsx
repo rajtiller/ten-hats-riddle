@@ -44,27 +44,27 @@ const TestButton: React.FC<TestButtonProps> = ({ formula, onTestResult }) => {
       }
     }
 
-    // Check for incomplete brackets
-    if (
-      formula.includes("r[") &&
-      !formula.includes("r[") + formula.split("r[")[1]?.includes("]")
-    ) {
-      return { isValid: false, error: "Incomplete r[ bracket" };
-    }
-    if (
-      formula.includes("l[") &&
-      !formula.includes("l[") + formula.split("l[")[1]?.includes("]")
-    ) {
-      return { isValid: false, error: "Incomplete l[ bracket" };
+    // Check for incomplete brackets - Fixed logic
+    const rBracketStart = formula.indexOf("r[");
+    if (rBracketStart !== -1) {
+      const afterRBracket = formula.substring(rBracketStart + 2);
+      if (!afterRBracket.includes("]")) {
+        return { isValid: false, error: "Incomplete r[ bracket" };
+      }
     }
 
-    // Check for valid tokens
-    const validTokens = /^[irl\[\]()1-9+\-×÷\s]|all|mod$/;
-    const tokens = formula.split(/(\s+)/).filter((token) => token.trim());
-    for (const token of tokens) {
-      if (!validTokens.test(token) && !["all", "mod"].includes(token)) {
-        return { isValid: false, error: `Invalid token: ${token}` };
+    const lBracketStart = formula.indexOf("l[");
+    if (lBracketStart !== -1) {
+      const afterLBracket = formula.substring(lBracketStart + 2);
+      if (!afterLBracket.includes("]")) {
+        return { isValid: false, error: "Incomplete l[ bracket" };
       }
+    }
+
+    // Check for valid characters - simplified validation
+    const invalidChars = formula.replace(/[irl\[\]()0-9+\-×÷\s]|all|mod/g, "");
+    if (invalidChars) {
+      return { isValid: false, error: `Invalid characters: ${invalidChars}` };
     }
 
     return { isValid: true, error: "" };
