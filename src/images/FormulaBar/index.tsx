@@ -59,11 +59,11 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
       if (char === "(") parenCount++;
       if (char === ")") parenCount--;
       if (parenCount < 0) {
-        return { isValid: false, error: "Unmatched closing parenthesis" };
+        return { isValid: false, error: "Unmatched closing parenthesis ')'" };
       }
     }
     if (parenCount > 0) {
-      return { isValid: false, error: "Unmatched opening parenthesis" };
+      return { isValid: false, error: "Unmatched opening parenthesis '('" };
     }
 
     // Check for valid bracket constructs
@@ -74,28 +74,36 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
       if (!/^[1-9]$/.test(content)) {
         return {
           isValid: false,
-          error: `Invalid bracket content: ${content || "empty"}`,
+          error: `Invalid bracket content '${
+            content || "empty"
+          }' - must be 1-9`,
         };
       }
     }
 
     // Check for incomplete brackets
-    if (
-      (formula.includes("r[") && !formula.includes("r[")) ||
-      (formula.includes("l[") && !formula.includes("l["))
-    ) {
-      if (/[rl]\[\]/.test(formula)) {
-        return { isValid: false, error: "Empty bracket found" };
-      }
+    if (/[rl]\[\]/.test(formula)) {
+      return {
+        isValid: false,
+        error: "Empty brackets found - must contain a number 1-9",
+      };
     }
 
-    // Check for valid operators
+    // Check for orphaned brackets
+    if (formula.includes("[") && !formula.match(/[rl]\[[1-9]\]/)) {
+      return {
+        isValid: false,
+        error: "Invalid bracket syntax - use r[1-9] or l[1-9]",
+      };
+    }
+
+    // Check for valid operators and characters
     const invalidChars = formula.replace(
-      /[irl\[\]\(\)0-9\+\-×÷\s]|mod|all/g,
+      /[irl\[\]\(\)1-9\+\-×÷\s]|mod|all/g,
       ""
     );
     if (invalidChars) {
-      return { isValid: false, error: `Invalid characters: ${invalidChars}` };
+      return { isValid: false, error: `Invalid characters: '${invalidChars}'` };
     }
 
     return { isValid: true, error: "" };
@@ -134,6 +142,91 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
   };
 
   const handleDelete = () => {
+    // Special delete behavior for bracket constructs
+    const charAtCursor = formula[cursorPosition - 1];
+    const charBeforeCursor = formula[cursorPosition - 2];
+    const charAfterCursor = formula[cursorPosition];
+    const charTwoAfterCursor = formula[cursorPosition + 1];
+
+    // Case 1: Cursor is after ] in a complete bracket like r[4]
+    if (charAtCursor === "]") {
+      // Find the start of the bracket construct
+      let bracketStart = cursorPosition - 2; // Start looking before the ]
+      while (bracketStart >= 0 && formula[bracketStart] !== "[") {
+        bracketStart--;
+      }
+
+      if (bracketStart > 0 && ["r", "l"].includes(formula[bracketStart - 1])) {
+        // Delete the entire construct (e.g., "r[4]")
+        const constructStart = bracketStart - 1;
+        const newFormula =
+          formula.slice(0, constructStart) + formula.slice(cursorPosition);
+        setFormula(newFormula);
+        setCursorPosition(constructStart);
+        setWaitingForBracketNumber(false);
+        if (errorMessage) setErrorMessage("");
+        return;
+      }
+    }
+
+    // Case 2: Cursor is after a number inside brackets like r[4|]
+    if (
+      charAtCursor &&
+      /^[1-9]$/.test(charAtCursor) &&
+      charAfterCursor === "]"
+    ) {
+      // Check if this is inside a bracket construct
+      let bracketStart = cursorPosition - 2;
+      while (bracketStart >= 0 && formula[bracketStart] !== "[") {
+        bracketStart--;
+      }
+
+      if (bracketStart > 0 && ["r", "l"].includes(formula[bracketStart - 1])) {
+        // Delete the entire construct
+        const constructStart = bracketStart - 1;
+        const newFormula =
+          formula.slice(0, constructStart) + formula.slice(cursorPosition + 1);
+        setFormula(newFormula);
+        setCursorPosition(constructStart);
+        setWaitingForBracketNumber(false);
+        if (errorMessage) setErrorMessage("");
+        return;
+      }
+    }
+
+    // Case 3: Cursor is right after r[ or l[ (waiting for number)
+    if (
+      charAtCursor === "[" &&
+      charBeforeCursor &&
+      ["r", "l"].includes(charBeforeCursor)
+    ) {
+      // Delete both characters (r[ or l[)
+      const newFormula =
+        formula.slice(0, cursorPosition - 2) +
+        formula.slice(cursorPosition + 1); // +1 to also remove the ]
+      setFormula(newFormula);
+      setCursorPosition(cursorPosition - 2);
+      setWaitingForBracketNumber(false);
+      if (errorMessage) setErrorMessage("");
+      return;
+    }
+
+    // Case 4: Cursor is right after ] in an empty bracket r[]
+    if (charAtCursor === "]" && charBeforeCursor === "[") {
+      let bracketTypePos = cursorPosition - 3;
+      if (bracketTypePos >= 0 && ["r", "l"].includes(formula[bracketTypePos])) {
+        // Delete the entire empty construct
+        const newFormula =
+          formula.slice(0, bracketTypePos) + formula.slice(cursorPosition);
+        setFormula(newFormula);
+        setCursorPosition(bracketTypePos);
+        setWaitingForBracketNumber(false);
+        if (errorMessage) setErrorMessage("");
+        return;
+      }
+    }
+
+    // Default delete behavior
     const { newText, newPosition } = deleteAtPosition(formula, cursorPosition);
     setFormula(newText);
     setCursorPosition(newPosition);
@@ -216,6 +309,12 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
 
   const validation = validateFormula(formula);
 
+  // Show validation errors in real-time, but not success messages until test is clicked
+  const displayError =
+    validation.error &&
+    !errorMessage.startsWith("✅") &&
+    !errorMessage.startsWith("❌ Counter");
+
   return (
     <div
       style={{
@@ -228,6 +327,7 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
         display: "flex",
         flexDirection: "column",
         gap: "2px",
+        position: "relative",
       }}
     >
       <style>
@@ -238,6 +338,31 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
           }
         `}
       </style>
+
+      {/* Error Message Above Formula Bar - only for validation errors */}
+      {displayError && (
+        <div
+          style={{
+            position: "absolute",
+            top: "-35px",
+            left: "0",
+            right: "0",
+            backgroundColor: "#ffebee",
+            color: "#d32f2f",
+            border: "1px solid #d32f2f",
+            borderRadius: "3px",
+            padding: "6px 8px",
+            fontSize: "12px",
+            fontFamily: "monospace",
+            fontWeight: "bold",
+            textAlign: "center",
+            zIndex: 10,
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+          }}
+        >
+          ⚠️ {validation.error}
+        </div>
+      )}
 
       {/* Formula Display with Person i: prefix */}
       <div
@@ -311,8 +436,9 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
         </button>
       </div>
 
-      {/* Error/Result Message */}
-      {errorMessage && (
+      {/* Test Result Message (below input) */}
+      {(errorMessage.startsWith("✅") ||
+        errorMessage.startsWith("❌ Counter")) && (
         <div
           style={{
             backgroundColor: errorMessage.startsWith("✅")
