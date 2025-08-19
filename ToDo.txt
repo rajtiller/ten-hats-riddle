@@ -1,4 +1,5 @@
 add hats to left side of screen where colors are mapped to numbers
+make it so once calculations are done, everyone's calculations are shown to see how they go there
 make it so har colors are randomized
 make it so hats for two people are black and white
 make a system for generating hat combinations that disprove the users solution

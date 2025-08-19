@@ -7,16 +7,16 @@ interface HatLegendProps {
 
 const HatLegend: React.FC<HatLegendProps> = ({ counts = {} }) => {
   const hatColors = [
-    { name: "Black", color: "#000000" },
-    { name: "White", color: "#ffffff" },
-    { name: "Red", color: "#ff0000" },
-    { name: "Orange", color: "#ffa500" },
-    { name: "Yellow", color: "#ffff00" },
-    { name: "Green", color: "#008000" },
-    { name: "Blue", color: "#0000ff" },
-    { name: "Violet", color: "#8b00ff" },
-    { name: "Pink", color: "#ffc0cb" },
-    { name: "Brown", color: "#8b4513" },
+    { name: "Black", color: "#000000", value: 0 },
+    { name: "Gray", color: "#808080", value: 1 },
+    { name: "Red", color: "#ff0000", value: 2 },
+    { name: "Orange", color: "#ffa500", value: 3 },
+    { name: "Green", color: "#008000", value: 4 },
+    { name: "Blue", color: "#0000ff", value: 5 },
+    { name: "Violet", color: "#8b00ff", value: 6 },
+    { name: "Magenta", color: "#ff00ff", value: 7 },
+    { name: "Tan", color: "#d2b48c", value: 8 },
+    { name: "Brown", color: "#8b4513", value: 9 },
   ];
 
   const renderHat = (color: string) => {
@@ -27,6 +27,13 @@ const HatLegend: React.FC<HatLegendProps> = ({ counts = {} }) => {
         {hat.render(0, 0, 0)}
       </svg>
     );
+  };
+
+  const getTextStyle = (color: string) => {
+    return {
+      color: color,
+      fontWeight: "bold" as const,
+    };
   };
 
   return (
@@ -52,6 +59,7 @@ const HatLegend: React.FC<HatLegendProps> = ({ counts = {} }) => {
           textAlign: "center",
           borderBottom: "1px solid #666",
           paddingBottom: "8px",
+          color: "#999", // Gray color for the title
         }}
       >
         Hat Colors
@@ -70,7 +78,13 @@ const HatLegend: React.FC<HatLegendProps> = ({ counts = {} }) => {
         >
           <div style={{ marginRight: "10px" }}>{renderHat(hatInfo.color)}</div>
 
-          <span style={{ marginRight: "8px", minWidth: "60px" }}>
+          <span
+            style={{
+              marginRight: "8px",
+              minWidth: "60px",
+              ...getTextStyle(hatInfo.color),
+            }}
+          >
             {hatInfo.name}
           </span>
 
@@ -82,9 +96,10 @@ const HatLegend: React.FC<HatLegendProps> = ({ counts = {} }) => {
               borderRadius: "3px",
               minWidth: "30px",
               textAlign: "center",
+              color: "black", // Ensure numbers are black
             }}
           >
-            - {counts[hatInfo.color] || 0}
+            {hatInfo.value}
           </span>
         </div>
       ))}

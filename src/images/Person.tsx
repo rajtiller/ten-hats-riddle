@@ -1,5 +1,19 @@
 import React, { type JSX } from "react";
 
+// Hat color to number mapping (matching HatLegend)
+const hatColorToNumber: { [color: string]: number } = {
+  "#000000": 0, // Black
+  "#808080": 1, // Gray
+  "#ff0000": 2, // Red
+  "#ffa500": 3, // Orange
+  "#008000": 4, // Green
+  "#0000ff": 5, // Blue
+  "#8b00ff": 6, // Violet
+  "#ff00ff": 7, // Magenta
+  "#d2b48c": 8, // Tan
+  "#8b4513": 9, // Brown
+};
+
 // Hat class/interface
 interface Hat {
   color: string;
@@ -23,6 +37,7 @@ class HatClass implements Hat {
 
     const transform = `translate(${x}, ${y}) rotate(${angle})`;
     const clipId = `hat-clip-${Math.random().toString(36).substr(2, 9)}`;
+    const hatNumber = hatColorToNumber[this.color] ?? "?";
 
     switch (this.type) {
       case "cap":
@@ -54,6 +69,33 @@ class HatClass implements Hat {
               stroke="#000"
               strokeWidth="1"
             />
+            {/* Hat number - double layer for extra boldness */}
+            <text
+              x="0"
+              y="-14"
+              textAnchor="middle"
+              fontSize="18"
+              fontFamily="monospace"
+              fontWeight="900"
+              fill="white"
+              stroke="white"
+              strokeWidth="2"
+            >
+              {hatNumber}
+            </text>
+            <text
+              x="0"
+              y="-14"
+              textAnchor="middle"
+              fontSize="18"
+              fontFamily="monospace"
+              fontWeight="900"
+              fill="black"
+              stroke="black"
+              strokeWidth="0.5"
+            >
+              {hatNumber}
+            </text>
           </g>
         );
       case "beanie":
@@ -78,6 +120,33 @@ class HatClass implements Hat {
               stroke="#000"
               strokeWidth="1"
             />
+            {/* Hat number - double layer for extra boldness */}
+            <text
+              x="0"
+              y="-14"
+              textAnchor="middle"
+              fontSize="18"
+              fontFamily="monospace"
+              fontWeight="900"
+              fill="white"
+              stroke="white"
+              strokeWidth="2"
+            >
+              {hatNumber}
+            </text>
+            <text
+              x="0"
+              y="-14"
+              textAnchor="middle"
+              fontSize="18"
+              fontFamily="monospace"
+              fontWeight="900"
+              fill="black"
+              stroke="black"
+              strokeWidth="0.5"
+            >
+              {hatNumber}
+            </text>
           </g>
         );
       case "fedora":
@@ -105,6 +174,33 @@ class HatClass implements Hat {
             />
             {/* Hat band */}
             <rect x="-20" y="-20" width="40" height="3" fill="#333" />
+            {/* Hat number - double layer for extra boldness */}
+            <text
+              x="0"
+              y="-19"
+              textAnchor="middle"
+              fontSize="18"
+              fontFamily="monospace"
+              fontWeight="900"
+              fill="white"
+              stroke="white"
+              strokeWidth="2"
+            >
+              {hatNumber}
+            </text>
+            <text
+              x="0"
+              y="-19"
+              textAnchor="middle"
+              fontSize="18"
+              fontFamily="monospace"
+              fontWeight="900"
+              fill="black"
+              stroke="black"
+              strokeWidth="0.5"
+            >
+              {hatNumber}
+            </text>
           </g>
         );
       case "cowboy":
@@ -139,6 +235,33 @@ class HatClass implements Hat {
               stroke="#000"
               strokeWidth="1"
             />
+            {/* Hat number - double layer for extra boldness */}
+            <text
+              x="0"
+              y="-22"
+              textAnchor="middle"
+              fontSize="18"
+              fontFamily="monospace"
+              fontWeight="900"
+              fill="white"
+              stroke="white"
+              strokeWidth="2"
+            >
+              {hatNumber}
+            </text>
+            <text
+              x="0"
+              y="-22"
+              textAnchor="middle"
+              fontSize="18"
+              fontFamily="monospace"
+              fontWeight="900"
+              fill="black"
+              stroke="black"
+              strokeWidth="0.5"
+            >
+              {hatNumber}
+            </text>
           </g>
         );
       default:
