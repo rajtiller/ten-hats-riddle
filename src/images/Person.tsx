@@ -98,18 +98,18 @@ export class Person {
     if (!this.isHighlighted || !this.showIndexLabels) return <></>;
 
     if (this.isCurrentPerson) {
-      const labelX = this.x + 20; // Reduced from 25 to 20
-      const labelY = this.y + 35; // Reduced from 45 to 35
+      const labelX = this.x + 28; // Increased from 20 (20 * 1.4)
+      const labelY = this.y + 49; // Increased from 35 (35 * 1.4)
 
       return (
         <g>
           <circle
             cx={labelX}
             cy={labelY - 3}
-            r="12" // Reduced from 15 to 12
+            r="17" // Increased from 12 (12 * 1.4)
             fill="none"
             stroke="#ffeb3b"
-            strokeWidth="2" // Reduced from 3 to 2
+            strokeWidth="3" // Increased from 2 (2 * 1.4)
             opacity="0.8"
             style={{
               animation: "pulse 1.5s ease-in-out infinite",
@@ -119,14 +119,14 @@ export class Person {
             {`
               @keyframes pulse {
                 0%, 100% { 
-                  stroke-width: 2;
+                  stroke-width: 3;
                   opacity: 0.8;
-                  r: 12;
+                  r: 17;
                 }
                 50% { 
-                  stroke-width: 3;
+                  stroke-width: 4;
                   opacity: 1;
-                  r: 14;
+                  r: 20;
                 }
               }
             `}
@@ -145,11 +145,11 @@ export class Person {
       <g>
         <circle
           cx={this.x}
-          cy={this.y - 15} // Reduced from -20 to -15
-          r="25" // Reduced from 30 to 25
+          cy={this.y - 21} // Increased from -15 (-15 * 1.4)
+          r="35" // Increased from 25 (25 * 1.4)
           fill="none"
           stroke="#ffeb3b"
-          strokeWidth="3" // Reduced from 4 to 3
+          strokeWidth="4" // Increased from 3 (3 * 1.4)
           opacity="0.8"
           style={{
             animation: "pulse 1.5s ease-in-out infinite",
@@ -159,14 +159,14 @@ export class Person {
           {`
             @keyframes pulse {
               0%, 100% { 
-                stroke-width: 3;
+                stroke-width: 4;
                 opacity: 0.8;
-                r: 25;
+                r: 35;
               }
               50% { 
-                stroke-width: 4;
+                stroke-width: 6;
                 opacity: 1;
-                r: 28;
+                r: 39;
               }
             }
           `}
@@ -193,17 +193,17 @@ export class Person {
       <g transform={transform}>
         <defs>
           <clipPath id={clipId}>
-            <rect x="-20" y="-7" width="40" height="40" />{" "}
-            {/* Reduced from 50x50 to 40x40 */}
+            <rect x="-28" y="-10" width="56" height="56" />{" "}
+            {/* Increased from 40x40 (40 * 1.4) */}
           </clipPath>
         </defs>
         <circle
           cx="0"
           cy="0"
-          r="16" // Reduced from 20 to 16
+          r="22" // Increased from 16 (16 * 1.4)
           fill={this.skinColor}
           stroke="#000"
-          strokeWidth="1"
+          strokeWidth="1.4" // Increased from 1 (1 * 1.4)
           clipPath={`url(#${clipId})`}
         />
       </g>
@@ -216,12 +216,12 @@ export class Person {
       <g transform={transform}>
         <ellipse
           cx="0"
-          cy="28" // Reduced from 35 to 28
-          rx="24" // Reduced from 30 to 24
-          ry="12" // Reduced from 15 to 12
+          cy="39" // Increased from 28 (28 * 1.4)
+          rx="34" // Increased from 24 (24 * 1.4)
+          ry="17" // Increased from 12 (12 * 1.4)
           fill={this.shirtColor}
           stroke="#000"
-          strokeWidth="1"
+          strokeWidth="1.4" // Increased from 1 (1 * 1.4)
         />
       </g>
     );
@@ -231,23 +231,23 @@ export class Person {
     if (!this.showFace) return <></>;
 
     const transform = `translate(${this.x}, ${this.y}) rotate(${this.angle})`;
-    const eyeOffset = Math.cos((this.angle * Math.PI) / 180) * 5; // Reduced from 6 to 5
-    const noseOffset = Math.sin((this.angle * Math.PI) / 180) * 2.5; // Reduced from 3 to 2.5
+    const eyeOffset = Math.cos((this.angle * Math.PI) / 180) * 7; // Increased from 5 (5 * 1.4)
+    const noseOffset = Math.sin((this.angle * Math.PI) / 180) * 3.5; // Increased from 2.5 (2.5 * 1.4)
 
     return (
       <g transform={transform}>
-        <circle cx={-eyeOffset} cy="-4" r="1.5" fill="#000" />{" "}
-        {/* Reduced size and position */}
-        <circle cx={eyeOffset} cy="-4" r="1.5" fill="#000" />
-        <ellipse cx={noseOffset} cy="0" rx="1.2" ry="2.4" fill="#d4a574" />{" "}
-        {/* Reduced size */}
+        <circle cx={-eyeOffset} cy="-6" r="2.1" fill="#000" />{" "}
+        {/* Increased from 1.5 and -4 */}
+        <circle cx={eyeOffset} cy="-6" r="2.1" fill="#000" />
+        <ellipse cx={noseOffset} cy="0" rx="1.7" ry="3.4" fill="#d4a574" />{" "}
+        {/* Increased from 1.2 and 2.4 */}
         <path
-          d="M -3 5 Q 0 8 3 5"
+          d="M -4 7 Q 0 11 4 7"
           stroke="#000"
-          strokeWidth="1"
+          strokeWidth="1.4"
           fill="none"
         />{" "}
-        {/* Reduced size */}
+        {/* Increased size */}
       </g>
     );
   }
@@ -255,25 +255,25 @@ export class Person {
   renderPersonNumber(): JSX.Element {
     if (!this.showPersonNumber) return <></>;
 
-    const labelX = this.x + 20; // Reduced from 25 to 20
-    const labelY = this.y + 35; // Reduced from 45 to 35
+    const labelX = this.x + 28; // Increased from 20 (20 * 1.4)
+    const labelY = this.y + 49; // Increased from 35 (35 * 1.4)
 
     return (
       <g>
         <circle
           cx={labelX}
           cy={labelY - 3}
-          r="8" // Reduced from 10 to 8
+          r="11" // Increased from 8 (8 * 1.4)
           fill="white"
           stroke="#333"
-          strokeWidth="1"
+          strokeWidth="1.4" // Increased from 1 (1 * 1.4)
           opacity="0.9"
         />
         <text
           x={labelX}
           y={labelY}
           textAnchor="middle"
-          fontSize="10" // Reduced from 12 to 10
+          fontSize="14" // Increased from 10 (10 * 1.4)
           fontFamily="monospace"
           fontWeight="bold"
           fill="black"
@@ -287,8 +287,8 @@ export class Person {
   renderIndexLabel(): JSX.Element {
     if (!this.showIndexLabels) return <></>;
 
-    const labelX = this.x + 20; // Reduced from 25 to 20
-    const labelY = this.y + 35; // Reduced from 45 to 35
+    const labelX = this.x + 28; // Increased from 20 (20 * 1.4)
+    const labelY = this.y + 49; // Increased from 35 (35 * 1.4)
 
     if (this.isCurrentPerson) {
       return (
@@ -296,17 +296,17 @@ export class Person {
           <circle
             cx={labelX}
             cy={labelY - 3}
-            r="8" // Reduced from 10 to 8
+            r="11" // Increased from 8 (8 * 1.4)
             fill="white"
             stroke="#333"
-            strokeWidth="1"
+            strokeWidth="1.4" // Increased from 1 (1 * 1.4)
             opacity="0.9"
           />
           <text
             x={labelX}
             y={labelY}
             textAnchor="middle"
-            fontSize="10" // Reduced from 12 to 10
+            fontSize="14" // Increased from 10 (10 * 1.4)
             fontFamily="monospace"
             fontWeight="bold"
             fill="black"
@@ -334,17 +334,17 @@ export class Person {
           <circle
             cx={labelX}
             cy={labelY - 3}
-            r="8" // Reduced from 10 to 8
+            r="11" // Increased from 8 (8 * 1.4)
             fill="white"
             stroke="#333"
-            strokeWidth="1"
+            strokeWidth="1.4" // Increased from 1 (1 * 1.4)
             opacity="0.9"
           />
           <text
             x={labelX}
             y={labelY}
             textAnchor="middle"
-            fontSize="8" // Reduced from 10 to 8
+            fontSize="11" // Increased from 8 (8 * 1.4)
             fontFamily="monospace"
             fontWeight="bold"
             fill="black"
@@ -357,7 +357,7 @@ export class Person {
   }
 
   renderPersonLabel(): JSX.Element {
-    const labelY = this.y + 68; // Reduced from 85 to 68
+    const labelY = this.y + 95; // Increased from 68 (68 * 1.4)
 
     if (!this.showPersonNumber && !this.showIndexLabels) {
       return (
@@ -366,7 +366,7 @@ export class Person {
             x={this.x}
             y={labelY}
             textAnchor="middle"
-            fontSize="10" // Reduced from 12 to 10
+            fontSize="14" // Increased from 10 (10 * 1.4)
             fontFamily="monospace"
             fontWeight="bold"
             fill="#0066cc"
@@ -413,29 +413,29 @@ export class Person {
   renderGuess(): JSX.Element {
     if (this.guess === undefined || this.guess === -1) return <></>;
 
-    // Position the guess above the person - reduced distance
-    const guessY = this.y - 45; // Reduced from -60 to -45
+    // Position the guess above the person
+    const guessY = this.y - 63; // Increased from -45 (-45 * 1.4)
     const guessColor = this.getGuessColor(this.guess);
     const textColor = this.getTextColor(guessColor);
 
     return (
       <g>
-        {/* Background circle for guess - smaller */}
+        {/* Background circle for guess */}
         <circle
           cx={this.x}
           cy={guessY}
-          r="10" // Reduced from 12 to 10
+          r="14" // Increased from 10 (10 * 1.4)
           fill={guessColor}
           stroke="#333"
-          strokeWidth="1.5" // Reduced from 2 to 1.5
+          strokeWidth="2.1" // Increased from 1.5 (1.5 * 1.4)
           opacity="0.9"
         />
         {/* Guess text with contrasting color */}
         <text
           x={this.x}
-          y={guessY + 3} // Reduced offset from 4 to 3
+          y={guessY + 4} // Increased from 3 (3 * 1.4)
           textAnchor="middle"
-          fontSize="12" // Reduced from 14 to 12
+          fontSize="17" // Increased from 12 (12 * 1.4)
           fontFamily="monospace"
           fontWeight="bold"
           fill={textColor}
@@ -445,9 +445,9 @@ export class Person {
         {/* Small "guess" label */}
         <text
           x={this.x}
-          y={guessY - 14} // Reduced from -18 to -14
+          y={guessY - 20} // Increased from -14 (-14 * 1.4)
           textAnchor="middle"
-          fontSize="7" // Reduced from 8 to 7
+          fontSize="10" // Increased from 7 (7 * 1.4)
           fontFamily="monospace"
           fill="#666"
         >

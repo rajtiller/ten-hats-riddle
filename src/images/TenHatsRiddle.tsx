@@ -169,7 +169,7 @@ const TenHatsRiddle: React.FC = () => {
       <div
         style={{
           position: "absolute",
-          top: "600px", // Increased from 60px to 100px
+          top: "650px", // Moved down further to account for larger circle
           fontSize: "16px",
           fontFamily: "monospace",
           color: "#666",
@@ -192,14 +192,14 @@ const TenHatsRiddle: React.FC = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: "50px", // Increased gap from 30px to 50px to accommodate formula bar move
-          marginTop: "40px", // Added top margin to push content down
+          gap: "50px",
+          marginTop: "90px", // Increased from 40px to 90px (moved down 50px)
         }}
       >
-        {/* Group of people - increased radius again */}
+        {/* Group of people - increased radius and moved down */}
         <Group
           numberOfPeople={10}
-          radius={9.5} // Increased from 9 to 9.5 (about 10px more radius)
+          radius={10} // Increased from 9.5 to 10 (about 10px more radius)
           hatColors={getHatColorsForState()}
           showPersonNumbers={appState === "results"}
           currentPersonIndex={currentPersonIndex}
@@ -214,8 +214,6 @@ const TenHatsRiddle: React.FC = () => {
         {(appState === "input" ||
           (appState === "results" && !testResult?.isCorrect)) && (
           <div style={{ marginTop: "20px" }}>
-            {" "}
-            {/* Added 20px margin to move formula bar down */}
             <FormulaBar
               width={600}
               height={120}
@@ -242,7 +240,7 @@ const TenHatsRiddle: React.FC = () => {
               maxWidth: "600px",
               textAlign: "center",
               fontFamily: "monospace",
-              marginTop: "20px", // Added margin to move success message down too
+              marginTop: "20px",
             }}
           >
             <div
