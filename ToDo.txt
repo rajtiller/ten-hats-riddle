@@ -1,10 +1,9 @@
-make sure each person is labeled with a number
-implement test function
 make the numbers text box not look editable
 consider removing gray as a color to it can be used for the unknown hat
 make it so the current person's hat is unknown (dark gray)
 make is clear other peoples hats are known (light gray)
 make it clear all refers to all other peoples hats
+implement test function
 make it clear i refers to the current person's number, not hat
 make it so people are only labeled iwth an index after the test button is hit
 consider making square braces like round parentheses
