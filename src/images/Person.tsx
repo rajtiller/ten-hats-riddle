@@ -20,7 +20,8 @@ export interface PersonProps {
   showPersonNumber?: boolean;
   isCurrentPerson?: boolean;
   leftPosition?: number;
-  isHighlighted?: boolean; // New prop for highlighting
+  isHighlighted?: boolean;
+  showIndexLabels?: boolean; // New prop for showing index labels
 }
 
 export class Person {
@@ -41,6 +42,7 @@ export class Person {
   isCurrentPerson: boolean;
   leftPosition: number;
   isHighlighted: boolean;
+  showIndexLabels: boolean;
 
   constructor({
     x = 0,
@@ -62,6 +64,7 @@ export class Person {
     isCurrentPerson = false,
     leftPosition = 0,
     isHighlighted = false,
+    showIndexLabels = false,
   }: PersonProps = {}) {
     this.x = x;
     this.y = y;
@@ -80,6 +83,7 @@ export class Person {
     this.isCurrentPerson = isCurrentPerson;
     this.leftPosition = leftPosition;
     this.isHighlighted = isHighlighted;
+    this.showIndexLabels = showIndexLabels;
   }
 
   renderHighlight(): JSX.Element {
@@ -213,8 +217,63 @@ export class Person {
     );
   }
 
-  renderPersonLabel(): JSX.Element {
+  renderIndexLabel(): JSX.Element {
+    if (!this.showIndexLabels) return <></>;
+
     const labelY = this.y + 67; // Position below the person
+
+    if (this.isCurrentPerson) {
+      // Show "i" for current person
+      return (
+        <g>
+          <text
+            x={this.x}
+            y={labelY}
+            textAnchor="middle"
+            fontSize="12"
+            fontFamily="monospace"
+            fontWeight="bold"
+            fill="#0066cc"
+          >
+            i
+          </text>
+        </g>
+      );
+    } else {
+      // Show relative index (i-1, i+1, etc.) for others
+      const relativeIndex = this.leftPosition;
+      let indexLabel = "";
+
+      if (relativeIndex === 1) {
+        indexLabel = "i+1";
+      } else if (relativeIndex === 9) {
+        indexLabel = "i-1";
+      } else if (relativeIndex <= 5) {
+        indexLabel = `i+${relativeIndex}`;
+      } else {
+        indexLabel = `i-${10 - relativeIndex}`;
+      }
+
+      return (
+        <g>
+          <text
+            x={this.x}
+            y={labelY}
+            textAnchor="middle"
+            fontSize="12"
+            fontFamily="monospace"
+            fontWeight="bold"
+            fill="#0066cc"
+          >
+            {indexLabel}
+          </text>
+        </g>
+      );
+    }
+  }
+
+  renderPersonLabel(): JSX.Element {
+    const labelY = this.y + 85; // Position below index labels
 
     if (this.isCurrentPerson) {
       // Always show "YOU" for current person
@@ -233,8 +292,8 @@ export class Person {
           </text>
         </g>
       );
-    } else if (!this.showPersonNumber) {
-      // Show l[n] labels only in input state (when showPersonNumber is false)
+    } else if (!this.showPersonNumber && !this.showIndexLabels) {
+      // Show l[n] labels only when neither person numbers nor index labels are shown
       return (
         <g>
           <text
@@ -264,6 +323,7 @@ export class Person {
         {this.renderFace()}
         {this.hat.render(this.x, this.y, this.angle, this.isCurrentPerson)}
         {this.renderPersonNumber()}
+        {this.renderIndexLabel()}
         {this.renderPersonLabel()}
       </g>
     );

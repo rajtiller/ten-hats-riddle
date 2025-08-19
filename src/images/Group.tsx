@@ -9,7 +9,8 @@ interface GroupProps {
   hatColors?: string[];
   showPersonNumbers?: boolean;
   currentPersonIndex?: number;
-  personHighlight?: PersonHighlight | null; // New prop for highlighting
+  personHighlight?: PersonHighlight | null;
+  showIndexLabels?: boolean; // New prop for showing index labels
 }
 
 class Group {
@@ -25,6 +26,7 @@ class Group {
     showPersonNumbers = false,
     currentPersonIndex = 0,
     personHighlight = null,
+    showIndexLabels = false,
   }: GroupProps = {}) {
     this.numberOfPeople = numberOfPeople;
     this.radius = Math.max(1, Math.min(10, radius));
@@ -37,7 +39,8 @@ class Group {
         hatColors,
         showPersonNumbers,
         currentPersonIndex,
-        personHighlight
+        personHighlight,
+        showIndexLabels
       );
   }
 
@@ -105,7 +108,8 @@ class Group {
     hatColors: string[],
     showPersonNumbers: boolean,
     currentPersonIndex: number,
-    personHighlight: PersonHighlight | null = null
+    personHighlight: PersonHighlight | null = null,
+    showIndexLabels: boolean = false
   ): Person[] {
     const people: Person[] = [];
     const angleStep = (2 * Math.PI) / this.numberOfPeople;
@@ -162,6 +166,7 @@ class Group {
         isCurrentPerson: isCurrentPerson,
         leftPosition: leftPosition,
         isHighlighted: isHighlighted,
+        showIndexLabels: showIndexLabels,
       });
 
       people.push(person);

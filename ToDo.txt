@@ -1,5 +1,6 @@
 make it clear all refers to all other peoples hats
 make it clear i refers to the current person's number, not hat
+fix spacing, things are overlapping
 make it so people are only labeled iwth an index after the test button is hit
 consider making square braces like round parentheses
 make people light up when they are referenced (l[?], r[?], all, i)

@@ -155,6 +155,7 @@ const TenHatsRiddle: React.FC = () => {
           showPersonNumbers={appState === "results"}
           currentPersonIndex={currentPersonIndex}
           personHighlight={personHighlight}
+          showIndexLabels={true} // Always show index labels
         />
 
         {/* Formula bar - only show in input state */}
@@ -243,7 +244,7 @@ const TenHatsRiddle: React.FC = () => {
         }}
       >
         {appState === "input"
-          ? "Your hat (YOU at bottom) appears light gray with ??? because you can't see it. Other people wear rainbow hats representing all possible colors. Referenced people will highlight in yellow."
+          ? "YOU are person 'i' at the bottom. Others are labeled relative to you (i+1, i-1, etc.). Referenced people will highlight in yellow."
           : "This shows a counter-example where your formula would fail. Study the pattern and try a different approach."}
       </div>
     </div>
