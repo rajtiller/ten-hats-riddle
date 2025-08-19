@@ -170,7 +170,6 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
             index === matchingBracket ||
             index === beforeMatchingBracket;
 
-          const beforeCursor = index < cursorPosition;
           const atCursor = index === cursorPosition;
 
           return (

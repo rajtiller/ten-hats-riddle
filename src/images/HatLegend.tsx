@@ -5,7 +5,7 @@ interface HatLegendProps {
   counts?: { [color: string]: number };
 }
 
-const HatLegend: React.FC<HatLegendProps> = ({ counts = {} }) => {
+const HatLegend: React.FC<HatLegendProps> = () => {
   const hatColors = [
     { name: "Black", color: "#000000", value: 0 },
     { name: "Gray", color: "#808080", value: 1 },

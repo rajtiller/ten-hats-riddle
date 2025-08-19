@@ -5,6 +5,7 @@ import { useKeyboardControls } from "./useKeyboardControls";
 import { validateFormula } from "./validation";
 import { handleDelete } from "./deleteHandlers";
 import { handleButtonClick } from "./buttonHandlers";
+import { testFormula, evaluateTestResult } from "./testFunction";
 import FormulaDisplay from "./FormulaDisplay";
 import ButtonGrid from "./ButtonGrid";
 
@@ -28,12 +29,6 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
     if (errorMessage) setErrorMessage("");
   };
 
-  // Test function placeholder
-  const testFunction = (formula: string): number[] => {
-    // TODO: Implement actual test logic
-    return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-  };
-
   const handleTest = () => {
     const validation = validateFormula(formula);
 
@@ -43,15 +38,12 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
     }
 
     setErrorMessage("");
-    const result = testFunction(formula);
 
-    if (result.length === 0) {
-      setErrorMessage("✅ Correct solution!");
-    } else {
-      setErrorMessage(
-        `❌ Counter example: People guess [${result.join(", ")}]`
-      );
-    }
+    // Use the centralized test function
+    const result = testFormula(formula);
+    const evaluation = evaluateTestResult(result);
+
+    setErrorMessage(evaluation.message);
   };
 
   const deleteContext = {

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { validateFormula } from "./FormulaBar/validation";
+import { testFormula, evaluateTestResult } from "./FormulaBar/testFunction";
 
 interface TestButtonProps {
   formula: string;
@@ -10,79 +12,12 @@ const TestButton: React.FC<TestButtonProps> = ({ formula, onTestResult }) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [testResult, setTestResult] = useState<number[] | null>(null);
 
-  // Validation function for formula syntax
-  const validateFormula = (
-    formula: string
-  ): { isValid: boolean; error: string } => {
-    if (!formula.trim()) {
-      return { isValid: false, error: "Formula cannot be empty" };
-    }
-
-    // Check for balanced parentheses
-    let parenCount = 0;
-    for (const char of formula) {
-      if (char === "(") parenCount++;
-      if (char === ")") parenCount--;
-      if (parenCount < 0) {
-        return { isValid: false, error: "Unmatched closing parenthesis" };
-      }
-    }
-    if (parenCount > 0) {
-      return { isValid: false, error: "Unmatched opening parenthesis" };
-    }
-
-    // Check for valid bracket constructs r[1-9] and l[1-9]
-    const bracketRegex = /[rl]\[([^\]]*)\]/g;
-    let match;
-    while ((match = bracketRegex.exec(formula)) !== null) {
-      const content = match[1];
-      if (!/^[1-9]$/.test(content)) {
-        return {
-          isValid: false,
-          error: `Invalid bracket content: ${content}. Must be 1-9`,
-        };
-      }
-    }
-
-    // Check for incomplete brackets - Fixed logic
-    const rBracketStart = formula.indexOf("r[");
-    if (rBracketStart !== -1) {
-      const afterRBracket = formula.substring(rBracketStart + 2);
-      if (!afterRBracket.includes("]")) {
-        return { isValid: false, error: "Incomplete r[ bracket" };
-      }
-    }
-
-    const lBracketStart = formula.indexOf("l[");
-    if (lBracketStart !== -1) {
-      const afterLBracket = formula.substring(lBracketStart + 2);
-      if (!afterLBracket.includes("]")) {
-        return { isValid: false, error: "Incomplete l[ bracket" };
-      }
-    }
-
-    // Check for valid characters - simplified validation
-    const invalidChars = formula.replace(/[irl\[\]()0-9+\-×÷\s]|all|mod/g, "");
-    if (invalidChars) {
-      return { isValid: false, error: `Invalid characters: ${invalidChars}` };
-    }
-
-    return { isValid: true, error: "" };
-  };
-
-  // Test function - placeholder that returns [0,1,2,3,4,5,6,7,8,9]
-  const testFunction = (formula: string): number[] => {
-    // For now, return the example array
-    // You will implement the actual logic later
-    return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-  };
-
   const handleTest = () => {
     setIsValidating(true);
     setErrorMessage("");
     setTestResult(null);
 
-    // Validate the formula
+    // Validate the formula using the same validation as FormulaBar
     const validation = validateFormula(formula);
 
     if (!validation.isValid) {
@@ -92,8 +27,10 @@ const TestButton: React.FC<TestButtonProps> = ({ formula, onTestResult }) => {
     }
 
     try {
-      // Call the test function
-      const result = testFunction(formula);
+      // Use the centralized test function
+      const result = testFormula(formula);
+      const evaluation = evaluateTestResult(result);
+
       setTestResult(result);
 
       // Call the callback if provided
@@ -102,10 +39,8 @@ const TestButton: React.FC<TestButtonProps> = ({ formula, onTestResult }) => {
       }
 
       // Log result
-      if (result.length === 0) {
-        console.log("✅ Formula is correct!");
-      } else {
-        console.log("❌ Counter example found:", result);
+      console.log(evaluation.message);
+      if (result.length > 0) {
         console.log(
           "Hat distribution:",
           result

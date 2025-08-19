@@ -1,4 +1,4 @@
-import React, { type JSX } from "react";
+import { type JSX } from "react";
 
 export const hatColorToNumber: { [color: string]: number } = {
   "#000000": 0,

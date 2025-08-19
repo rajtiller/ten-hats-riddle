@@ -16,17 +16,10 @@ export const validateFormula = (formula: string): ValidationResult => {
   // Remove spaces for easier parsing
   const cleanFormula = formula.replace(/\s+/g, "");
 
-  // Check parentheses matching
-  let parenCount = 0;
-  for (const char of cleanFormula) {
-    if (char === "(") parenCount++;
-    if (char === ")") parenCount--;
-    if (parenCount < 0) {
-      return { isValid: false, error: "Unmatched closing parenthesis ')'" };
-    }
-  }
-  if (parenCount > 0) {
-    return { isValid: false, error: "Unmatched opening parenthesis '('" };
+  // Check parentheses matching and content
+  const parenResult = validateParentheses(cleanFormula);
+  if (!parenResult.isValid) {
+    return parenResult;
   }
 
   // Check bracket constructs
@@ -81,6 +74,112 @@ export const validateFormula = (formula: string): ValidationResult => {
   // Enhanced tokenization to handle multi-digit numbers
   const tokens = tokenizeFormula(cleanFormula);
   return validateTokens(tokens);
+};
+
+const validateParentheses = (cleanFormula: string): ValidationResult => {
+  let parenCount = 0;
+  let openPositions: number[] = [];
+
+  // First pass: check balance and collect positions
+  for (let i = 0; i < cleanFormula.length; i++) {
+    const char = cleanFormula[i];
+    if (char === "(") {
+      parenCount++;
+      openPositions.push(i);
+    } else if (char === ")") {
+      parenCount--;
+      if (parenCount < 0) {
+        return { isValid: false, error: "Unmatched closing parenthesis ')'" };
+      }
+
+      // Check content between this closing paren and its matching opening paren
+      const openPos = openPositions.pop();
+      if (openPos !== undefined) {
+        const content = cleanFormula.substring(openPos + 1, i);
+        const contentResult = validateParenthesesContent(content);
+        if (!contentResult.isValid) {
+          return contentResult;
+        }
+      }
+    }
+  }
+
+  if (parenCount > 0) {
+    return { isValid: false, error: "Unmatched opening parenthesis '('" };
+  }
+
+  return { isValid: true, error: "" };
+};
+
+const validateParenthesesContent = (content: string): ValidationResult => {
+  if (!content.trim()) {
+    return { isValid: false, error: "Empty parentheses '()' are not allowed" };
+  }
+
+  // Remove nested parentheses for this check by replacing them with 'X'
+  let simplified = content;
+  let depth = 0;
+  let result = "";
+
+  for (let i = 0; i < content.length; i++) {
+    const char = content[i];
+    if (char === "(") {
+      depth++;
+      result += "X"; // Replace nested parens with placeholder
+    } else if (char === ")") {
+      depth--;
+      result += "X"; // Replace nested parens with placeholder
+    } else if (depth === 0) {
+      result += char; // Keep only top-level content
+    } else {
+      result += "X"; // Replace nested content with placeholder
+    }
+  }
+
+  simplified = result;
+
+  // Check if parentheses contain valid content (numbers, variables, operators)
+  // Must have at least one number or variable
+  const hasNumber = /[0-9]/.test(simplified);
+  const hasVariable =
+    /i/.test(simplified) ||
+    /all/.test(simplified) ||
+    /[rl]\[[1-9]\]/.test(simplified);
+  const hasNestedContent = /X/.test(simplified);
+
+  if (!hasNumber && !hasVariable && !hasNestedContent) {
+    return {
+      isValid: false,
+      error:
+        "Parentheses must contain numbers, variables (i, all, r[?], l[?]), or nested expressions",
+    };
+  }
+
+  // Check for operator-only content
+  const onlyOperators = simplified.replace(/[+\-×\s]/g, "");
+  if (onlyOperators === "") {
+    return {
+      isValid: false,
+      error: "Parentheses cannot contain only operators",
+    };
+  }
+
+  // Check for leading/trailing operators inside parentheses
+  const trimmed = simplified.trim();
+  if (/^[+\-×]/.test(trimmed)) {
+    return {
+      isValid: false,
+      error: "Parentheses cannot start with an operator",
+    };
+  }
+  if (/[+\-×]$/.test(trimmed)) {
+    return {
+      isValid: false,
+      error: "Parentheses cannot end with an operator",
+    };
+  }
+
+  return { isValid: true, error: "" };
 };
 
 const tokenizeFormula = (cleanFormula: string): Token[] => {
