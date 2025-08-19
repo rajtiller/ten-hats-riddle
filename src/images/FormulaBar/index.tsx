@@ -6,12 +6,15 @@ import { validateFormula } from "./validation";
 import { handleDelete } from "./deleteHandlers";
 import { handleButtonClick } from "./buttonHandlers";
 import { testFormula, evaluateTestResult } from "./testFunction";
-import FormulaDisplay from "./FormulaDisplay";
+import FormulaDisplay, { type PersonHighlight } from "./FormulaDisplay";
 import ButtonGrid from "./ButtonGrid";
 
 const FormulaBar: React.FC<
-  FormulaBarProps & { onTestResult?: (result: number[]) => void }
-> = ({ width = 600, height = 120, onTestResult }) => {
+  FormulaBarProps & {
+    onTestResult?: (result: number[]) => void;
+    onPersonHighlight?: (highlight: PersonHighlight | null) => void;
+  }
+> = ({ width = 600, height = 120, onTestResult, onPersonHighlight }) => {
   const [formula, setFormula] = useState("");
   const [cursorPosition, setCursorPosition] = useState(0);
   const [waitingForBracketNumber, setWaitingForBracketNumber] = useState(false);
@@ -169,7 +172,11 @@ const FormulaBar: React.FC<
             boxSizing: "border-box",
           }}
         >
-          <FormulaDisplay formula={formula} cursorPosition={cursorPosition} />
+          <FormulaDisplay
+            formula={formula}
+            cursorPosition={cursorPosition}
+            onHighlightChange={onPersonHighlight}
+          />
         </div>
 
         <div

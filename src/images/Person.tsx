@@ -18,8 +18,9 @@ export interface PersonProps {
   hatColor?: string;
   personNumber?: number;
   showPersonNumber?: boolean;
-  isCurrentPerson?: boolean; // New prop to identify current person
-  leftPosition?: number; // New prop for l[n] labeling
+  isCurrentPerson?: boolean;
+  leftPosition?: number;
+  isHighlighted?: boolean; // New prop for highlighting
 }
 
 export class Person {
@@ -39,6 +40,7 @@ export class Person {
   showPersonNumber: boolean;
   isCurrentPerson: boolean;
   leftPosition: number;
+  isHighlighted: boolean;
 
   constructor({
     x = 0,
@@ -59,6 +61,7 @@ export class Person {
     showPersonNumber = true,
     isCurrentPerson = false,
     leftPosition = 0,
+    isHighlighted = false,
   }: PersonProps = {}) {
     this.x = x;
     this.y = y;
@@ -76,6 +79,45 @@ export class Person {
     this.showPersonNumber = showPersonNumber;
     this.isCurrentPerson = isCurrentPerson;
     this.leftPosition = leftPosition;
+    this.isHighlighted = isHighlighted;
+  }
+
+  renderHighlight(): JSX.Element {
+    if (!this.isHighlighted) return <></>;
+
+    return (
+      <g>
+        {/* Pulsing highlight circle */}
+        <circle
+          cx={this.x}
+          cy={this.y}
+          r="45"
+          fill="none"
+          stroke="#ffeb3b"
+          strokeWidth="4"
+          opacity="0.8"
+          style={{
+            animation: "pulse 1.5s ease-in-out infinite",
+          }}
+        />
+        <style>
+          {`
+            @keyframes pulse {
+              0%, 100% { 
+                stroke-width: 4;
+                opacity: 0.8;
+                r: 45;
+              }
+              50% { 
+                stroke-width: 6;
+                opacity: 1;
+                r: 50;
+              }
+            }
+          `}
+        </style>
+      </g>
+    );
   }
 
   renderHead(): JSX.Element {
@@ -216,6 +258,7 @@ export class Person {
   render(): JSX.Element {
     return (
       <g>
+        {this.renderHighlight()}
         {this.renderShoulders()}
         {this.renderHead()}
         {this.renderFace()}

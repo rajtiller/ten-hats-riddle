@@ -1,5 +1,6 @@
 import React, { type JSX } from "react";
 import { Person } from "./Person";
+import { type PersonHighlight } from "./FormulaBar/FormulaDisplay";
 
 interface GroupProps {
   numberOfPeople?: number;
@@ -7,7 +8,8 @@ interface GroupProps {
   radius?: number;
   hatColors?: string[];
   showPersonNumbers?: boolean;
-  currentPersonIndex?: number; // New prop to specify which person is current
+  currentPersonIndex?: number;
+  personHighlight?: PersonHighlight | null; // New prop for highlighting
 }
 
 class Group {
@@ -21,27 +23,95 @@ class Group {
     radius = 5,
     hatColors = [],
     showPersonNumbers = false,
-    currentPersonIndex = 0, // Default to person 0 being current
+    currentPersonIndex = 0,
+    personHighlight = null,
   }: GroupProps = {}) {
     this.numberOfPeople = numberOfPeople;
     this.radius = Math.max(1, Math.min(10, radius));
+
+    console.log("Group constructor - personHighlight:", personHighlight);
+
     this.people =
       people ||
-      this.createPeople(hatColors, showPersonNumbers, currentPersonIndex);
+      this.createPeople(
+        hatColors,
+        showPersonNumbers,
+        currentPersonIndex,
+        personHighlight
+      );
+  }
+
+  private shouldHighlightPerson(
+    personIndex: number,
+    currentPersonIndex: number,
+    highlight: PersonHighlight | null
+  ): boolean {
+    if (!highlight) return false;
+
+    console.log(
+      `Checking highlight for person ${personIndex}, highlight:`,
+      highlight
+    );
+
+    switch (highlight.type) {
+      case "current":
+        const shouldHighlightCurrent = personIndex === currentPersonIndex;
+        console.log(
+          `Current person check: ${personIndex} === ${currentPersonIndex} = ${shouldHighlightCurrent}`
+        );
+        return shouldHighlightCurrent;
+
+      case "all":
+        const shouldHighlightAll = personIndex !== currentPersonIndex;
+        console.log(
+          `All people check: ${personIndex} !== ${currentPersonIndex} = ${shouldHighlightAll}`
+        );
+        return shouldHighlightAll;
+
+      case "left":
+        if (highlight.position && personIndex !== currentPersonIndex) {
+          // Calculate the person's position relative to current person
+          const relativePosition =
+            (personIndex - currentPersonIndex + this.numberOfPeople) %
+            this.numberOfPeople;
+          const shouldHighlightLeft = relativePosition === highlight.position;
+          console.log(
+            `Left position check: person ${personIndex}, relative pos ${relativePosition}, target ${highlight.position} = ${shouldHighlightLeft}`
+          );
+          return shouldHighlightLeft;
+        }
+        return false;
+
+      case "right":
+        if (highlight.position && personIndex !== currentPersonIndex) {
+          // Calculate the person's position relative to current person (right side)
+          const relativePosition =
+            (currentPersonIndex - personIndex + this.numberOfPeople) %
+            this.numberOfPeople;
+          const shouldHighlightRight = relativePosition === highlight.position;
+          console.log(
+            `Right position check: person ${personIndex}, relative pos ${relativePosition}, target ${highlight.position} = ${shouldHighlightRight}`
+          );
+          return shouldHighlightRight;
+        }
+        return false;
+
+      default:
+        return false;
+    }
   }
 
   private createPeople(
     hatColors: string[],
     showPersonNumbers: boolean,
-    currentPersonIndex: number
+    currentPersonIndex: number,
+    personHighlight: PersonHighlight | null = null
   ): Person[] {
     const people: Person[] = [];
     const angleStep = (2 * Math.PI) / this.numberOfPeople;
 
     for (let i = 0; i < this.numberOfPeople; i++) {
       // Arrange people so that person at currentPersonIndex is at the bottom
-      // Bottom position is at angle π/2 (90 degrees) in standard coordinates
-      // but we want to offset so currentPersonIndex person is at bottom
       const adjustedIndex =
         (i - currentPersonIndex + this.numberOfPeople) % this.numberOfPeople;
 
@@ -52,6 +122,15 @@ class Group {
       const y = scaledRadius * Math.sin(angle);
 
       const isCurrentPerson = i === currentPersonIndex;
+      const isHighlighted = this.shouldHighlightPerson(
+        i,
+        currentPersonIndex,
+        personHighlight
+      );
+
+      console.log(
+        `Person ${i}: isCurrentPerson=${isCurrentPerson}, isHighlighted=${isHighlighted}`
+      );
 
       // Use light gray for current person, provided colors for others
       let hatColor;
@@ -62,19 +141,14 @@ class Group {
       }
 
       // Calculate left position relative to current person
-      // l[1] is the person to the immediate left of current person (counter-clockwise)
       let leftPosition = 1;
       if (!isCurrentPerson) {
-        // Calculate relative position from current person's perspective
-        // In a circle going clockwise, "left" means counter-clockwise from current person
         const relativePosition =
           (i - currentPersonIndex + this.numberOfPeople) % this.numberOfPeople;
         leftPosition = relativePosition;
 
-        // Adjust so position 0 (current person) doesn't get a label
-        // and others get sequential numbering starting from 1
         if (relativePosition === 0) {
-          leftPosition = this.numberOfPeople; // This shouldn't happen for non-current person
+          leftPosition = this.numberOfPeople;
         }
       }
 
@@ -82,11 +156,12 @@ class Group {
         x,
         y,
         angle: 0,
-        personNumber: i, // Keep original numbering for results display
+        personNumber: i,
         showPersonNumber: showPersonNumbers,
         hatColor: hatColor,
         isCurrentPerson: isCurrentPerson,
         leftPosition: leftPosition,
+        isHighlighted: isHighlighted,
       });
 
       people.push(person);
@@ -107,6 +182,8 @@ class Group {
 }
 
 const GroupComponent: React.FC<GroupProps> = (props = {}) => {
+  console.log("GroupComponent props:", props);
+
   const group = new Group(props);
   const padding = 80;
   const scaledRadius = group.radius * 20;

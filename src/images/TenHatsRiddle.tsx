@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import FormulaBar from "./FormulaBar/index";
 import Group from "./Group";
 import HatLegend from "./HatLegend";
+import { type PersonHighlight } from "./FormulaBar/FormulaDisplay";
 
 type AppState = "input" | "results";
 
@@ -15,7 +16,9 @@ const TenHatsRiddle: React.FC = () => {
   const [appState, setAppState] = useState<AppState>("input");
   const [testResult, setTestResult] = useState<TestResult | null>(null);
   const [counterExampleHats, setCounterExampleHats] = useState<string[]>([]);
-  const [currentPersonIndex] = useState(0); // Player is always person 0 and will be positioned at bottom
+  const [currentPersonIndex] = useState(0);
+  const [personHighlight, setPersonHighlight] =
+    useState<PersonHighlight | null>(null);
 
   // Hat colors - all valid colors for the rainbow effect
   const availableHatColors = [
@@ -60,6 +63,7 @@ const TenHatsRiddle: React.FC = () => {
     setAppState("input");
     setTestResult(null);
     setCounterExampleHats([]);
+    setPersonHighlight(null); // Clear highlighting when resetting
   };
 
   const getHatColorsForState = (): string[] => {
@@ -150,6 +154,7 @@ const TenHatsRiddle: React.FC = () => {
           hatColors={getHatColorsForState()}
           showPersonNumbers={appState === "results"}
           currentPersonIndex={currentPersonIndex}
+          personHighlight={personHighlight}
         />
 
         {/* Formula bar - only show in input state */}
@@ -158,6 +163,7 @@ const TenHatsRiddle: React.FC = () => {
             width={600}
             height={120}
             onTestResult={handleTestResult}
+            onPersonHighlight={setPersonHighlight}
           />
         )}
 
@@ -237,7 +243,7 @@ const TenHatsRiddle: React.FC = () => {
         }}
       >
         {appState === "input"
-          ? "Your hat (YOU at bottom) appears light gray with ??? because you can't see it. Other people wear rainbow hats representing all possible colors."
+          ? "Your hat (YOU at bottom) appears light gray with ??? because you can't see it. Other people wear rainbow hats representing all possible colors. Referenced people will highlight in yellow."
           : "This shows a counter-example where your formula would fail. Study the pattern and try a different approach."}
       </div>
     </div>
