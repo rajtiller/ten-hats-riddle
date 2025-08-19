@@ -1,4 +1,3 @@
-make it clear all refers to all other peoples hats
 make it clear i refers to the current person's number, not hat
 fix spacing, things are overlapping
 make it so people are only labeled iwth an index after the test button is hit
@@ -9,3 +8,4 @@ make spacing in fomular bar consistent, especially after deleting
 make it so once calculations are done, everyone's calculations are shown to see how they go there
 implement test function
 make it so hats for two people are black and white
+remove 'YOU'

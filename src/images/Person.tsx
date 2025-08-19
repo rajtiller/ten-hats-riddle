@@ -86,16 +86,63 @@ export class Person {
     this.showIndexLabels = showIndexLabels;
   }
 
-  renderHighlight(): JSX.Element {
-    if (!this.isHighlighted) return <></>;
+  renderIndexHighlight(): JSX.Element {
+    if (!this.isHighlighted || !this.showIndexLabels) return <></>;
 
+    // Highlight the index label specifically for current person
+    if (this.isCurrentPerson) {
+      const labelX = this.x + 25;
+      const labelY = this.y + 45;
+
+      return (
+        <g>
+          {/* Pulsing highlight circle around the index label */}
+          <circle
+            cx={labelX}
+            cy={labelY - 3}
+            r="15"
+            fill="none"
+            stroke="#ffeb3b"
+            strokeWidth="3"
+            opacity="0.8"
+            style={{
+              animation: "pulse 1.5s ease-in-out infinite",
+            }}
+          />
+          <style>
+            {`
+              @keyframes pulse {
+                0%, 100% { 
+                  stroke-width: 3;
+                  opacity: 0.8;
+                  r: 15;
+                }
+                50% { 
+                  stroke-width: 4;
+                  opacity: 1;
+                  r: 18;
+                }
+              }
+            `}
+          </style>
+        </g>
+      );
+    }
+
+    return <></>;
+  }
+
+  renderHatHighlight(): JSX.Element {
+    if (!this.isHighlighted || this.isCurrentPerson) return <></>;
+
+    // Highlight around the hat for other people
     return (
       <g>
-        {/* Pulsing highlight circle */}
+        {/* Pulsing highlight circle around the hat */}
         <circle
           cx={this.x}
-          cy={this.y}
-          r="45"
+          cy={this.y - 20} // Position around hat area
+          r="30"
           fill="none"
           stroke="#ffeb3b"
           strokeWidth="4"
@@ -110,18 +157,29 @@ export class Person {
               0%, 100% { 
                 stroke-width: 4;
                 opacity: 0.8;
-                r: 45;
+                r: 30;
               }
               50% { 
                 stroke-width: 6;
                 opacity: 1;
-                r: 50;
+                r: 35;
               }
             }
           `}
         </style>
       </g>
     );
+  }
+
+  renderHighlight(): JSX.Element {
+    if (!this.isHighlighted) return <></>;
+
+    // Use different highlighting based on whether it's current person or others
+    if (this.isCurrentPerson) {
+      return this.renderIndexHighlight();
+    } else {
+      return this.renderHatHighlight();
+    }
   }
 
   renderHead(): JSX.Element {
@@ -201,7 +259,7 @@ export class Person {
           strokeWidth="1"
           opacity="0.9"
         />
-        {/* Person number text */}
+        {/* Person number text - always show absolute person number */}
         <text
           x={labelX}
           y={labelY}
@@ -220,27 +278,40 @@ export class Person {
   renderIndexLabel(): JSX.Element {
     if (!this.showIndexLabels) return <></>;
 
-    const labelY = this.y + 67; // Position below the person
+    // Position the label at bottom right relative to the person (same as person numbers)
+    const labelX = this.x + 25;
+    const labelY = this.y + 45;
 
     if (this.isCurrentPerson) {
       // Show "i" for current person
       return (
         <g>
+          {/* White background circle for better readability */}
+          <circle
+            cx={labelX}
+            cy={labelY - 3}
+            r="10"
+            fill="white"
+            stroke="#333"
+            strokeWidth="1"
+            opacity="0.9"
+          />
+          {/* Index label text */}
           <text
-            x={this.x}
+            x={labelX}
             y={labelY}
             textAnchor="middle"
             fontSize="12"
             fontFamily="monospace"
             fontWeight="bold"
-            fill="#0066cc"
+            fill="black"
           >
             i
           </text>
         </g>
       );
     } else {
-      // Show relative index (i-1, i+1, etc.) for others
+      // Show relative index (i-1, i+1, etc.) for others in same format
       const relativeIndex = this.leftPosition;
       let indexLabel = "";
 
@@ -256,14 +327,25 @@ export class Person {
 
       return (
         <g>
+          {/* White background circle for better readability */}
+          <circle
+            cx={labelX}
+            cy={labelY - 3}
+            r="10"
+            fill="white"
+            stroke="#333"
+            strokeWidth="1"
+            opacity="0.9"
+          />
+          {/* Index label text */}
           <text
-            x={this.x}
+            x={labelX}
             y={labelY}
             textAnchor="middle"
-            fontSize="12"
+            fontSize="10"
             fontFamily="monospace"
             fontWeight="bold"
-            fill="#0066cc"
+            fill="black"
           >
             {indexLabel}
           </text>
@@ -322,8 +404,10 @@ export class Person {
         {this.renderHead()}
         {this.renderFace()}
         {this.hat.render(this.x, this.y, this.angle, this.isCurrentPerson)}
-        {this.renderPersonNumber()}
-        {this.renderIndexLabel()}
+        {/* Show either person numbers (absolute) OR index labels (relative), not both */}
+        {this.showPersonNumber
+          ? this.renderPersonNumber()
+          : this.renderIndexLabel()}
         {this.renderPersonLabel()}
       </g>
     );

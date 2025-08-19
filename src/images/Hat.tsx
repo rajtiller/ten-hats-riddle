@@ -75,7 +75,7 @@ export class HatClass implements Hat {
       .substring(2, 9)}`;
 
     // Show "???" for current person, number for others, nothing for rainbow
-    let displayText = "";
+    let displayText = "?";
     if (isCurrentPerson) {
       displayText = "???";
     } else if (!isRainbow) {

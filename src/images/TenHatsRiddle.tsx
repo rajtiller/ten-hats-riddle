@@ -152,10 +152,10 @@ const TenHatsRiddle: React.FC = () => {
           numberOfPeople={10}
           radius={10}
           hatColors={getHatColorsForState()}
-          showPersonNumbers={appState === "results"}
+          showPersonNumbers={appState === "results"} // Show absolute numbers after test
           currentPersonIndex={currentPersonIndex}
           personHighlight={personHighlight}
-          showIndexLabels={true} // Always show index labels
+          showIndexLabels={appState === "input"} // Show relative index labels only in input mode
         />
 
         {/* Formula bar - only show in input state */}
@@ -245,7 +245,7 @@ const TenHatsRiddle: React.FC = () => {
       >
         {appState === "input"
           ? "YOU are person 'i' at the bottom. Others are labeled relative to you (i+1, i-1, etc.). Referenced people will highlight in yellow."
-          : "This shows a counter-example where your formula would fail. Study the pattern and try a different approach."}
+          : "Numbers show absolute positions (0-9). Person 0 (YOU) is at bottom, numbered clockwise."}
       </div>
     </div>
   );
