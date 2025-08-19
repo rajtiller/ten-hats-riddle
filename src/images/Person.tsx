@@ -371,25 +371,57 @@ export class Person {
     return <></>;
   }
 
+  getGuessColor(guess: number): string {
+    const guessColors = [
+      "#000000", // Black - 0
+      "#008080", // Teal - 1
+      "#ff0000", // Red - 2
+      "#ffa500", // Orange - 3
+      "#008000", // Green - 4
+      "#0000ff", // Blue - 5
+      "#8b00ff", // Violet - 6
+      "#ff00ff", // Magenta - 7
+      "#d2b48c", // Tan - 8
+      "#8b4513", // Brown - 9
+    ];
+
+    return guessColors[guess] || "#666666"; // Fallback gray for invalid guesses
+  }
+
+  getTextColor(backgroundColor: string): string {
+    // Determine if we need light or dark text based on background color
+    const darkBackgrounds = [
+      "#000000",
+      "#008080",
+      "#008000",
+      "#0000ff",
+      "#8b00ff",
+      "#8b4513",
+    ];
+    return darkBackgrounds.includes(backgroundColor) ? "white" : "black";
+  }
+
   renderGuess(): JSX.Element {
     if (this.guess === undefined || this.guess === -1) return <></>;
 
     // Position the guess above the person
     const guessY = this.y - 60;
+    const guessColor = this.getGuessColor(this.guess);
+    const textColor = this.getTextColor(guessColor);
 
     return (
       <g>
-        {/* Background circle for guess */}
+        {/* Background circle for guess - now colored based on the guess */}
         <circle
           cx={this.x}
           cy={guessY}
           r="12"
-          fill="#fff3cd"
-          stroke="#856404"
+          fill={guessColor}
+          stroke="#333"
           strokeWidth="2"
           opacity="0.9"
         />
-        {/* Guess text */}
+        {/* Guess text with contrasting color */}
         <text
           x={this.x}
           y={guessY + 4}
@@ -397,7 +429,7 @@ export class Person {
           fontSize="14"
           fontFamily="monospace"
           fontWeight="bold"
-          fill="#856404"
+          fill={textColor}
         >
           {this.guess}
         </text>
