@@ -97,11 +97,8 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
       };
     }
 
-    // Check for valid operators and characters
-    const invalidChars = formula.replace(
-      /[irl\[\]\(\)1-9\+\-×÷\s]|mod|all/g,
-      ""
-    );
+    // Check for valid operators and characters (removed mod from valid chars)
+    const invalidChars = formula.replace(/[irl\[\]\(\)1-9\+\-×÷\s]|all/g, "");
     if (invalidChars) {
       return { isValid: false, error: `Invalid characters: '${invalidChars}'` };
     }
@@ -274,9 +271,6 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
       case "del":
         handleDelete();
         break;
-      case "mod":
-        insertAtCursor(" mod ");
-        break;
       case "+":
         insertAtCursor(" + ");
         break;
@@ -364,7 +358,7 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
         </div>
       )}
 
-      {/* Formula Display with Person i: prefix */}
+      {/* Formula Display with Person i: prefix and mod 10 suffix */}
       <div
         style={{
           height: "32px",
@@ -411,6 +405,24 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
           }}
         >
           <FormulaDisplay formula={formula} cursorPosition={cursorPosition} />
+        </div>
+
+        {/* mod 10 label in gray area - no border */}
+        <div
+          style={{
+            backgroundColor: "#f5f5f5", // Same as surrounding
+            color: "black",
+            fontFamily: "monospace",
+            fontSize: "14px",
+            padding: "6px 8px",
+            display: "flex",
+            alignItems: "center",
+            userSelect: "none",
+            height: "100%",
+            boxSizing: "border-box",
+          }}
+        >
+          mod 10
         </div>
 
         {/* Test Button */}

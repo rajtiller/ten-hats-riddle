@@ -1,3 +1,4 @@
+add error check for no numbers in formula
 make it so evrerybody's guess is displayed in a text box
 make it so once calculations are done, everyone's calculations are shown to see how they go there
 make it so har colors are randomized
