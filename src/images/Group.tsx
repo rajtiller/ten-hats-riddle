@@ -5,6 +5,8 @@ interface GroupProps {
   numberOfPeople?: number;
   people?: Person[];
   radius?: number;
+  hatColors?: string[];
+  showPersonNumbers?: boolean;
 }
 
 class Group {
@@ -12,29 +14,41 @@ class Group {
   people: Person[];
   radius: number;
 
-  constructor({ numberOfPeople = 5, people, radius = 5 }: GroupProps = {}) {
+  constructor({
+    numberOfPeople = 5,
+    people,
+    radius = 5,
+    hatColors = [],
+    showPersonNumbers = false,
+  }: GroupProps = {}) {
     this.numberOfPeople = numberOfPeople;
     this.radius = Math.max(1, Math.min(10, radius));
-    this.people = people || this.createPeople();
+    this.people = people || this.createPeople(hatColors, showPersonNumbers);
   }
 
-  private createPeople(): Person[] {
+  private createPeople(
+    hatColors: string[],
+    showPersonNumbers: boolean
+  ): Person[] {
     const people: Person[] = [];
     const angleStep = (2 * Math.PI) / this.numberOfPeople;
 
     for (let i = 0; i < this.numberOfPeople; i++) {
-      // Start from bottom (person 0) and go clockwise
       const angle = (i + 0.5) * angleStep;
       const scaledRadius = this.radius * 20;
       const x = scaledRadius * Math.cos(angle);
       const y = scaledRadius * Math.sin(angle);
 
+      // Use provided hat color or default
+      const hatColor = hatColors[i] || "#ff0000";
+
       const person = new Person({
         x,
         y,
         angle: 0,
-        personNumber: (i+8) % 10,
-        showPersonNumber: true,
+        personNumber: (i + 8) % 10,
+        showPersonNumber: showPersonNumbers,
+        hatColor: hatColor,
       });
 
       people.push(person);

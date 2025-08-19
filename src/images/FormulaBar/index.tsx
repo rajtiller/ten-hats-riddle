@@ -9,10 +9,9 @@ import { testFormula, evaluateTestResult } from "./testFunction";
 import FormulaDisplay from "./FormulaDisplay";
 import ButtonGrid from "./ButtonGrid";
 
-const FormulaBar: React.FC<FormulaBarProps> = ({
-  width = 600,
-  height = 120,
-}) => {
+const FormulaBar: React.FC<
+  FormulaBarProps & { onTestResult?: (result: number[]) => void }
+> = ({ width = 600, height = 120, onTestResult }) => {
   const [formula, setFormula] = useState("");
   const [cursorPosition, setCursorPosition] = useState(0);
   const [waitingForBracketNumber, setWaitingForBracketNumber] = useState(false);
@@ -44,6 +43,11 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
     const evaluation = evaluateTestResult(result);
 
     setErrorMessage(evaluation.message);
+
+    // Call the callback to update parent state
+    if (onTestResult) {
+      onTestResult(result);
+    }
   };
 
   const deleteContext = {

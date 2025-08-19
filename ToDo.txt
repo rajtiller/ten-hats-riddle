@@ -1,5 +1,5 @@
-make the numbers text box not look editable
 consider removing gray as a color to it can be used for the unknown hat
+
 make it so the current person's hat is unknown (dark gray)
 make is clear other peoples hats are known (light gray)
 make it clear all refers to all other peoples hats

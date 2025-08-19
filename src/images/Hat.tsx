@@ -2,7 +2,7 @@ import { type JSX } from "react";
 
 export const hatColorToNumber: { [color: string]: number } = {
   "#000000": 0,
-  "#808080": 1,
+  "#008080": 1, // Changed from #808080 (gray) to #008080 (teal)
   "#ff0000": 2,
   "#ffa500": 3,
   "#008000": 4,
