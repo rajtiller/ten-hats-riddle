@@ -357,24 +357,7 @@ export class Person {
   renderPersonLabel(): JSX.Element {
     const labelY = this.y + 85; // Position below index labels
 
-    if (this.isCurrentPerson) {
-      // Always show "YOU" for current person
-      return (
-        <g>
-          <text
-            x={this.x}
-            y={labelY}
-            textAnchor="middle"
-            fontSize="14"
-            fontFamily="monospace"
-            fontWeight="bold"
-            fill="#ff0000"
-          >
-            YOU
-          </text>
-        </g>
-      );
-    } else if (!this.showPersonNumber && !this.showIndexLabels) {
+    if (!this.showPersonNumber && !this.showIndexLabels) {
       // Show l[n] labels only when neither person numbers nor index labels are shown
       return (
         <g>

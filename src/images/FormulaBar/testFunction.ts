@@ -2,7 +2,7 @@ export const testFormula = (formula: string): number[] => {
   // TODO: Implement actual test logic
   // This will contain the real algorithm to test if the formula works
   // For now, return example counter-example
-  return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+  return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1000];
 };
 
 export interface TestResult {

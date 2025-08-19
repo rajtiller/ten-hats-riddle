@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { type FormulaBarProps } from "./types";
 import { insertTextAtPosition } from "./utils";
 import { useKeyboardControls } from "./useKeyboardControls";
@@ -11,16 +11,37 @@ import ButtonGrid from "./ButtonGrid";
 
 const FormulaBar: React.FC<
   FormulaBarProps & {
-    onTestResult?: (result: number[]) => void;
+    onTestResult?: (result: number[], formula: string) => void;
     onPersonHighlight?: (highlight: PersonHighlight | null) => void;
+    initialFormula?: string;
+    showAsReadOnly?: boolean;
+    onTryAgain?: () => void;
   }
-> = ({ width = 600, height = 120, onTestResult, onPersonHighlight }) => {
-  const [formula, setFormula] = useState("");
+> = ({
+  width = 600,
+  height = 120,
+  onTestResult,
+  onPersonHighlight,
+  initialFormula = "",
+  showAsReadOnly = false,
+  onTryAgain,
+}) => {
+  const [formula, setFormula] = useState(initialFormula);
   const [cursorPosition, setCursorPosition] = useState(0);
   const [waitingForBracketNumber, setWaitingForBracketNumber] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  // Update formula when initialFormula changes
+  useEffect(() => {
+    if (initialFormula !== undefined) {
+      setFormula(initialFormula);
+      setCursorPosition(initialFormula.length);
+    }
+  }, [initialFormula]);
+
   const insertAtCursor = (text: string) => {
+    if (showAsReadOnly) return;
+
     const { newText, newPosition } = insertTextAtPosition(
       formula,
       cursorPosition,
@@ -49,7 +70,7 @@ const FormulaBar: React.FC<
 
     // Call the callback to update parent state
     if (onTestResult) {
-      onTestResult(result);
+      onTestResult(result, formula);
     }
   };
 
@@ -160,14 +181,14 @@ const FormulaBar: React.FC<
             flex: 1,
             height: "100%",
             border: "1px solid #666",
-            backgroundColor: "white",
+            backgroundColor: showAsReadOnly ? "#f9f9f9" : "white",
             padding: "6px",
             fontFamily: "monospace",
             fontSize: "14px",
             display: "flex",
             alignItems: "center",
             overflow: "hidden",
-            cursor: "default",
+            cursor: showAsReadOnly ? "default" : "default",
             userSelect: "none",
             boxSizing: "border-box",
           }}
@@ -176,6 +197,7 @@ const FormulaBar: React.FC<
             formula={formula}
             cursorPosition={cursorPosition}
             onHighlightChange={onPersonHighlight}
+            showCursor={!showAsReadOnly}
           />
         </div>
 
@@ -197,16 +219,21 @@ const FormulaBar: React.FC<
         </div>
 
         <button
-          onClick={handleTest}
-          disabled={!validation.isValid}
+          onClick={showAsReadOnly && onTryAgain ? onTryAgain : handleTest}
+          disabled={!showAsReadOnly && !validation.isValid}
           style={{
             marginLeft: "8px",
             padding: "6px 12px",
-            backgroundColor: validation.isValid ? "#4CAF50" : "#ccc",
-            color: validation.isValid ? "white" : "#999",
+            backgroundColor: showAsReadOnly
+              ? "#dc3545"
+              : validation.isValid
+              ? "#4CAF50"
+              : "#ccc",
+            color: showAsReadOnly || validation.isValid ? "white" : "#999",
             border: "1px solid #666",
             borderRadius: "3px",
-            cursor: validation.isValid ? "pointer" : "not-allowed",
+            cursor:
+              showAsReadOnly || validation.isValid ? "pointer" : "not-allowed",
             fontFamily: "monospace",
             fontSize: "12px",
             fontWeight: "bold",
@@ -214,7 +241,7 @@ const FormulaBar: React.FC<
             boxSizing: "border-box",
           }}
         >
-          TEST
+          {showAsReadOnly ? "TRY AGAIN" : "TEST"}
         </button>
       </div>
 
@@ -241,15 +268,17 @@ const FormulaBar: React.FC<
         </div>
       )}
 
-      {/* Button grid */}
-      <div style={{ flex: "1 1 auto" }}>
-        <ButtonGrid
-          onButtonClick={(value) =>
-            handleButtonClick(value, buttonContext, waitingForBracketNumber)
-          }
-          waitingForBracketNumber={waitingForBracketNumber}
-        />
-      </div>
+      {/* Button grid - only show when not read-only */}
+      {!showAsReadOnly && (
+        <div style={{ flex: "1 1 auto" }}>
+          <ButtonGrid
+            onButtonClick={(value) =>
+              handleButtonClick(value, buttonContext, waitingForBracketNumber)
+            }
+            waitingForBracketNumber={waitingForBracketNumber}
+          />
+        </div>
+      )}
     </div>
   );
 };

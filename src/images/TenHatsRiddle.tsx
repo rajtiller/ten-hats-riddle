@@ -10,6 +10,8 @@ interface TestResult {
   isCorrect: boolean;
   counterExample?: number[];
   message: string;
+  successCount?: number; // Add success count to test result
+  formula?: string; // Add formula to test result
 }
 
 const TenHatsRiddle: React.FC = () => {
@@ -19,6 +21,7 @@ const TenHatsRiddle: React.FC = () => {
   const [currentPersonIndex] = useState(0);
   const [personHighlight, setPersonHighlight] =
     useState<PersonHighlight | null>(null);
+  const [currentFormula, setCurrentFormula] = useState<string>(""); // Track current formula
 
   // Hat colors - all valid colors for the rainbow effect
   const availableHatColors = [
@@ -36,24 +39,33 @@ const TenHatsRiddle: React.FC = () => {
 
   const currentPersonHatColor = "#d3d3d3"; // Light gray for current person
 
-  const handleTestResult = (result: number[]) => {
+  const handleTestResult = (result: number[], formula: string) => {
+    setCurrentFormula(formula);
+
     if (result.length === 0) {
       // Correct solution
       setTestResult({
         isCorrect: true,
         message: "✅ Correct solution! Your formula works for all cases.",
+        successCount: 10000000000, // 10 billion successes
+        formula: formula,
       });
       setAppState("results");
     } else {
-      // Counter example found
-      const hatColors = result.map(
+      // Counter example found - extract success count if available
+      const successCount = result.length >= 11 ? result[10] : undefined;
+      const counterExample = result.slice(0, 10); // First 10 elements are the counter example
+
+      const hatColors = counterExample.map(
         (colorIndex) => availableHatColors[colorIndex]
       );
       setCounterExampleHats(hatColors);
       setTestResult({
         isCorrect: false,
-        counterExample: result,
+        counterExample: counterExample,
         message: `❌ Counter example found! Here's a case where your formula fails.`,
+        successCount: successCount,
+        formula: formula,
       });
       setAppState("results");
     }
@@ -92,6 +104,12 @@ const TenHatsRiddle: React.FC = () => {
     }
   };
 
+  const formatSuccessRate = (successCount: number): string => {
+    const total = 10000000000; // 10 billion
+    const percentage = ((successCount / total) * 100).toFixed(3);
+    return `${percentage}%`;
+  };
+
   return (
     <div
       style={{
@@ -119,7 +137,7 @@ const TenHatsRiddle: React.FC = () => {
         Ten Hats Riddle
       </div>
 
-      {/* State indicator */}
+      {/* State indicator with success rate */}
       <div
         style={{
           position: "absolute",
@@ -132,7 +150,9 @@ const TenHatsRiddle: React.FC = () => {
       >
         {appState === "input"
           ? "🤔 Create a formula to determine your hat color"
-          : "🎯 Test Results"}
+          : appState === "results" && testResult?.successCount !== undefined
+          ? `Success Rate: ${formatSuccessRate(testResult.successCount)}`
+          : "THIS SHOULD NOT APPEAR"}
       </div>
 
       {/* Hat Legend */}
@@ -158,25 +178,27 @@ const TenHatsRiddle: React.FC = () => {
           showIndexLabels={appState === "input"} // Show relative index labels only in input mode
         />
 
-        {/* Formula bar - only show in input state */}
-        {appState === "input" && (
+        {/* Formula bar - show in input state OR results state for failures */}
+        {(appState === "input" ||
+          (appState === "results" && !testResult?.isCorrect)) && (
           <FormulaBar
             width={600}
             height={120}
             onTestResult={handleTestResult}
             onPersonHighlight={setPersonHighlight}
+            initialFormula={appState === "results" ? currentFormula : undefined}
+            showAsReadOnly={appState === "results"}
+            onTryAgain={appState === "results" ? handleGuessAgain : undefined}
           />
         )}
 
-        {/* Results panel - only show in results state */}
-        {appState === "results" && testResult && (
+        {/* Success message - only show for successful results */}
+        {appState === "results" && testResult?.isCorrect && (
           <div
             style={{
-              backgroundColor: testResult.isCorrect ? "#d4edda" : "#f8d7da",
-              color: testResult.isCorrect ? "#155724" : "#721c24",
-              border: `2px solid ${
-                testResult.isCorrect ? "#c3e6cb" : "#f5c6cb"
-              }`,
+              backgroundColor: "#d4edda",
+              color: "#155724",
+              border: "2px solid #c3e6cb",
               borderRadius: "8px",
               padding: "20px",
               maxWidth: "600px",
@@ -191,18 +213,8 @@ const TenHatsRiddle: React.FC = () => {
                 marginBottom: "10px",
               }}
             >
-              {testResult.message}
+              ✅ You got it! Your formula works for all cases.
             </div>
-
-            {!testResult.isCorrect && testResult.counterExample && (
-              <div style={{ fontSize: "14px", marginBottom: "15px" }}>
-                Hat distribution: [{testResult.counterExample.join(", ")}]
-                <br />
-                <span style={{ fontSize: "12px", opacity: 0.8 }}>
-                  Person 0 (YOU) is at bottom, numbered clockwise
-                </span>
-              </div>
-            )}
 
             <button
               onClick={handleGuessAgain}
@@ -225,10 +237,40 @@ const TenHatsRiddle: React.FC = () => {
                 e.currentTarget.style.backgroundColor = "#007bff";
               }}
             >
-              {testResult.isCorrect ? "Try Another Formula" : "Guess Again"}
+              Try Another Formula
             </button>
           </div>
         )}
+
+        {/* Counter example info - only show for failures */}
+        {appState === "results" &&
+          !testResult?.isCorrect &&
+          testResult?.counterExample && (
+            <div
+              style={{
+                backgroundColor: "#f8d7da",
+                color: "#721c24",
+                border: "2px solid #f5c6cb",
+                borderRadius: "8px",
+                padding: "15px",
+                maxWidth: "600px",
+                textAlign: "center",
+                fontFamily: "monospace",
+                fontSize: "14px",
+              }}
+            >
+              <div style={{ marginBottom: "10px", fontWeight: "bold" }}>
+                Counter Example:
+              </div>
+              <div>
+                Hat distribution: [{testResult.counterExample.join(", ")}]
+                <br />
+                <span style={{ fontSize: "12px", opacity: 0.8 }}>
+                  Person 0 (YOU) is at bottom, numbered clockwise
+                </span>
+              </div>
+            </div>
+          )}
       </div>
 
       {/* Instructions */}
@@ -243,9 +285,7 @@ const TenHatsRiddle: React.FC = () => {
           maxWidth: "80%",
         }}
       >
-        {appState === "input"
-          ? "YOU are person 'i' at the bottom. Others are labeled relative to you (i+1, i-1, etc.). Referenced people will highlight in yellow."
-          : "Numbers show absolute positions (0-9). Person 0 (YOU) is at bottom, numbered clockwise."}
+        {appState === "input" ? "" : ""}
       </div>
     </div>
   );

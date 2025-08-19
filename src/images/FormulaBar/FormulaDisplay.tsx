@@ -4,6 +4,7 @@ interface FormulaDisplayProps {
   formula: string;
   cursorPosition: number;
   onHighlightChange?: (highlight: PersonHighlight | null) => void;
+  showCursor?: boolean;
 }
 
 export interface PersonHighlight {
@@ -15,6 +16,7 @@ const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
   formula,
   cursorPosition,
   onHighlightChange,
+  showCursor = true,
 }) => {
   const findMatchingParenthesis = (position: number): number | null => {
     const char = formula[position];
@@ -155,7 +157,7 @@ const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
 
           return (
             <React.Fragment key={index}>
-              {atCursor && (
+              {atCursor && showCursor && (
                 <span
                   style={{
                     borderLeft: "2px solid #333",
@@ -179,7 +181,7 @@ const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
             </React.Fragment>
           );
         })}
-        {cursorPosition === formula.length && (
+        {cursorPosition === formula.length && showCursor && (
           <span
             style={{
               borderLeft: "2px solid #333",
