@@ -30,6 +30,35 @@ export class HatClass implements Hat {
     this.type = type;
   }
 
+  private createRainbowGradient(id: string): JSX.Element {
+    const allColors = [
+      "#000000", // Black
+      "#008080", // Teal
+      "#ff0000", // Red
+      "#ffa500", // Orange
+      "#008000", // Green
+      "#0000ff", // Blue
+      "#8b00ff", // Violet
+      "#ff00ff", // Magenta
+      "#d2b48c", // Tan
+      "#8b4513", // Brown
+    ];
+
+    return (
+      <defs>
+        <linearGradient id={id} x1="0%" y1="0%" x2="100%" y2="0%">
+          {allColors.map((color, index) => (
+            <stop
+              key={index}
+              offset={`${(index / (allColors.length - 1)) * 100}%`}
+              stopColor={color}
+            />
+          ))}
+        </linearGradient>
+      </defs>
+    );
+  }
+
   render(
     x: number,
     y: number,
@@ -40,51 +69,64 @@ export class HatClass implements Hat {
 
     const transform = `translate(${x}, ${y}) rotate(${angle})`;
     const hatNumber = hatColorToNumber[this.color] ?? "";
+    const isRainbow = this.color === "rainbow";
+    const gradientId = `rainbow-gradient-${Math.random()
+      .toString(36)
+      .substring(2, 9)}`;
 
-    // Show "???" for current person, number for others
-    const displayText = isCurrentPerson ? "???" : hatNumber;
+    // Show "???" for current person, number for others, nothing for rainbow
+    let displayText = "";
+    if (isCurrentPerson) {
+      displayText = "???";
+    } else if (!isRainbow) {
+      displayText = hatNumber.toString();
+    }
 
-    const renderHatText = (yPos: number) => (
-      <>
-        <text
-          x="0"
-          y={yPos}
-          textAnchor="middle"
-          fontSize="18"
-          fontFamily="monospace"
-          fontWeight="900"
-          fill="white"
-          stroke="white"
-          strokeWidth="2"
-        >
-          {displayText}
-        </text>
-        <text
-          x="0"
-          y={yPos}
-          textAnchor="middle"
-          fontSize="18"
-          fontFamily="monospace"
-          fontWeight="900"
-          fill="black"
-          stroke="black"
-          strokeWidth="0.5"
-        >
-          {displayText}
-        </text>
-      </>
-    );
+    const renderHatText = (yPos: number) =>
+      displayText ? (
+        <>
+          <text
+            x="0"
+            y={yPos}
+            textAnchor="middle"
+            fontSize="18"
+            fontFamily="monospace"
+            fontWeight="900"
+            fill="white"
+            stroke="white"
+            strokeWidth="2"
+          >
+            {displayText}
+          </text>
+          <text
+            x="0"
+            y={yPos}
+            textAnchor="middle"
+            fontSize="18"
+            fontFamily="monospace"
+            fontWeight="900"
+            fill="black"
+            stroke="black"
+            strokeWidth="0.5"
+          >
+            {displayText}
+          </text>
+        </>
+      ) : null;
+
+    const fillColor = isRainbow ? `url(#${gradientId})` : this.color;
 
     switch (this.type) {
       case "cap":
         return (
           <g transform={transform}>
+            {isRainbow && this.createRainbowGradient(gradientId)}
             <ellipse
               cx="0"
               cy="-20"
               rx="22"
               ry="15"
-              fill={this.color}
+              fill={fillColor}
               stroke="#000"
               strokeWidth="1"
             />
@@ -93,7 +135,7 @@ export class HatClass implements Hat {
               cy="-15"
               rx="28"
               ry="6"
-              fill={this.color}
+              fill={fillColor}
               stroke="#000"
               strokeWidth="1"
             />
@@ -103,12 +145,13 @@ export class HatClass implements Hat {
       case "beanie":
         return (
           <g transform={transform}>
+            {isRainbow && this.createRainbowGradient(gradientId)}
             <ellipse
               cx="0"
               cy="-20"
               rx="22"
               ry="15"
-              fill={this.color}
+              fill={fillColor}
               stroke="#000"
               strokeWidth="1"
             />
@@ -117,7 +160,7 @@ export class HatClass implements Hat {
               y="-8"
               width="44"
               height="6"
-              fill={this.color}
+              fill={fillColor}
               stroke="#000"
               strokeWidth="1"
             />
@@ -127,12 +170,13 @@ export class HatClass implements Hat {
       case "fedora":
         return (
           <g transform={transform}>
+            {isRainbow && this.createRainbowGradient(gradientId)}
             <ellipse
               cx="0"
               cy="-15"
               rx="32"
               ry="8"
-              fill={this.color}
+              fill={fillColor}
               stroke="#000"
               strokeWidth="1"
             />
@@ -141,7 +185,7 @@ export class HatClass implements Hat {
               cy="-25"
               rx="20"
               ry="12"
-              fill={this.color}
+              fill={fillColor}
               stroke="#000"
               strokeWidth="1"
             />
@@ -152,12 +196,13 @@ export class HatClass implements Hat {
       case "cowboy":
         return (
           <g transform={transform}>
+            {isRainbow && this.createRainbowGradient(gradientId)}
             <ellipse
               cx="0"
               cy="-12"
               rx="38"
               ry="10"
-              fill={this.color}
+              fill={fillColor}
               stroke="#000"
               strokeWidth="1"
             />
@@ -166,7 +211,7 @@ export class HatClass implements Hat {
               cy="-28"
               rx="18"
               ry="15"
-              fill={this.color}
+              fill={fillColor}
               stroke="#000"
               strokeWidth="1"
             />

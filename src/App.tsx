@@ -58,13 +58,13 @@ function App() {
   // Determine hat colors based on state
   const getHatColors = () => {
     if (tenHatsState === "input") {
-      // All hats are unknown (dark gray)
-      return Array(10).fill("#696969");
+      // Show rainbow hats for all people in input state
+      return Array(10).fill("rainbow");
     } else {
       // Show counter example or success colors
       return counterExampleHats.length > 0
         ? counterExampleHats
-        : Array(10).fill("#00ff00");
+        : Array(10).fill("rainbow"); // Show rainbow for success too
     }
   };
 

@@ -1,15 +1,11 @@
-make it so the current person's hat is unknown (dark gray)
 make all the mystery hats rainbow
-remove ???
-make is clear other peoples hats are known (light gray)
 make it clear all refers to all other peoples hats
-implement test function
 make it clear i refers to the current person's number, not hat
 make it so people are only labeled iwth an index after the test button is hit
 consider making square braces like round parentheses
 make people light up when they are referenced (l[?], r[?], all, i)
-make it so evrerybody's guess is displayed in a text box
+make it so evrerybody's guess is displayed in a text box (w/ explanation)
 make spacing in fomular bar consistent, especially after deleting
 make it so once calculations are done, everyone's calculations are shown to see how they go there
-make it so har colors are randomized
+implement test function
 make it so hats for two people are black and white

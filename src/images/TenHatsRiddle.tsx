@@ -17,7 +17,7 @@ const TenHatsRiddle: React.FC = () => {
   const [counterExampleHats, setCounterExampleHats] = useState<string[]>([]);
   const [currentPersonIndex] = useState(0); // Player is always person 0 and will be positioned at bottom
 
-  // Hat colors - fixed numbering and removed duplicate white
+  // Hat colors - all valid colors for the rainbow effect
   const availableHatColors = [
     "#000000", // Black - 0
     "#008080", // Teal - 1
@@ -31,7 +31,6 @@ const TenHatsRiddle: React.FC = () => {
     "#8b4513", // Brown - 9
   ];
 
-  const unknownHatColor = "#696969"; // Dark gray for unknown hats
   const currentPersonHatColor = "#d3d3d3"; // Light gray for current person
 
   const handleTestResult = (result: number[]) => {
@@ -65,15 +64,14 @@ const TenHatsRiddle: React.FC = () => {
 
   const getHatColorsForState = (): string[] => {
     if (appState === "input") {
-      // Current person gets light gray, others get their actual colors
+      // Current person gets light gray, others get rainbow
       const colors = Array(10)
         .fill("")
         .map((_, index) => {
           if (index === currentPersonIndex) {
             return currentPersonHatColor; // Light gray for current person
           } else {
-            // For now, use random colors for other people that the current person can see
-            return availableHatColors[index % availableHatColors.length];
+            return "rainbow"; // Special rainbow color for all others
           }
         });
       return colors;
@@ -81,8 +79,12 @@ const TenHatsRiddle: React.FC = () => {
       // Show counter example colors
       return counterExampleHats;
     } else {
-      // Fallback
-      return Array(10).fill(unknownHatColor);
+      // Fallback - show rainbow colors
+      return Array(10)
+        .fill("")
+        .map((_, index) =>
+          index === currentPersonIndex ? currentPersonHatColor : "rainbow"
+        );
     }
   };
 
@@ -235,7 +237,7 @@ const TenHatsRiddle: React.FC = () => {
         }}
       >
         {appState === "input"
-          ? "Your hat (YOU at bottom) appears light gray with ??? because you can't see it. Other people are labeled l[1], l[2], etc. representing their position to your left."
+          ? "Your hat (YOU at bottom) appears light gray with ??? because you can't see it. Other people wear rainbow hats representing all possible colors."
           : "This shows a counter-example where your formula would fail. Study the pattern and try a different approach."}
       </div>
     </div>
