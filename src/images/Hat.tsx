@@ -30,13 +30,21 @@ export class HatClass implements Hat {
     this.type = type;
   }
 
-  render(x: number, y: number, angle: number = 0): JSX.Element {
+  render(
+    x: number,
+    y: number,
+    angle: number = 0,
+    isCurrentPerson: boolean = false
+  ): JSX.Element {
     if (this.type === "none") return <></>;
 
     const transform = `translate(${x}, ${y}) rotate(${angle})`;
-    const hatNumber = hatColorToNumber[this.color] ?? "?";
+    const hatNumber = hatColorToNumber[this.color] ?? "";
 
-    const renderHatNumber = (yPos: number) => (
+    // Show "???" for current person, number for others
+    const displayText = isCurrentPerson ? "???" : hatNumber;
+
+    const renderHatText = (yPos: number) => (
       <>
         <text
           x="0"
@@ -49,7 +57,7 @@ export class HatClass implements Hat {
           stroke="white"
           strokeWidth="2"
         >
-          {hatNumber}
+          {displayText}
         </text>
         <text
           x="0"
@@ -62,7 +70,7 @@ export class HatClass implements Hat {
           stroke="black"
           strokeWidth="0.5"
         >
-          {hatNumber}
+          {displayText}
         </text>
       </>
     );
@@ -89,7 +97,7 @@ export class HatClass implements Hat {
               stroke="#000"
               strokeWidth="1"
             />
-            {renderHatNumber(-14)}
+            {renderHatText(-14)}
           </g>
         );
       case "beanie":
@@ -113,7 +121,7 @@ export class HatClass implements Hat {
               stroke="#000"
               strokeWidth="1"
             />
-            {renderHatNumber(-14)}
+            {renderHatText(-14)}
           </g>
         );
       case "fedora":
@@ -138,7 +146,7 @@ export class HatClass implements Hat {
               strokeWidth="1"
             />
             <rect x="-20" y="-20" width="40" height="3" fill="#333" />
-            {renderHatNumber(-19)}
+            {renderHatText(-19)}
           </g>
         );
       case "cowboy":
@@ -170,7 +178,7 @@ export class HatClass implements Hat {
               stroke="#000"
               strokeWidth="1"
             />
-            {renderHatNumber(-22)}
+            {renderHatText(-22)}
           </g>
         );
       default:

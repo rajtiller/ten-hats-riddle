@@ -18,6 +18,8 @@ export interface PersonProps {
   hatColor?: string;
   personNumber?: number;
   showPersonNumber?: boolean;
+  isCurrentPerson?: boolean; // New prop to identify current person
+  leftPosition?: number; // New prop for l[n] labeling
 }
 
 export class Person {
@@ -35,6 +37,8 @@ export class Person {
   height: number;
   personNumber: number;
   showPersonNumber: boolean;
+  isCurrentPerson: boolean;
+  leftPosition: number;
 
   constructor({
     x = 0,
@@ -53,6 +57,8 @@ export class Person {
     hatColor = "#ff0000",
     personNumber = 0,
     showPersonNumber = true,
+    isCurrentPerson = false,
+    leftPosition = 0,
   }: PersonProps = {}) {
     this.x = x;
     this.y = y;
@@ -68,6 +74,8 @@ export class Person {
     this.height = height;
     this.personNumber = personNumber;
     this.showPersonNumber = showPersonNumber;
+    this.isCurrentPerson = isCurrentPerson;
+    this.leftPosition = leftPosition;
   }
 
   renderHead(): JSX.Element {
@@ -132,9 +140,8 @@ export class Person {
     if (!this.showPersonNumber) return <></>;
 
     // Position the label at bottom right relative to the person
-    // Offset from the person's center position
-    const labelX = this.x + 25; // 25 pixels to the right
-    const labelY = this.y + 45; // 45 pixels down (below shoulders)
+    const labelX = this.x + 25;
+    const labelY = this.y + 45;
 
     return (
       <g>
@@ -164,14 +171,57 @@ export class Person {
     );
   }
 
+  renderPersonLabel(): JSX.Element {
+    const labelY = this.y + 67; // Position below the person
+
+    if (this.isCurrentPerson) {
+      // Always show "YOU" for current person
+      return (
+        <g>
+          <text
+            x={this.x}
+            y={labelY}
+            textAnchor="middle"
+            fontSize="14"
+            fontFamily="monospace"
+            fontWeight="bold"
+            fill="#ff0000"
+          >
+            YOU
+          </text>
+        </g>
+      );
+    } else if (!this.showPersonNumber) {
+      // Show l[n] labels only in input state (when showPersonNumber is false)
+      return (
+        <g>
+          <text
+            x={this.x}
+            y={labelY}
+            textAnchor="middle"
+            fontSize="12"
+            fontFamily="monospace"
+            fontWeight="bold"
+            fill="#0066cc"
+          >
+            l[{this.leftPosition}]
+          </text>
+        </g>
+      );
+    }
+
+    return <></>;
+  }
+
   render(): JSX.Element {
     return (
       <g>
         {this.renderShoulders()}
         {this.renderHead()}
         {this.renderFace()}
-        {this.hat.render(this.x, this.y, this.angle)}
+        {this.hat.render(this.x, this.y, this.angle, this.isCurrentPerson)}
         {this.renderPersonNumber()}
+        {this.renderPersonLabel()}
       </g>
     );
   }

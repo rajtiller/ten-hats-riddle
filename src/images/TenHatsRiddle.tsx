@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import FormulaBar from "./FormulaBar/index"; // Fixed import path
+import FormulaBar from "./FormulaBar/index";
 import Group from "./Group";
 import HatLegend from "./HatLegend";
 
@@ -15,6 +15,7 @@ const TenHatsRiddle: React.FC = () => {
   const [appState, setAppState] = useState<AppState>("input");
   const [testResult, setTestResult] = useState<TestResult | null>(null);
   const [counterExampleHats, setCounterExampleHats] = useState<string[]>([]);
+  const [currentPersonIndex] = useState(0); // Player is always person 0 and will be positioned at bottom
 
   // Hat colors - fixed numbering and removed duplicate white
   const availableHatColors = [
@@ -31,6 +32,7 @@ const TenHatsRiddle: React.FC = () => {
   ];
 
   const unknownHatColor = "#696969"; // Dark gray for unknown hats
+  const currentPersonHatColor = "#d3d3d3"; // Light gray for current person
 
   const handleTestResult = (result: number[]) => {
     if (result.length === 0) {
@@ -63,13 +65,23 @@ const TenHatsRiddle: React.FC = () => {
 
   const getHatColorsForState = (): string[] => {
     if (appState === "input") {
-      // All hats are unknown (dark gray)
-      return Array(10).fill(unknownHatColor);
+      // Current person gets light gray, others get their actual colors
+      const colors = Array(10)
+        .fill("")
+        .map((_, index) => {
+          if (index === currentPersonIndex) {
+            return currentPersonHatColor; // Light gray for current person
+          } else {
+            // For now, use random colors for other people that the current person can see
+            return availableHatColors[index % availableHatColors.length];
+          }
+        });
+      return colors;
     } else if (appState === "results" && counterExampleHats.length > 0) {
       // Show counter example colors
       return counterExampleHats;
     } else {
-      // Fallback - shouldn't happen
+      // Fallback
       return Array(10).fill(unknownHatColor);
     }
   };
@@ -117,7 +129,7 @@ const TenHatsRiddle: React.FC = () => {
           : "🎯 Test Results"}
       </div>
 
-      {/* Hat Legend - using default props since HatLegend doesn't accept hatColors prop */}
+      {/* Hat Legend */}
       <HatLegend />
 
       {/* Main content area */}
@@ -135,6 +147,7 @@ const TenHatsRiddle: React.FC = () => {
           radius={10}
           hatColors={getHatColorsForState()}
           showPersonNumbers={appState === "results"}
+          currentPersonIndex={currentPersonIndex}
         />
 
         {/* Formula bar - only show in input state */}
@@ -177,7 +190,7 @@ const TenHatsRiddle: React.FC = () => {
                 Hat distribution: [{testResult.counterExample.join(", ")}]
                 <br />
                 <span style={{ fontSize: "12px", opacity: 0.8 }}>
-                  Person 0 is at bottom, numbered clockwise
+                  Person 0 (YOU) is at bottom, numbered clockwise
                 </span>
               </div>
             )}
@@ -222,7 +235,7 @@ const TenHatsRiddle: React.FC = () => {
         }}
       >
         {appState === "input"
-          ? "All hat colors appear gray because you don't know them. Create a formula using i (your number), all (sum of others), r[n]/l[n] (person n to your right/left)."
+          ? "Your hat (YOU at bottom) appears light gray with ??? because you can't see it. Other people are labeled l[1], l[2], etc. representing their position to your left."
           : "This shows a counter-example where your formula would fail. Study the pattern and try a different approach."}
       </div>
     </div>
