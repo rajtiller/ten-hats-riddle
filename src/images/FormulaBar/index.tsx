@@ -94,6 +94,7 @@ const FormulaBar: React.FC<
     formula,
     setCursorPosition,
     onDelete: () => handleDelete(deleteContext),
+    disabled: showAsReadOnly, // Disable keyboard controls when read-only
   });
 
   const validation = validateFormula(formula);
@@ -239,17 +240,16 @@ const FormulaBar: React.FC<
         </button>
       </div>
 
-      {/* Button grid - only show when not read-only */}
-      {!showAsReadOnly && (
-        <div style={{ flex: "1 1 auto" }}>
-          <ButtonGrid
-            onButtonClick={(value) =>
-              handleButtonClick(value, buttonContext, waitingForBracketNumber)
-            }
-            waitingForBracketNumber={waitingForBracketNumber}
-          />
-        </div>
-      )}
+      {/* Button grid - always show but disable when read-only */}
+      <div style={{ flex: "1 1 auto" }}>
+        <ButtonGrid
+          onButtonClick={(value) =>
+            handleButtonClick(value, buttonContext, waitingForBracketNumber)
+          }
+          waitingForBracketNumber={waitingForBracketNumber}
+          disabled={showAsReadOnly} // Disable all buttons when in read-only mode
+        />
+      </div>
     </div>
   );
 };

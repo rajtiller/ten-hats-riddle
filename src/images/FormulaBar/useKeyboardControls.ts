@@ -5,6 +5,7 @@ interface UseKeyboardControlsProps {
   formula: string;
   setCursorPosition: (position: number) => void;
   onDelete: () => void;
+  disabled?: boolean; // New prop to disable keyboard controls
 }
 
 export const useKeyboardControls = ({
@@ -12,9 +13,12 @@ export const useKeyboardControls = ({
   formula,
   setCursorPosition,
   onDelete,
+  disabled = false, // Default to enabled
 }: UseKeyboardControlsProps) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (disabled) return; // Don't handle keyboard events when disabled
+
       switch (event.key) {
         case "ArrowLeft":
           event.preventDefault();
@@ -36,5 +40,5 @@ export const useKeyboardControls = ({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [cursorPosition, formula, setCursorPosition, onDelete]);
+  }, [cursorPosition, formula, setCursorPosition, onDelete, disabled]);
 };
