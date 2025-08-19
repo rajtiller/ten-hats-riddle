@@ -1,5 +1,3 @@
-for error handling, make sure parantheses sandwich numbers
-seperate files to shorten each file
 make sure each person is labeled with a number
 implement test function
 make the numbers text box not look editable

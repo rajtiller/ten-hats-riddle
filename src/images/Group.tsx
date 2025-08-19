@@ -33,7 +33,7 @@ class Group {
         x,
         y,
         angle: 0,
-        personNumber: i,
+        personNumber: (i+8) % 10,
         showPersonNumber: true,
       });
 

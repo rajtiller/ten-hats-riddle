@@ -131,20 +131,36 @@ export class Person {
   renderPersonNumber(): JSX.Element {
     if (!this.showPersonNumber) return <></>;
 
+    // Position the label at bottom right relative to the person
+    // Offset from the person's center position
+    const labelX = this.x + 25; // 25 pixels to the right
+    const labelY = this.y + 45; // 45 pixels down (below shoulders)
+
     return (
-      <text
-        x={this.x}
-        y={this.y + 55}
-        textAnchor="middle"
-        fontSize="14"
-        fontFamily="monospace"
-        fontWeight="bold"
-        fill="black"
-        stroke="white"
-        strokeWidth="0.5"
-      >
-        {this.personNumber}
-      </text>
+      <g>
+        {/* White background circle for better readability */}
+        <circle
+          cx={labelX}
+          cy={labelY - 3}
+          r="10"
+          fill="white"
+          stroke="#333"
+          strokeWidth="1"
+          opacity="0.9"
+        />
+        {/* Person number text */}
+        <text
+          x={labelX}
+          y={labelY}
+          textAnchor="middle"
+          fontSize="12"
+          fontFamily="monospace"
+          fontWeight="bold"
+          fill="black"
+        >
+          {this.personNumber}
+        </text>
+      </g>
     );
   }
 
