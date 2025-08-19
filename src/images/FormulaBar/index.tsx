@@ -79,11 +79,8 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
       };
     }
 
-    // Check for valid characters
-    const invalidChars = cleanFormula.replace(
-      /[irl\[\]\(\)0-9\+\-×÷]|all/g,
-      ""
-    );
+    // Check for valid characters (removed ÷ from valid chars)
+    const invalidChars = cleanFormula.replace(/[irl\[\]\(\)0-9\+\-×]|all/g, "");
     if (invalidChars) {
       return { isValid: false, error: `Invalid characters: '${invalidChars}'` };
     }
@@ -139,7 +136,7 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
           i++;
         }
         tokens.push({ type: "number", value: numberStr });
-      } else if (["+", "-", "×", "÷"].includes(char)) {
+      } else if (["+", "-", "×"].includes(char)) {
         tokens.push({ type: "operator", value: char });
         i++;
       } else {
@@ -391,9 +388,6 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
         break;
       case "x":
         insertAtCursor(" × ");
-        break;
-      case "÷":
-        insertAtCursor(" ÷ ");
         break;
       default:
         if (/^[0-9]$/.test(value)) {

@@ -10,8 +10,8 @@ const ButtonGrid: React.FC<ButtonGridProps> = ({
   waitingForBracketNumber = false,
 }) => {
   const buttons = [
-    ["i", "all", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "del"],
-    ["r[", "l[", "(", ")", "+", "-", "x", "÷"],
+    ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "del"],
+    ["i", "r[", "l[", "all", "(", ")", "+", "-", "x"],
   ];
 
   const isButtonEnabled = (buttonValue: string): boolean => {
