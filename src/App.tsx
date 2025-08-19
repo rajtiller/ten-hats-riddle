@@ -3,6 +3,7 @@ import "./App.css";
 import Group from "./images/Group";
 import FormulaBar from "./images/FormulaBar/index"; // Use modular version for 10 hats
 import SimpleFormulaBar from "./images/SimpleFormulaBar"; // Use simple version for 2 hats
+import HatLegend from "./images/HatLegend"; // New hat legend component
 
 function App() {
   const [selectedPage, setSelectedPage] = useState(0);
@@ -61,6 +62,9 @@ function App() {
             justifyContent: "center",
           }}
         >
+          {/* Hat Legend on the left */}
+          <HatLegend />
+
           <Group numberOfPeople={10} radius={10} />
 
           {/* Full formula bar positioned at bottom */}
