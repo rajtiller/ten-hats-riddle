@@ -22,7 +22,8 @@ export interface PersonProps {
   leftPosition?: number;
   isHighlighted?: boolean;
   showIndexLabels?: boolean;
-  showAsUnknown?: boolean; // New prop to show ??? instead of hat
+  showAsUnknown?: boolean;
+  guess?: number; // The person's guess (0-9 or -1 for error)
 }
 
 export class Person {
@@ -45,6 +46,7 @@ export class Person {
   isHighlighted: boolean;
   showIndexLabels: boolean;
   showAsUnknown: boolean;
+  guess?: number;
 
   constructor({
     x = 0,
@@ -68,6 +70,7 @@ export class Person {
     isHighlighted = false,
     showIndexLabels = false,
     showAsUnknown = false,
+    guess = undefined,
   }: PersonProps = {}) {
     this.x = x;
     this.y = y;
@@ -88,19 +91,18 @@ export class Person {
     this.isHighlighted = isHighlighted;
     this.showIndexLabels = showIndexLabels;
     this.showAsUnknown = showAsUnknown;
+    this.guess = guess;
   }
 
   renderIndexHighlight(): JSX.Element {
     if (!this.isHighlighted || !this.showIndexLabels) return <></>;
 
-    // Highlight the index label specifically for current person
     if (this.isCurrentPerson) {
       const labelX = this.x + 25;
       const labelY = this.y + 45;
 
       return (
         <g>
-          {/* Pulsing highlight circle around the index label */}
           <circle
             cx={labelX}
             cy={labelY - 3}
@@ -139,13 +141,11 @@ export class Person {
   renderHatHighlight(): JSX.Element {
     if (!this.isHighlighted || this.isCurrentPerson) return <></>;
 
-    // Highlight around the hat for other people
     return (
       <g>
-        {/* Pulsing highlight circle around the hat */}
         <circle
           cx={this.x}
-          cy={this.y - 20} // Position around hat area
+          cy={this.y - 20}
           r="30"
           fill="none"
           stroke="#ffeb3b"
@@ -178,7 +178,6 @@ export class Person {
   renderHighlight(): JSX.Element {
     if (!this.isHighlighted) return <></>;
 
-    // Use different highlighting based on whether it's current person or others
     if (this.isCurrentPerson) {
       return this.renderIndexHighlight();
     } else {
@@ -247,13 +246,11 @@ export class Person {
   renderPersonNumber(): JSX.Element {
     if (!this.showPersonNumber) return <></>;
 
-    // Position the label at bottom right relative to the person
     const labelX = this.x + 25;
     const labelY = this.y + 45;
 
     return (
       <g>
-        {/* White background circle for better readability */}
         <circle
           cx={labelX}
           cy={labelY - 3}
@@ -263,7 +260,6 @@ export class Person {
           strokeWidth="1"
           opacity="0.9"
         />
-        {/* Person number text - always show absolute person number */}
         <text
           x={labelX}
           y={labelY}
@@ -282,15 +278,12 @@ export class Person {
   renderIndexLabel(): JSX.Element {
     if (!this.showIndexLabels) return <></>;
 
-    // Position the label at bottom right relative to the person (same as person numbers)
     const labelX = this.x + 25;
     const labelY = this.y + 45;
 
     if (this.isCurrentPerson) {
-      // Show "i" for current person
       return (
         <g>
-          {/* White background circle for better readability */}
           <circle
             cx={labelX}
             cy={labelY - 3}
@@ -300,7 +293,6 @@ export class Person {
             strokeWidth="1"
             opacity="0.9"
           />
-          {/* Index label text */}
           <text
             x={labelX}
             y={labelY}
@@ -315,7 +307,6 @@ export class Person {
         </g>
       );
     } else {
-      // Show relative index (i-1, i+1, etc.) for others in same format
       const relativeIndex = this.leftPosition;
       let indexLabel = "";
 
@@ -331,7 +322,6 @@ export class Person {
 
       return (
         <g>
-          {/* White background circle for better readability */}
           <circle
             cx={labelX}
             cy={labelY - 3}
@@ -341,7 +331,6 @@ export class Person {
             strokeWidth="1"
             opacity="0.9"
           />
-          {/* Index label text */}
           <text
             x={labelX}
             y={labelY}
@@ -359,10 +348,9 @@ export class Person {
   }
 
   renderPersonLabel(): JSX.Element {
-    const labelY = this.y + 85; // Position below index labels
+    const labelY = this.y + 85;
 
     if (!this.showPersonNumber && !this.showIndexLabels) {
-      // Show l[n] labels only when neither person numbers nor index labels are shown
       return (
         <g>
           <text
@@ -383,6 +371,51 @@ export class Person {
     return <></>;
   }
 
+  renderGuess(): JSX.Element {
+    if (this.guess === undefined || this.guess === -1) return <></>;
+
+    // Position the guess above the person
+    const guessY = this.y - 60;
+
+    return (
+      <g>
+        {/* Background circle for guess */}
+        <circle
+          cx={this.x}
+          cy={guessY}
+          r="12"
+          fill="#fff3cd"
+          stroke="#856404"
+          strokeWidth="2"
+          opacity="0.9"
+        />
+        {/* Guess text */}
+        <text
+          x={this.x}
+          y={guessY + 4}
+          textAnchor="middle"
+          fontSize="14"
+          fontFamily="monospace"
+          fontWeight="bold"
+          fill="#856404"
+        >
+          {this.guess}
+        </text>
+        {/* Small "guess" label */}
+        <text
+          x={this.x}
+          y={guessY - 18}
+          textAnchor="middle"
+          fontSize="8"
+          fontFamily="monospace"
+          fill="#666"
+        >
+          guess
+        </text>
+      </g>
+    );
+  }
+
   render(): JSX.Element {
     return (
       <g>
@@ -390,13 +423,12 @@ export class Person {
         {this.renderShoulders()}
         {this.renderHead()}
         {this.renderFace()}
-        {/* Always show the hat - no ??? logic */}
         {this.hat.render(this.x, this.y, this.angle, this.isCurrentPerson)}
-        {/* Show either person numbers (absolute) OR index labels (relative), not both */}
         {this.showPersonNumber
           ? this.renderPersonNumber()
           : this.renderIndexLabel()}
         {this.renderPersonLabel()}
+        {this.renderGuess()}
       </g>
     );
   }

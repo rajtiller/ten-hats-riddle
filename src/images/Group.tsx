@@ -11,7 +11,8 @@ interface GroupProps {
   currentPersonIndex?: number;
   personHighlight?: PersonHighlight | null;
   showIndexLabels?: boolean;
-  showCurrentPersonAsUnknown?: boolean; // New prop to show ??? for current person
+  showCurrentPersonAsUnknown?: boolean;
+  personGuesses?: number[]; // Array of guesses for each person
 }
 
 export class Group {
@@ -29,6 +30,7 @@ export class Group {
     personHighlight = null,
     showIndexLabels = false,
     showCurrentPersonAsUnknown = false,
+    personGuesses = [],
   }: GroupProps = {}) {
     this.numberOfPeople = numberOfPeople;
     this.radius = Math.max(1, Math.min(10, radius));
@@ -43,7 +45,8 @@ export class Group {
         currentPersonIndex,
         personHighlight,
         showIndexLabels,
-        showCurrentPersonAsUnknown
+        showCurrentPersonAsUnknown,
+        personGuesses
       );
   }
 
@@ -76,7 +79,6 @@ export class Group {
 
       case "left":
         if (highlight.position && personIndex !== currentPersonIndex) {
-          // Calculate the person's position relative to current person
           const relativePosition =
             (personIndex - currentPersonIndex + this.numberOfPeople) %
             this.numberOfPeople;
@@ -90,7 +92,6 @@ export class Group {
 
       case "right":
         if (highlight.position && personIndex !== currentPersonIndex) {
-          // Calculate the person's position relative to current person (right side)
           const relativePosition =
             (currentPersonIndex - personIndex + this.numberOfPeople) %
             this.numberOfPeople;
@@ -113,17 +114,16 @@ export class Group {
     currentPersonIndex: number,
     personHighlight: PersonHighlight | null = null,
     showIndexLabels: boolean = false,
-    showCurrentPersonAsUnknown: boolean = false
+    showCurrentPersonAsUnknown: boolean = false,
+    personGuesses: number[] = []
   ): Person[] {
     const people: Person[] = [];
     const angleStep = (2 * Math.PI) / this.numberOfPeople;
 
     for (let i = 0; i < this.numberOfPeople; i++) {
-      // Arrange people so that person at currentPersonIndex is at the bottom
       const adjustedIndex =
         (i - currentPersonIndex + this.numberOfPeople) % this.numberOfPeople;
 
-      // Start from bottom (π/2) and go clockwise
       const angle = Math.PI / 2 + adjustedIndex * angleStep;
       const scaledRadius = this.radius * 20;
       const x = scaledRadius * Math.cos(angle);
@@ -140,10 +140,8 @@ export class Group {
         `Person ${i}: isCurrentPerson=${isCurrentPerson}, isHighlighted=${isHighlighted}`
       );
 
-      // Use provided hat colors directly from the array, including for current person
       const hatColor = hatColors[i] || "#ff0000";
 
-      // Calculate left position relative to current person
       let leftPosition = 1;
       if (!isCurrentPerson) {
         const relativePosition =
@@ -167,6 +165,7 @@ export class Group {
         isHighlighted: isHighlighted,
         showIndexLabels: showIndexLabels,
         showAsUnknown: isCurrentPerson && showCurrentPersonAsUnknown,
+        guess: personGuesses.length > i ? personGuesses[i] : undefined,
       });
 
       people.push(person);

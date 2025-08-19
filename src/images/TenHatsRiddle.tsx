@@ -3,6 +3,7 @@ import FormulaBar from "./FormulaBar/index";
 import Group from "./Group";
 import HatLegend from "./HatLegend";
 import { type PersonHighlight } from "./FormulaBar/FormulaDisplay";
+import { calculatePersonGuess } from "./FormulaBar/evaluateFormula";
 
 type AppState = "input" | "results";
 
@@ -10,8 +11,9 @@ interface TestResult {
   isCorrect: boolean;
   counterExample?: number[];
   message: string;
-  successCount?: number; // Add success count to test result
-  formula?: string; // Add formula to test result
+  successCount?: number;
+  formula?: string;
+  personGuesses?: number[]; // Add guesses for each person
 }
 
 const TenHatsRiddle: React.FC = () => {
@@ -21,7 +23,7 @@ const TenHatsRiddle: React.FC = () => {
   const [currentPersonIndex] = useState(0);
   const [personHighlight, setPersonHighlight] =
     useState<PersonHighlight | null>(null);
-  const [currentFormula, setCurrentFormula] = useState<string>(""); // Track current formula
+  const [currentFormula, setCurrentFormula] = useState<string>("");
 
   // Hat colors - all valid colors for the rainbow effect
   const availableHatColors = [
@@ -38,6 +40,28 @@ const TenHatsRiddle: React.FC = () => {
   ];
 
   const currentPersonHatColor = "#d3d3d3"; // Light gray for current person
+
+  const calculateAllGuesses = (
+    hatColors: number[],
+    formula: string
+  ): number[] => {
+    const guesses: number[] = [];
+
+    for (let personIndex = 0; personIndex < 10; personIndex++) {
+      try {
+        const guess = calculatePersonGuess(hatColors, formula, personIndex);
+        guesses.push(guess);
+      } catch (error) {
+        console.error(
+          `Error calculating guess for person ${personIndex}:`,
+          error
+        );
+        guesses.push(-1); // -1 indicates error
+      }
+    }
+
+    return guesses;
+  };
 
   const handleTestResult = (result: number[], formula: string) => {
     setCurrentFormula(formula);
@@ -56,6 +80,9 @@ const TenHatsRiddle: React.FC = () => {
       const successCount = result.length >= 11 ? result[10] : undefined;
       const counterExample = result.slice(0, 10); // First 10 elements are the counter example
 
+      // Calculate what each person would guess with this formula and hat distribution
+      const personGuesses = calculateAllGuesses(counterExample, formula);
+
       const hatColors = counterExample.map(
         (colorIndex) => availableHatColors[colorIndex]
       );
@@ -66,6 +93,7 @@ const TenHatsRiddle: React.FC = () => {
         message: `❌ Counter example found! Here's a case where your formula fails.`,
         successCount: successCount,
         formula: formula,
+        personGuesses: personGuesses,
       });
       setAppState("results");
     }
@@ -75,7 +103,7 @@ const TenHatsRiddle: React.FC = () => {
     setAppState("input");
     setTestResult(null);
     setCounterExampleHats([]);
-    setPersonHighlight(null); // Clear highlighting when resetting
+    setPersonHighlight(null);
   };
 
   const getHatColorsForState = (): string[] => {
@@ -85,9 +113,9 @@ const TenHatsRiddle: React.FC = () => {
         .fill("")
         .map((_, index) => {
           if (index === currentPersonIndex) {
-            return currentPersonHatColor; // Light gray for current person
+            return currentPersonHatColor;
           } else {
-            return "rainbow"; // Special rainbow color for all others
+            return "rainbow";
           }
         });
       return colors;
@@ -172,10 +200,13 @@ const TenHatsRiddle: React.FC = () => {
           numberOfPeople={10}
           radius={10}
           hatColors={getHatColorsForState()}
-          showPersonNumbers={appState === "results"} // Show absolute numbers after test
+          showPersonNumbers={appState === "results"}
           currentPersonIndex={currentPersonIndex}
           personHighlight={personHighlight}
-          showIndexLabels={appState === "input"} // Show relative index labels only in input mode
+          showIndexLabels={appState === "input"}
+          personGuesses={
+            appState === "results" ? testResult?.personGuesses : undefined
+          }
         />
 
         {/* Formula bar - show in input state OR results state for failures */}
@@ -241,21 +272,6 @@ const TenHatsRiddle: React.FC = () => {
             </button>
           </div>
         )}
-      </div>
-
-      {/* Instructions */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: "20px",
-          fontSize: "12px",
-          fontFamily: "monospace",
-          color: "#888",
-          textAlign: "center",
-          maxWidth: "80%",
-        }}
-      >
-        {appState === "input" ? "" : ""}
       </div>
     </div>
   );
