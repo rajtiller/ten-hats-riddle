@@ -7,4 +7,4 @@ make spacing in fomular bar consistent, especially after deleting
 make it so once calculations are done, everyone's calculations are shown to see how they go there
 implement test function
 make it so hats for two people are black and white
-remove 'YOU'
+make success rate bold and color percentage based on success rate

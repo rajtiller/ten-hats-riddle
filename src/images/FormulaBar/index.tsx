@@ -64,9 +64,6 @@ const FormulaBar: React.FC<
 
     // Use the centralized test function
     const result = testFormula(formula);
-    const evaluation = evaluateTestResult(result);
-
-    setErrorMessage(evaluation.message);
 
     // Call the callback to update parent state
     if (onTestResult) {
@@ -100,10 +97,7 @@ const FormulaBar: React.FC<
   });
 
   const validation = validateFormula(formula);
-  const displayError =
-    validation.error &&
-    !errorMessage.startsWith("✅") &&
-    !errorMessage.startsWith("❌ Counter");
+  const displayError = validation.error && !errorMessage.startsWith("✅");
 
   return (
     <div
@@ -244,29 +238,6 @@ const FormulaBar: React.FC<
           {showAsReadOnly ? "TRY AGAIN" : "TEST"}
         </button>
       </div>
-
-      {/* Test result message */}
-      {(errorMessage.startsWith("✅") ||
-        errorMessage.startsWith("❌ Counter")) && (
-        <div
-          style={{
-            backgroundColor: errorMessage.startsWith("✅")
-              ? "#d4edda"
-              : "#f8d7da",
-            color: errorMessage.startsWith("✅") ? "#155724" : "#721c24",
-            border: `1px solid ${
-              errorMessage.startsWith("✅") ? "#c3e6cb" : "#f5c6cb"
-            }`,
-            borderRadius: "3px",
-            padding: "4px 8px",
-            fontSize: "12px",
-            fontFamily: "monospace",
-            marginBottom: "2px",
-          }}
-        >
-          {errorMessage}
-        </div>
-      )}
 
       {/* Button grid - only show when not read-only */}
       {!showAsReadOnly && (

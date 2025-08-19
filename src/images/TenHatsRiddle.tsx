@@ -241,36 +241,6 @@ const TenHatsRiddle: React.FC = () => {
             </button>
           </div>
         )}
-
-        {/* Counter example info - only show for failures */}
-        {appState === "results" &&
-          !testResult?.isCorrect &&
-          testResult?.counterExample && (
-            <div
-              style={{
-                backgroundColor: "#f8d7da",
-                color: "#721c24",
-                border: "2px solid #f5c6cb",
-                borderRadius: "8px",
-                padding: "15px",
-                maxWidth: "600px",
-                textAlign: "center",
-                fontFamily: "monospace",
-                fontSize: "14px",
-              }}
-            >
-              <div style={{ marginBottom: "10px", fontWeight: "bold" }}>
-                Counter Example:
-              </div>
-              <div>
-                Hat distribution: [{testResult.counterExample.join(", ")}]
-                <br />
-                <span style={{ fontSize: "12px", opacity: 0.8 }}>
-                  Person 0 (YOU) is at bottom, numbered clockwise
-                </span>
-              </div>
-            </div>
-          )}
       </div>
 
       {/* Instructions */}
