@@ -12,6 +12,7 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
   const [formula, setFormula] = useState("");
   const [cursorPosition, setCursorPosition] = useState(0);
   const [waitingForBracketNumber, setWaitingForBracketNumber] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const insertAtCursor = (text: string) => {
     const { newText, newPosition } = insertTextAtPosition(
@@ -21,6 +22,8 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
     );
     setFormula(newText);
     setCursorPosition(newPosition);
+    // Clear error when user modifies formula
+    if (errorMessage) setErrorMessage("");
   };
 
   const validateBracketContent = (text: string): boolean => {
@@ -43,92 +46,100 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
     return true;
   };
 
-  const handleDelete = () => {
-    // Special delete behavior for bracket constructs
-    const charAtCursor = formula[cursorPosition - 1];
-    const charBeforeCursor = formula[cursorPosition - 2];
-    const charAfterCursor = formula[cursorPosition];
-    const charTwoAfterCursor = formula[cursorPosition + 1];
+  const validateFormula = (
+    formula: string
+  ): { isValid: boolean; error: string } => {
+    if (!formula.trim()) {
+      return { isValid: false, error: "Formula cannot be empty" };
+    }
 
-    // Case 1: Cursor is after ] in a complete bracket like r[4]
-    if (charAtCursor === "]") {
-      // Find the start of the bracket construct
-      let bracketStart = cursorPosition - 2; // Start looking before the ]
-      while (bracketStart >= 0 && formula[bracketStart] !== "[") {
-        bracketStart--;
+    // Check for unmatched parentheses
+    let parenCount = 0;
+    for (const char of formula) {
+      if (char === "(") parenCount++;
+      if (char === ")") parenCount--;
+      if (parenCount < 0) {
+        return { isValid: false, error: "Unmatched closing parenthesis" };
       }
+    }
+    if (parenCount > 0) {
+      return { isValid: false, error: "Unmatched opening parenthesis" };
+    }
 
-      if (bracketStart > 0 && ["r", "l"].includes(formula[bracketStart - 1])) {
-        // Delete the entire construct (e.g., "r[4]")
-        const constructStart = bracketStart - 1;
-        const newFormula =
-          formula.slice(0, constructStart) + formula.slice(cursorPosition);
-        setFormula(newFormula);
-        setCursorPosition(constructStart);
-        setWaitingForBracketNumber(false);
-        return;
+    // Check for valid bracket constructs
+    const bracketRegex = /[rl]\[([^\]]*)\]/g;
+    let match;
+    while ((match = bracketRegex.exec(formula)) !== null) {
+      const content = match[1];
+      if (!/^[1-9]$/.test(content)) {
+        return {
+          isValid: false,
+          error: `Invalid bracket content: ${content || "empty"}`,
+        };
       }
     }
 
-    // Case 2: Cursor is after a number inside brackets like r[4|]
+    // Check for incomplete brackets
     if (
-      charAtCursor &&
-      /^[1-9]$/.test(charAtCursor) &&
-      charAfterCursor === "]"
+      (formula.includes("r[") && !formula.includes("r[")) ||
+      (formula.includes("l[") && !formula.includes("l["))
     ) {
-      // Check if this is inside a bracket construct
-      let bracketStart = cursorPosition - 2;
-      while (bracketStart >= 0 && formula[bracketStart] !== "[") {
-        bracketStart--;
-      }
-
-      if (bracketStart > 0 && ["r", "l"].includes(formula[bracketStart - 1])) {
-        // Delete the entire construct
-        const constructStart = bracketStart - 1;
-        const newFormula =
-          formula.slice(0, constructStart) + formula.slice(cursorPosition + 1);
-        setFormula(newFormula);
-        setCursorPosition(constructStart);
-        setWaitingForBracketNumber(false);
-        return;
+      if (/[rl]\[\]/.test(formula)) {
+        return { isValid: false, error: "Empty bracket found" };
       }
     }
 
-    // Case 3: Cursor is right after r[ or l[ (waiting for number)
-    if (
-      charAtCursor === "[" &&
-      charBeforeCursor &&
-      ["r", "l"].includes(charBeforeCursor)
-    ) {
-      // Delete both characters (r[ or l[)
-      const newFormula =
-        formula.slice(0, cursorPosition - 2) +
-        formula.slice(cursorPosition + 1); // +1 to also remove the ]
-      setFormula(newFormula);
-      setCursorPosition(cursorPosition - 2);
-      setWaitingForBracketNumber(false);
+    // Check for valid operators
+    const invalidChars = formula.replace(
+      /[irl\[\]\(\)0-9\+\-×÷\s]|mod|all/g,
+      ""
+    );
+    if (invalidChars) {
+      return { isValid: false, error: `Invalid characters: ${invalidChars}` };
+    }
+
+    return { isValid: true, error: "" };
+  };
+
+  // Test function (placeholder for now)
+  const testFunction = (formula: string): number[] => {
+    // For now, always return this test array
+    // Later you'll implement the actual logic
+    return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+  };
+
+  const handleTest = () => {
+    const validation = validateFormula(formula);
+
+    if (!validation.isValid) {
+      setErrorMessage(validation.error);
       return;
     }
 
-    // Case 4: Cursor is right after ] in an empty bracket r[]
-    if (charAtCursor === "]" && charBeforeCursor === "[") {
-      let bracketTypePos = cursorPosition - 3;
-      if (bracketTypePos >= 0 && ["r", "l"].includes(formula[bracketTypePos])) {
-        // Delete the entire empty construct
-        const newFormula =
-          formula.slice(0, bracketTypePos) + formula.slice(cursorPosition);
-        setFormula(newFormula);
-        setCursorPosition(bracketTypePos);
-        setWaitingForBracketNumber(false);
-        return;
-      }
-    }
+    // Clear any previous error
+    setErrorMessage("");
 
-    // Default delete behavior
+    // Call test function
+    const result = testFunction(formula);
+
+    if (result.length === 0) {
+      // Correct solution
+      setErrorMessage("✅ Correct solution!");
+    } else {
+      // Counter example found
+      setErrorMessage(
+        `❌ Counter example: People guess [${result.join(", ")}]`
+      );
+    }
+  };
+
+  const handleDelete = () => {
     const { newText, newPosition } = deleteAtPosition(formula, cursorPosition);
     setFormula(newText);
     setCursorPosition(newPosition);
     setWaitingForBracketNumber(false);
+    // Clear error when user modifies formula
+    if (errorMessage) setErrorMessage("");
   };
 
   const handleButtonClick = (value: string) => {
@@ -203,11 +214,13 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
     onDelete: handleDelete,
   });
 
+  const validation = validateFormula(formula);
+
   return (
     <div
       style={{
         width,
-        height,
+        height: height + (errorMessage ? 30 : 0), // Extend height if there's an error message
         border: "2px solid #333",
         padding: "5px",
         backgroundColor: "#f5f5f5",
@@ -274,7 +287,51 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
         >
           <FormulaDisplay formula={formula} cursorPosition={cursorPosition} />
         </div>
+
+        {/* Test Button */}
+        <button
+          onClick={handleTest}
+          disabled={!validation.isValid}
+          style={{
+            marginLeft: "8px",
+            padding: "6px 12px",
+            backgroundColor: validation.isValid ? "#4CAF50" : "#ccc",
+            color: validation.isValid ? "white" : "#999",
+            border: "1px solid #666",
+            borderRadius: "3px",
+            cursor: validation.isValid ? "pointer" : "not-allowed",
+            fontFamily: "monospace",
+            fontSize: "12px",
+            fontWeight: "bold",
+            height: "100%",
+            boxSizing: "border-box",
+          }}
+        >
+          TEST
+        </button>
       </div>
+
+      {/* Error/Result Message */}
+      {errorMessage && (
+        <div
+          style={{
+            backgroundColor: errorMessage.startsWith("✅")
+              ? "#d4edda"
+              : "#f8d7da",
+            color: errorMessage.startsWith("✅") ? "#155724" : "#721c24",
+            border: `1px solid ${
+              errorMessage.startsWith("✅") ? "#c3e6cb" : "#f5c6cb"
+            }`,
+            borderRadius: "3px",
+            padding: "4px 8px",
+            fontSize: "12px",
+            fontFamily: "monospace",
+            marginBottom: "2px",
+          }}
+        >
+          {errorMessage}
+        </div>
+      )}
 
       {/* Button Container */}
       <div style={{ flex: "1 1 auto" }}>
