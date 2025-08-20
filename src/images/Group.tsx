@@ -234,7 +234,7 @@ const GroupComponent: React.FC<GroupProps> = (props = {}) => {
   const group = new Group(props);
   const padding = 80;
   const scaledRadius = group.radius * 20;
-  const canvasHeight = (scaledRadius + padding) * 2 ;
+  const canvasHeight = (scaledRadius + padding) * 2;
   const canvasWidth = (scaledRadius + padding) * 2 + 140; // fixed cut off for guess boxes
   const viewBox = `-${canvasHeight / 2} -${
     canvasHeight / 2
@@ -266,8 +266,8 @@ const GroupComponent: React.FC<GroupProps> = (props = {}) => {
                 opacity="0.9"
                 onMouseEnter={() =>
                   setActiveTooltip({
-                    x: person.x,
-                    y: guessY,
+                    x: 0, // Center the tooltip at (0, 0) - the center of the circle
+                    y: 0,
                     guess: person.guess!,
                     guessColor,
                     textColor,
@@ -422,10 +422,10 @@ const TooltipComponent: React.FC<TooltipComponentProps> = ({ tooltipData }) => {
 
   return (
     <g>
-      {/* Tooltip background */}
+      {/* Tooltip background - centered at (0, 0) */}
       <rect
         x={x - 150}
-        y={y - 120}
+        y={y - 60}
         width="300"
         height="90"
         fill="rgba(0, 0, 0, 0.95)"
@@ -438,7 +438,7 @@ const TooltipComponent: React.FC<TooltipComponentProps> = ({ tooltipData }) => {
       {/* Tooltip title */}
       <text
         x={x}
-        y={y - 100}
+        y={y - 40}
         textAnchor="middle"
         fontSize="12"
         fontFamily="monospace"
@@ -451,7 +451,7 @@ const TooltipComponent: React.FC<TooltipComponentProps> = ({ tooltipData }) => {
       {/* Animated formula */}
       <text
         x={x}
-        y={y - 80}
+        y={y - 20}
         textAnchor="middle"
         fontSize="11"
         fontFamily="monospace"
@@ -463,7 +463,7 @@ const TooltipComponent: React.FC<TooltipComponentProps> = ({ tooltipData }) => {
       {/* Equals to calculated value */}
       <text
         x={x}
-        y={y - 60}
+        y={y}
         textAnchor="middle"
         fontSize="11"
         fontFamily="monospace"
@@ -475,7 +475,7 @@ const TooltipComponent: React.FC<TooltipComponentProps> = ({ tooltipData }) => {
       {/* Mod 10 operation */}
       <text
         x={x}
-        y={y - 40}
+        y={y + 20}
         textAnchor="middle"
         fontSize="11"
         fontFamily="monospace"
