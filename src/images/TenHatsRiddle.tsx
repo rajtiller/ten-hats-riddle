@@ -169,7 +169,7 @@ const TenHatsRiddle: React.FC = () => {
       <div
         style={{
           position: "absolute",
-          top: "70px",
+          top: "325px",
           left: "50%",
           transform: "translateX(-50%)",
           fontSize: "16px",
