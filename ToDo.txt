@@ -1,4 +1,3 @@
-make it so if someone hovers the cursor over some's guess, the calculation is shown for why that person gussed what they did. It would be cool if some values, like l[3] constantly switched between the variable name and actual value and that everything is calculated first and then mod 10 is the last operation done. This only has to be done for a single arrangements of hats returned by test Formula.make spacing in fomular bar consistent, especially after deleting
 i isn't replacing correctly
 duynmically allocated guess to be the size it needs to be
 implement test function

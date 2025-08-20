@@ -134,20 +134,18 @@ export const calculatePersonGuess = (
     (_, index) => index !== personIndex
   );
 
-  // Process formula to replace 'i' with the person's own hat color (which they don't know)
-  // For the calculation, we'll need to try all possible values or use a different approach
+  // Process formula to replace variables
   let processedFormula = formula.trim();
 
   // Replace 'x' with '*' for multiplication
-  processedFormula = processedFormula.replace(/x/g, "*");
+  processedFormula = processedFormula.replace(/×/g, "*");
+
+  // Replace 'i' with the person's NUMBER (their index), not their hat color
+  processedFormula = processedFormula.replace(/\bi\b/g, personIndex.toString());
 
   // Replace 'all' with sum of all visible hat colors
   const allSum = visibleHatColors.reduce((sum, color) => sum + color, 0);
   processedFormula = processedFormula.replace(/\ball\b/g, allSum.toString());
-
-  // For this person's perspective, we need to map l[n] and r[n] relative to their position
-  // This is complex and depends on the exact positioning logic
-  // For now, let's use a simplified approach where we assume the person can see everyone else
 
   // Replace l[n] patterns - these represent people to the left of the current person
   processedFormula = processedFormula.replace(
@@ -179,33 +177,19 @@ export const calculatePersonGuess = (
     }
   );
 
-  // Replace 'i' with 0 initially (the person doesn't know their own hat)
-  // We'll iterate through possible values to find what they would guess
-  for (let guessedHat = 0; guessedHat <= 9; guessedHat++) {
-    const testFormula = processedFormula.replace(
-      /\bi\b/g,
-      guessedHat.toString()
-    );
+  try {
+    const result = new Function(`"use strict"; return (${processedFormula})`)();
 
-    try {
-      const result = new Function(`"use strict"; return (${testFormula})`)();
-
-      if (Number.isFinite(result)) {
-        const modResult = ((result % 10) + 10) % 10;
-        const finalResult = Math.floor(modResult);
-
-        // If the formula evaluates to the guessed hat color, that's their guess
-        if (finalResult === guessedHat) {
-          return guessedHat;
-        }
-      }
-    } catch (error) {
-      // Continue to next guess if this one fails
-      continue;
+    if (Number.isFinite(result)) {
+      const modResult = ((result % 10) + 10) % 10;
+      return Math.floor(modResult);
     }
+  } catch (error) {
+    console.error(`Error evaluating formula for person ${personIndex}:`, error);
+    return -1;
   }
 
-  // If no consistent solution found, return -1 to indicate error
+  // If evaluation failed, return -1 to indicate error
   return -1;
 };
 

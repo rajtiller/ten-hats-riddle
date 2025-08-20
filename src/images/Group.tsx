@@ -341,9 +341,10 @@ const TooltipComponent: React.FC<TooltipComponentProps> = ({ tooltipData }) => {
       // Create substituted formula
       let substitutedFormula = formula;
 
+      // Replace 'i' with the person's NUMBER (not their guess)
       substitutedFormula = substitutedFormula.replace(
         /\bi\b/g,
-        guess.toString()
+        personNumber.toString()
       );
 
       const visibleHats = hatColors.filter(
@@ -377,7 +378,11 @@ const TooltipComponent: React.FC<TooltipComponentProps> = ({ tooltipData }) => {
       let animatedFormula = formula;
 
       if (animationToggle) {
-        animatedFormula = animatedFormula.replace(/\bi\b/g, guess.toString());
+        // Show values - replace 'i' with person number
+        animatedFormula = animatedFormula.replace(
+          /\bi\b/g,
+          personNumber.toString()
+        );
         animatedFormula = animatedFormula.replace(
           /\ball\b/g,
           allSum.toString()
