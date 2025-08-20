@@ -613,7 +613,7 @@ const GuessWithTooltip: React.FC<GuessWithTooltipProps> = ({
       {/* Guess circle */}
       <circle
         cx={x}
-        cy={y}
+        cy={y-6}
         r="14"
         fill={guessColor}
         stroke="#333"
@@ -627,7 +627,7 @@ const GuessWithTooltip: React.FC<GuessWithTooltipProps> = ({
       {/* Guess text */}
       <text
         x={x}
-        y={y + 4}
+        y={y -2}
         textAnchor="middle"
         fontSize="17"
         fontFamily="monospace"
@@ -641,19 +641,6 @@ const GuessWithTooltip: React.FC<GuessWithTooltipProps> = ({
         }}
       >
         {guess}
-      </text>
-
-      {/* Small "guess" label */}
-      <text
-        x={x}
-        y={y - 20}
-        textAnchor="middle"
-        fontSize="10"
-        fontFamily="monospace"
-        fill="#666"
-        style={{ pointerEvents: "none" }}
-      >
-        guess
       </text>
 
       {/* Tooltip */}
