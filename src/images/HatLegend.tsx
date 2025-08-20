@@ -19,6 +19,8 @@ const HatLegend: React.FC<HatLegendProps> = () => {
     { name: "Brown", color: "#8b4513", value: 9 },
   ];
 
+  const sizeScale = 1.15; // Same scale as used for people in the group
+
   const getTextStyle = (color: string) => {
     return {
       color: color,
@@ -58,6 +60,13 @@ const HatLegend: React.FC<HatLegendProps> = () => {
       {hatColors.map((hatInfo, index) => {
         const hat = new HatClass(hatInfo.color, "cap");
 
+        // Calculate scaled dimensions
+        const scaledSize = Math.ceil(50 * sizeScale); // Scale the container size
+        const viewBoxWidth = Math.ceil(70 * sizeScale); // Scale viewBox width
+        const viewBoxHeight = Math.ceil(50 * sizeScale); // Scale viewBox height
+        const viewBoxX = Math.ceil(-35 * sizeScale); // Scale viewBox x offset
+        const viewBoxY = Math.ceil(-45 * sizeScale); // Scale viewBox y offset
+
         return (
           <div
             key={index}
@@ -67,7 +76,7 @@ const HatLegend: React.FC<HatLegendProps> = () => {
               marginBottom: "8px",
               fontSize: "14px",
               fontFamily: "monospace",
-              height: "50px", // Increased height to accommodate larger hats
+              height: `${scaledSize}px`, // Scale container height
             }}
           >
             <div
@@ -76,22 +85,22 @@ const HatLegend: React.FC<HatLegendProps> = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                width: "50px", // Increased width
-                height: "50px", // Increased height
+                width: `${scaledSize}px`, // Scale container width
+                height: `${scaledSize}px`, // Scale container height
               }}
             >
               <svg
-                width="50"
-                height="50"
-                viewBox="-35 -45 70 50" // Expanded viewBox: wider (-35 to 35) and taller (-45 to 5)
+                width={scaledSize}
+                height={scaledSize}
+                viewBox={`${viewBoxX} ${viewBoxY} ${viewBoxWidth} ${viewBoxHeight}`} // Apply scaled viewBox
                 style={
                   {
                     // No border or background styles
                   }
                 }
               >
-                {hat.render(0, 0, 0, false, false)}{" "}
-                {/* Added isOnPerson: false */}
+                {hat.render(0, 0, 0, false, false, sizeScale)}{" "}
+                {/* Pass the same sizeScale used for people */}
               </svg>
             </div>
 
