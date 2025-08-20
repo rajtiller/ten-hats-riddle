@@ -19,17 +19,6 @@ const HatLegend: React.FC<HatLegendProps> = () => {
     { name: "Brown", color: "#8b4513", value: 9 },
   ];
 
-  const renderHat = (color: string) => {
-    const hat = new HatClass(color, "cap");
-    return (
-      <svg width="40" height="40" viewBox="-25 -40 50 40">
-        {" "}
-        {/* Increased height and adjusted viewBox */}
-        {hat.render(0, 0, 0)}
-      </svg>
-    );
-  };
-
   const getTextStyle = (color: string) => {
     return {
       color: color,
@@ -78,7 +67,7 @@ const HatLegend: React.FC<HatLegendProps> = () => {
               marginBottom: "8px",
               fontSize: "14px",
               fontFamily: "monospace",
-              height: "40px",
+              height: "50px", // Increased height to accommodate larger hats
             }}
           >
             <div
@@ -87,17 +76,17 @@ const HatLegend: React.FC<HatLegendProps> = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                width: "40px",
-                height: "40px",
+                width: "50px", // Increased width
+                height: "50px", // Increased height
               }}
             >
               <svg
-                width="40"
-                height="40"
-                viewBox="-25 -40 50 40"
+                width="50"
+                height="50"
+                viewBox="-35 -45 70 50" // Expanded viewBox: wider (-35 to 35) and taller (-45 to 5)
                 style={
                   {
-                    // Removed border, borderRadius, and backgroundColor
+                    // No border or background styles
                   }
                 }
               >
