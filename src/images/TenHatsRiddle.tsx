@@ -145,11 +145,10 @@ const TenHatsRiddle: React.FC = () => {
         height: "100vh",
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "space-between", // Changed from center to space-between
         backgroundColor: "#f0f0f0",
         position: "relative",
-        padding: "20px 0", // Add padding top and bottom
+        padding: "0", // Removed padding
+        overflow: "hidden", // Prevent any scrolling
       }}
     >
       {/* Title */}
@@ -159,6 +158,8 @@ const TenHatsRiddle: React.FC = () => {
           fontFamily: "monospace",
           fontWeight: "bold",
           color: "#333",
+          textAlign: "center",
+          padding: "20px 0",
         }}
       >
         Ten Hats Riddle
@@ -168,7 +169,9 @@ const TenHatsRiddle: React.FC = () => {
       <div
         style={{
           position: "absolute",
-          top: "50px",
+          top: "70px",
+          left: "50%",
+          transform: "translateX(-50%)",
           fontSize: "16px",
           fontFamily: "monospace",
           color: "#666",
@@ -179,20 +182,25 @@ const TenHatsRiddle: React.FC = () => {
           ? "🤔 Create a formula to determine your hat color"
           : appState === "results" && testResult?.successCount !== undefined
           ? `Success Rate: ${formatSuccessRate(testResult.successCount)}`
-          : "THIS SHOULD NOT APPEAR"}
+          : ""}
       </div>
 
       {/* Hat Legend */}
       <HatLegend />
 
-      {/* Main content area with Group */}
+      {/* Main content area with Group - takes up remaining space */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          flex: 1, // Take up available space
+          flex: 1,
+          paddingBottom:
+            appState === "input" ||
+            (appState === "results" && !testResult?.isCorrect)
+              ? "140px" // Reserve space for formula bar (120px height + 20px margin)
+              : "20px", // Just small padding if no formula bar
         }}
       >
         <Group
@@ -209,15 +217,17 @@ const TenHatsRiddle: React.FC = () => {
         />
       </div>
 
-      {/* Bottom section for Formula bar and success message */}
+      {/* Bottom section - positioned absolutely at bottom */}
       <div
         style={{
+          position: "absolute",
+          bottom: "0",
+          left: "0",
+          right: "0",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: "20px",
-          width: "100%",
-          paddingBottom: "10px", // Small padding from bottom of screen
+          backgroundColor: "#f0f0f0", // Match background
         }}
       >
         {/* Formula bar - show in input state OR results state for failures */}
@@ -246,6 +256,7 @@ const TenHatsRiddle: React.FC = () => {
               maxWidth: "600px",
               textAlign: "center",
               fontFamily: "monospace",
+              margin: "20px",
             }}
           >
             <div
