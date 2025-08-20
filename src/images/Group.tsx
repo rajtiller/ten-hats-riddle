@@ -236,9 +236,12 @@ const GroupComponent: React.FC<GroupProps> = (props = {}) => {
   const scaledRadius = group.radius * 20;
   const canvasHeight = (scaledRadius + padding) * 2;
   const canvasWidth = (scaledRadius + padding) * 2 + 140; // fixed cut off for guess boxes
+
+  // Adjust viewBox to show more space at the top for person 5's hat/guess bubble
+  const extraTopSpace = 60; // Additional space at the top
   const viewBox = `-${canvasHeight / 2} -${
-    canvasHeight / 2
-  } ${canvasHeight} ${canvasHeight}`;
+    canvasHeight / 2 + extraTopSpace
+  } ${canvasHeight} ${canvasHeight + extraTopSpace}`;
 
   return (
     <div style={{ position: "relative" }}>
