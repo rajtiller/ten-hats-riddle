@@ -20,6 +20,8 @@ export interface PersonProps {
   showPersonNumber?: boolean;
   isCurrentPerson?: boolean;
   leftPosition?: number;
+  rightPosition?: number; // Add right position
+  isLeftSide?: boolean; // Add flag to determine left or right
   isHighlighted?: boolean;
   showIndexLabels?: boolean;
   showAsUnknown?: boolean;
@@ -46,6 +48,8 @@ export class Person {
   showPersonNumber: boolean;
   isCurrentPerson: boolean;
   leftPosition: number;
+  rightPosition: number; // Add right position
+  isLeftSide: boolean; // Add left/right flag
   isHighlighted: boolean;
   showIndexLabels: boolean;
   showAsUnknown: boolean;
@@ -73,6 +77,8 @@ export class Person {
     showPersonNumber = true,
     isCurrentPerson = false,
     leftPosition = 0,
+    rightPosition = 0, // Add right position
+    isLeftSide = true, // Add left/right flag
     isHighlighted = false,
     showIndexLabels = false,
     showAsUnknown = false,
@@ -97,6 +103,8 @@ export class Person {
     this.showPersonNumber = showPersonNumber;
     this.isCurrentPerson = isCurrentPerson;
     this.leftPosition = leftPosition;
+    this.rightPosition = rightPosition;
+    this.isLeftSide = isLeftSide;
     this.isHighlighted = isHighlighted;
     this.showIndexLabels = showIndexLabels;
     this.showAsUnknown = showAsUnknown;
@@ -432,10 +440,7 @@ export class Person {
 
     const guessY = this.y - 48 * this.sizeScale;
 
-    return (
-      <g>
-      </g>
-    );
+    return <g></g>;
   }
 
   // Legacy method for backward compatibility (not used in new Group component)
@@ -457,7 +462,9 @@ export class Person {
           this.isCurrentPerson,
           true,
           this.sizeScale,
-          this.leftPosition
+          this.leftPosition,
+          this.rightPosition, // Pass right position
+          this.isLeftSide // Pass left/right flag
         )}
         {this.showPersonNumber
           ? this.renderPersonNumber()

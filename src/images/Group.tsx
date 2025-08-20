@@ -150,7 +150,9 @@ export class Group {
       const scaledRadius = this.radius * 20 * sizeScale; // Scale the radius
       const x = scaledRadius * Math.cos(angle);
       const y =
-        scaledRadius * Math.sin(angle) - (i > 2 && i < 8 ? 15 * sizeScale : 0)-20; // Scale the y offset
+        scaledRadius * Math.sin(angle) -
+        (i > 2 && i < 8 ? 15 * sizeScale : 0) -
+        20; // Scale the y offset
 
       const isCurrentPerson = i === currentPersonIndex;
       const isHighlighted = this.shouldHighlightPerson(
@@ -165,14 +167,27 @@ export class Group {
 
       const hatColor = hatColors[i] || "#ff0000";
 
-      let leftPosition = 1;
+      // Calculate position and determine if it's left or right
+      let leftPosition = 0;
+      let rightPosition = 0;
+      let isLeftSide = true;
+
       if (!isCurrentPerson) {
+        // Calculate relative position from current person
         const relativePosition =
           (i - currentPersonIndex + this.numberOfPeople) % this.numberOfPeople;
-        leftPosition = relativePosition;
 
-        if (relativePosition === 0) {
-          leftPosition = this.numberOfPeople;
+        // Positions 1-5 are to the left (l[1] through l[5])
+        // Positions 6-9 are to the right (r[4] through r[1])
+        if (relativePosition <= 5) {
+          // Left side: l[1], l[2], l[3], l[4], l[5]
+          leftPosition = relativePosition;
+          isLeftSide = true;
+        } else {
+          // Right side: r[4], r[3], r[2], r[1]
+          // relativePosition 6 = r[4], 7 = r[3], 8 = r[2], 9 = r[1]
+          rightPosition = 10 - relativePosition;
+          isLeftSide = false;
         }
       }
 
@@ -184,7 +199,9 @@ export class Group {
         showPersonNumber: showPersonNumbers,
         hatColor: hatColor,
         isCurrentPerson: isCurrentPerson,
-        leftPosition: leftPosition,
+        leftPosition: isLeftSide ? leftPosition : 0,
+        rightPosition: !isLeftSide ? rightPosition : 0,
+        isLeftSide: isLeftSide,
         isHighlighted: isHighlighted,
         showIndexLabels: showIndexLabels,
         showAsUnknown: isCurrentPerson && showCurrentPersonAsUnknown,
@@ -215,7 +232,11 @@ export class Group {
               person.y,
               person.angle,
               person.isCurrentPerson,
-              true
+              true,
+              person.sizeScale, // Pass sizeScale
+              person.leftPosition, // Pass leftPosition
+              person.rightPosition, // Pass rightPosition
+              person.isLeftSide // Pass isLeftSide flag
             )}
             {person.showPersonNumber
               ? person.renderPersonNumber()

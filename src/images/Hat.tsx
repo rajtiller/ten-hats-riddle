@@ -64,14 +64,16 @@ export class HatClass implements Hat {
     y: number,
     angle: number = 0,
     isCurrentPerson: boolean = false,
-    isOnPerson: boolean = true, // New parameter to distinguish between person hats and legend hats
+    isOnPerson: boolean = true,
     sizeScale: number = 1.0,
-    leftPosition?: number // Add leftPosition parameter
+    leftPosition?: number,
+    rightPosition?: number,
+    isLeftSide?: boolean
   ): JSX.Element {
     if (this.type === "none") return <></>;
 
     const transform = `translate(${x}, ${y}) rotate(${angle}) scale(${sizeScale})`;
-    const hatNumber = hatColorToNumber[this.color] ?? "";
+    const hatNumber = hatColorToNumber[this.color];
     const isRainbow = this.color === "rainbow";
     const gradientId = `rainbow-gradient-${Math.random()
       .toString(36)
@@ -80,14 +82,26 @@ export class HatClass implements Hat {
     // Determine what text to display
     let displayText = "";
 
-    if (isCurrentPerson && this.color === "#d3d3d3") {
-      // Current person shows "YOU"
+    if (isCurrentPerson) {
+      // Current person always shows "YOU" regardless of hat color
       displayText = "???";
-    } else if (isRainbow && leftPosition !== undefined) {
-      // Rainbow hats show left position labels
-      displayText = `l[${leftPosition}]`;
-    } else if (!isRainbow) {
-      // Colored hats show their number
+    } else if (isRainbow) {
+      // Rainbow hats show position labels
+      if (
+        isLeftSide !== false &&
+        leftPosition !== undefined &&
+        leftPosition > 0
+      ) {
+        displayText = `l[${leftPosition}]`;
+      } else if (
+        isLeftSide === false &&
+        rightPosition !== undefined &&
+        rightPosition > 0
+      ) {
+        displayText = `r[${rightPosition}]`;
+      }
+    } else if (!isRainbow && hatNumber !== undefined) {
+      // Colored hats show their number (including 0)
       displayText = hatNumber.toString();
     }
 
@@ -98,7 +112,7 @@ export class HatClass implements Hat {
             x="0"
             y={yPos}
             textAnchor="middle"
-            fontSize={displayText.length > 2 ? "14" : "20"} // Smaller font for longer text
+            fontSize={displayText.length > 2 ? "14" : "20"}
             fontFamily="monospace"
             fontWeight="900"
             fill="white"
@@ -111,7 +125,7 @@ export class HatClass implements Hat {
             x="0"
             y={yPos}
             textAnchor="middle"
-            fontSize={displayText.length > 2 ? "14" : "20"} // Smaller font for longer text
+            fontSize={displayText.length > 2 ? "14" : "20"}
             fontFamily="monospace"
             fontWeight="900"
             fill="black"
@@ -126,7 +140,7 @@ export class HatClass implements Hat {
     const fillColor = isRainbow ? `url(#${gradientId})` : this.color;
 
     // Apply small lift offset only for hats on people, not legend hats
-    const liftOffset = isOnPerson ? -5 : 0; // Move up just 5px for person hats
+    const liftOffset = isOnPerson ? -5 : 0;
 
     switch (this.type) {
       case "cap":
@@ -135,7 +149,7 @@ export class HatClass implements Hat {
             {isRainbow && this.createRainbowGradient(gradientId)}
             <ellipse
               cx="0"
-              cy={-22 + liftOffset} // Apply small lift offset
+              cy={-22 + liftOffset}
               rx="25"
               ry="17"
               fill={fillColor}
@@ -144,14 +158,14 @@ export class HatClass implements Hat {
             />
             <ellipse
               cx="0"
-              cy={-17 + liftOffset} // Apply small lift offset
+              cy={-17 + liftOffset}
               rx="31"
               ry="7"
               fill={fillColor}
               stroke="#000"
               strokeWidth="1.4"
             />
-            {renderHatText(-15 + liftOffset)} {/* Apply small lift offset */}
+            {renderHatText(-20 + liftOffset)}
           </g>
         );
       case "beanie":
