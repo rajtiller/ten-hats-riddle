@@ -181,7 +181,7 @@ const TenHatsRiddle: React.FC = () => {
       <div
         style={{
           position: "absolute",
-          top: "315px", // Adjusted for smaller title
+          top: "615px", // Adjusted for smaller title
           left: "50%",
           transform: "translateX(-50%)",
           fontSize: "16px",

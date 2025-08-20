@@ -234,14 +234,15 @@ const GroupComponent: React.FC<GroupProps> = (props = {}) => {
   const group = new Group(props);
   const padding = 80;
   const scaledRadius = group.radius * 20;
-  const canvasSize = (scaledRadius + padding) * 2;
-  const viewBox = `-${canvasSize / 2} -${
-    canvasSize / 2
-  } ${canvasSize} ${canvasSize}`;
+  const canvasHeight = (scaledRadius + padding) * 2 ;
+  const canvasWidth = (scaledRadius + padding) * 2 + 140; // fixed cut off for guess boxes
+  const viewBox = `-${canvasHeight / 2} -${
+    canvasHeight / 2
+  } ${canvasHeight} ${canvasHeight}`;
 
   return (
     <div style={{ position: "relative" }}>
-      <svg width={canvasSize} height={canvasSize} viewBox={viewBox}>
+      <svg width={canvasWidth} height={canvasHeight} viewBox={viewBox}>
         {/* Main group content */}
         {group.render()}
 
