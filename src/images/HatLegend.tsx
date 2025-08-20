@@ -95,11 +95,11 @@ const HatLegend: React.FC<HatLegendProps> = () => {
                 width="40"
                 height="40"
                 viewBox="-25 -40 50 40"
-                style={{
-                  border: "1px solid #ccc",
-                  borderRadius: "5px",
-                  backgroundColor: "#f9f9f9",
-                }}
+                style={
+                  {
+                    // Removed border, borderRadius, and backgroundColor
+                  }
+                }
               >
                 {hat.render(0, 0, 0, false, false)}{" "}
                 {/* Added isOnPerson: false */}
