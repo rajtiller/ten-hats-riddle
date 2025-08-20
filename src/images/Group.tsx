@@ -12,7 +12,9 @@ interface GroupProps {
   personHighlight?: PersonHighlight | null;
   showIndexLabels?: boolean;
   showCurrentPersonAsUnknown?: boolean;
-  personGuesses?: number[]; // Array of guesses for each person
+  personGuesses?: number[];
+  formula?: string; // Add formula prop
+  hatColorNumbers?: number[]; // Add numerical hat colors for calculation
 }
 
 export class Group {
@@ -31,6 +33,8 @@ export class Group {
     showIndexLabels = false,
     showCurrentPersonAsUnknown = false,
     personGuesses = [],
+    formula = undefined,
+    hatColorNumbers = undefined,
   }: GroupProps = {}) {
     this.numberOfPeople = numberOfPeople;
     this.radius = Math.max(1, Math.min(10, radius));
@@ -46,7 +50,9 @@ export class Group {
         personHighlight,
         showIndexLabels,
         showCurrentPersonAsUnknown,
-        personGuesses
+        personGuesses,
+        formula,
+        hatColorNumbers
       );
   }
 
@@ -115,7 +121,9 @@ export class Group {
     personHighlight: PersonHighlight | null = null,
     showIndexLabels: boolean = false,
     showCurrentPersonAsUnknown: boolean = false,
-    personGuesses: number[] = []
+    personGuesses: number[] = [],
+    formula?: string,
+    hatColorNumbers?: number[]
   ): Person[] {
     const people: Person[] = [];
     const angleStep = (2 * Math.PI) / this.numberOfPeople;
@@ -127,7 +135,7 @@ export class Group {
       const angle = Math.PI / 2 + adjustedIndex * angleStep;
       const scaledRadius = this.radius * 20;
       const x = scaledRadius * Math.cos(angle);
-      const y = scaledRadius * Math.sin(angle) - (i > 2 && i < 8 ? 15 : 0); // Adjust y position for better spacing
+      const y = scaledRadius * Math.sin(angle) - (i > 2 && i < 8 ? 15 : 0);
 
       const isCurrentPerson = i === currentPersonIndex;
       const isHighlighted = this.shouldHighlightPerson(
@@ -155,7 +163,7 @@ export class Group {
 
       const person = new Person({
         x,
-        y, // Adjust y position for better spacing
+        y,
         angle: 0,
         personNumber: i,
         showPersonNumber: showPersonNumbers,
@@ -166,6 +174,8 @@ export class Group {
         showIndexLabels: showIndexLabels,
         showAsUnknown: isCurrentPerson && showCurrentPersonAsUnknown,
         guess: personGuesses.length > i ? personGuesses[i] : undefined,
+        formula: formula, // Pass formula to person
+        hatColors: hatColorNumbers, // Pass numerical hat colors
       });
 
       people.push(person);

@@ -13,13 +13,16 @@ interface TestResult {
   message: string;
   successCount?: number;
   formula?: string;
-  personGuesses?: number[]; // Add guesses for each person
+  personGuesses?: number[];
 }
 
 const TenHatsRiddle: React.FC = () => {
   const [appState, setAppState] = useState<AppState>("input");
   const [testResult, setTestResult] = useState<TestResult | null>(null);
   const [counterExampleHats, setCounterExampleHats] = useState<string[]>([]);
+  const [counterExampleNumbers, setCounterExampleNumbers] = useState<number[]>(
+    []
+  );
   const [currentPersonIndex] = useState(0);
   const [personHighlight, setPersonHighlight] =
     useState<PersonHighlight | null>(null);
@@ -87,6 +90,7 @@ const TenHatsRiddle: React.FC = () => {
         (colorIndex) => availableHatColors[colorIndex]
       );
       setCounterExampleHats(hatColors);
+      setCounterExampleNumbers(counterExample); // Store numerical values too
       setTestResult({
         isCorrect: false,
         counterExample: counterExample,
@@ -103,6 +107,7 @@ const TenHatsRiddle: React.FC = () => {
     setAppState("input");
     setTestResult(null);
     setCounterExampleHats([]);
+    setCounterExampleNumbers([]);
     setPersonHighlight(null);
   };
 
@@ -147,8 +152,8 @@ const TenHatsRiddle: React.FC = () => {
         flexDirection: "column",
         backgroundColor: "#f0f0f0",
         position: "relative",
-        padding: "0", // Removed padding
-        overflow: "hidden", // Prevent any scrolling
+        padding: "0",
+        overflow: "hidden",
       }}
     >
       {/* Title */}
@@ -199,8 +204,8 @@ const TenHatsRiddle: React.FC = () => {
           paddingBottom:
             appState === "input" ||
             (appState === "results" && !testResult?.isCorrect)
-              ? "140px" // Reserve space for formula bar (120px height + 20px margin)
-              : "20px", // Just small padding if no formula bar
+              ? "140px"
+              : "20px",
         }}
       >
         <Group
@@ -213,6 +218,10 @@ const TenHatsRiddle: React.FC = () => {
           showIndexLabels={appState === "input"}
           personGuesses={
             appState === "results" ? testResult?.personGuesses : undefined
+          }
+          formula={appState === "results" ? currentFormula : undefined}
+          hatColorNumbers={
+            appState === "results" ? counterExampleNumbers : undefined
           }
         />
       </div>
@@ -227,7 +236,7 @@ const TenHatsRiddle: React.FC = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          backgroundColor: "#f0f0f0", // Match background
+          backgroundColor: "#f0f0f0",
         }}
       >
         {/* Formula bar - show in input state OR results state for failures */}

@@ -1,6 +1,6 @@
-make it so evrerybody's guess is displayed in a text box (w/ explanation)
-make spacing in fomular bar consistent, especially after deleting
+make it so if someone hovers the cursor over some's guess, the calculation is shown for why that person gussed what they did. It would be cool if some values, like l[3] constantly switched between the variable name and actual value and that everything is calculated first and then mod 10 is the last operation done. This only has to be done for a single arrangements of hats returned by test Formula.make spacing in fomular bar consistent, especially after deleting
 implement test function
 make it so hats for two people are black and white
 make success rate bold and color percentage based on success rate
 consider making square braces like round parentheses
+fix eyes
