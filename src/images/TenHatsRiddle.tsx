@@ -68,6 +68,9 @@ const TenHatsRiddle: React.FC = () => {
 
   const handleTestResult = (result: number[], formula: string) => {
     setCurrentFormula(formula);
+    
+    // Clear person highlight when transitioning to results state
+    setPersonHighlight(null);
 
     if (result.length === 0) {
       // Correct solution
@@ -214,7 +217,7 @@ const TenHatsRiddle: React.FC = () => {
           hatColors={getHatColorsForState()}
           showPersonNumbers={appState === "results"}
           currentPersonIndex={currentPersonIndex}
-          personHighlight={personHighlight}
+          personHighlight={appState === "input" ? personHighlight : null}
           showIndexLabels={appState === "input"}
           personGuesses={
             appState === "results" ? testResult?.personGuesses : undefined
@@ -246,7 +249,7 @@ const TenHatsRiddle: React.FC = () => {
             width={600}
             height={120}
             onTestResult={handleTestResult}
-            onPersonHighlight={setPersonHighlight}
+            onPersonHighlight={appState === "input" ? setPersonHighlight : undefined} 
             initialFormula={appState === "results" ? currentFormula : undefined}
             showAsReadOnly={appState === "results"}
             onTryAgain={appState === "results" ? handleGuessAgain : undefined}
