@@ -63,7 +63,8 @@ export class HatClass implements Hat {
     x: number,
     y: number,
     angle: number = 0,
-    isCurrentPerson: boolean = false
+    isCurrentPerson: boolean = false,
+    isOnPerson: boolean = true // New parameter to distinguish between person hats and legend hats
   ): JSX.Element {
     if (this.type === "none") return <></>;
 
@@ -89,12 +90,12 @@ export class HatClass implements Hat {
             x="0"
             y={yPos}
             textAnchor="middle"
-            fontSize="20" // Increased from 14 (14 * 1.4)
+            fontSize="20"
             fontFamily="monospace"
             fontWeight="900"
             fill="white"
             stroke="white"
-            strokeWidth="2.1" // Increased from 1.5 (1.5 * 1.4)
+            strokeWidth="2.1"
           >
             {displayText}
           </text>
@@ -102,12 +103,12 @@ export class HatClass implements Hat {
             x="0"
             y={yPos}
             textAnchor="middle"
-            fontSize="20" // Increased from 14 (14 * 1.4)
+            fontSize="20"
             fontFamily="monospace"
             fontWeight="900"
             fill="black"
             stroke="black"
-            strokeWidth="0.4" // Increased from 0.3 (0.3 * 1.4)
+            strokeWidth="0.4"
           >
             {displayText}
           </text>
@@ -116,6 +117,9 @@ export class HatClass implements Hat {
 
     const fillColor = isRainbow ? `url(#${gradientId})` : this.color;
 
+    // Apply small lift offset only for hats on people, not legend hats
+    const liftOffset = isOnPerson ? -5 : 0; // Move up just 5px for person hats
+
     switch (this.type) {
       case "cap":
         return (
@@ -123,23 +127,23 @@ export class HatClass implements Hat {
             {isRainbow && this.createRainbowGradient(gradientId)}
             <ellipse
               cx="0"
-              cy="-22" // Increased from -16 (-16 * 1.4)
-              rx="25" // Increased from 18 (18 * 1.4)
-              ry="17" // Increased from 12 (12 * 1.4)
+              cy={-22 + liftOffset} // Apply small lift offset
+              rx="25"
+              ry="17"
               fill={fillColor}
               stroke="#000"
-              strokeWidth="1.4" // Increased from 1 (1 * 1.4)
+              strokeWidth="1.4"
             />
             <ellipse
               cx="0"
-              cy="-17" // Increased from -12 (-12 * 1.4)
-              rx="31" // Increased from 22 (22 * 1.4)
-              ry="7" // Increased from 5 (5 * 1.4)
+              cy={-17 + liftOffset} // Apply small lift offset
+              rx="31"
+              ry="7"
               fill={fillColor}
               stroke="#000"
-              strokeWidth="1.4" // Increased from 1 (1 * 1.4)
+              strokeWidth="1.4"
             />
-            {renderHatText(-15)} {/* Adjusted position */}
+            {renderHatText(-15 + liftOffset)} {/* Apply small lift offset */}
           </g>
         );
       case "beanie":
@@ -148,7 +152,7 @@ export class HatClass implements Hat {
             {isRainbow && this.createRainbowGradient(gradientId)}
             <ellipse
               cx="0"
-              cy="-22"
+              cy={-22 + liftOffset}
               rx="25"
               ry="17"
               fill={fillColor}
@@ -157,14 +161,14 @@ export class HatClass implements Hat {
             />
             <rect
               x="-25"
-              y="-8"
+              y={-8 + liftOffset}
               width="50"
               height="7"
               fill={fillColor}
               stroke="#000"
               strokeWidth="1.4"
             />
-            {renderHatText(-15)}
+            {renderHatText(-15 + liftOffset)}
           </g>
         );
       case "fedora":
@@ -173,7 +177,7 @@ export class HatClass implements Hat {
             {isRainbow && this.createRainbowGradient(gradientId)}
             <ellipse
               cx="0"
-              cy="-17"
+              cy={-17 + liftOffset}
               rx="36"
               ry="8"
               fill={fillColor}
@@ -182,15 +186,21 @@ export class HatClass implements Hat {
             />
             <ellipse
               cx="0"
-              cy="-28"
+              cy={-28 + liftOffset}
               rx="22"
               ry="14"
               fill={fillColor}
               stroke="#000"
               strokeWidth="1.4"
             />
-            <rect x="-22" y="-22" width="45" height="3" fill="#333" />
-            {renderHatText(-21)}
+            <rect
+              x="-22"
+              y={-22 + liftOffset}
+              width="45"
+              height="3"
+              fill="#333"
+            />
+            {renderHatText(-21 + liftOffset)}
           </g>
         );
       case "cowboy":
@@ -199,7 +209,7 @@ export class HatClass implements Hat {
             {isRainbow && this.createRainbowGradient(gradientId)}
             <ellipse
               cx="0"
-              cy="-14"
+              cy={-14 + liftOffset}
               rx="42"
               ry="11"
               fill={fillColor}
@@ -208,7 +218,7 @@ export class HatClass implements Hat {
             />
             <ellipse
               cx="0"
-              cy="-31"
+              cy={-31 + liftOffset}
               rx="20"
               ry="17"
               fill={fillColor}
@@ -217,13 +227,13 @@ export class HatClass implements Hat {
             />
             <line
               x1="0"
-              y1="-39"
+              y1={-39 + liftOffset}
               x2="0"
-              y2="-22"
+              y2={-22 + liftOffset}
               stroke="#000"
               strokeWidth="1.4"
             />
-            {renderHatText(-25)}
+            {renderHatText(-25 + liftOffset)}
           </g>
         );
       default:

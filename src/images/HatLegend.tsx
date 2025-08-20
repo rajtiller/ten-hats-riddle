@@ -66,62 +66,78 @@ const HatLegend: React.FC<HatLegendProps> = () => {
         Hat Colors
       </h3>
 
-      {hatColors.map((hatInfo, index) => (
-        <div
-          key={index}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            marginBottom: "8px",
-            fontSize: "14px",
-            fontFamily: "monospace",
-            height: "40px", // Fixed height to maintain consistent spacing
-          }}
-        >
+      {hatColors.map((hatInfo, index) => {
+        const hat = new HatClass(hatInfo.color, "cap");
+
+        return (
           <div
+            key={index}
             style={{
-              marginRight: "10px",
               display: "flex",
               alignItems: "center",
-              justifyContent: "center",
-              width: "40px", // Fixed width for consistent spacing
-              height: "40px", // Fixed height
+              marginBottom: "8px",
+              fontSize: "14px",
+              fontFamily: "monospace",
+              height: "40px",
             }}
           >
-            {renderHat(hatInfo.color)}
+            <div
+              style={{
+                marginRight: "10px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "40px",
+                height: "40px",
+              }}
+            >
+              <svg
+                width="40"
+                height="40"
+                viewBox="-25 -40 50 40"
+                style={{
+                  border: "1px solid #ccc",
+                  borderRadius: "5px",
+                  backgroundColor: "#f9f9f9",
+                }}
+              >
+                {hat.render(0, 0, 0, false, false)}{" "}
+                {/* Added isOnPerson: false */}
+              </svg>
+            </div>
+
+            <span
+              style={{
+                marginRight: "8px",
+                minWidth: "60px",
+                display: "flex",
+                alignItems: "center",
+                ...getTextStyle(hatInfo.color),
+              }}
+            >
+              {hatInfo.name}
+            </span>
+
+            <span
+              style={{
+                backgroundColor: "#d3d3d3",
+                border: "1px solid #999",
+                padding: "2px 6px",
+                borderRadius: "3px",
+                minWidth: "30px",
+                textAlign: "center",
+                color: "black",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                height: "24px", // Fixed height for the number badge
+              }}
+            >
+              {hatInfo.value}
+            </span>
           </div>
-
-          <span
-            style={{
-              marginRight: "8px",
-              minWidth: "60px",
-              display: "flex",
-              alignItems: "center",
-              ...getTextStyle(hatInfo.color),
-            }}
-          >
-            {hatInfo.name}
-          </span>
-
-          <span
-            style={{
-              backgroundColor: "#d3d3d3",
-              border: "1px solid #999",
-              padding: "2px 6px",
-              borderRadius: "3px",
-              minWidth: "30px",
-              textAlign: "center",
-              color: "black",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "24px", // Fixed height for the number badge
-            }}
-          >
-            {hatInfo.value}
-          </span>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
