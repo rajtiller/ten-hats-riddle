@@ -140,15 +140,17 @@ export class Group {
   ): Person[] {
     const people: Person[] = [];
     const angleStep = (2 * Math.PI) / this.numberOfPeople;
+    const sizeScale = 1.15; // 15% larger
 
     for (let i = 0; i < this.numberOfPeople; i++) {
       const adjustedIndex =
         (i - currentPersonIndex + this.numberOfPeople) % this.numberOfPeople;
 
       const angle = Math.PI / 2 + adjustedIndex * angleStep;
-      const scaledRadius = this.radius * 20;
+      const scaledRadius = this.radius * 20 * sizeScale; // Scale the radius
       const x = scaledRadius * Math.cos(angle);
-      const y = scaledRadius * Math.sin(angle) - (i > 2 && i < 8 ? 15 : 0);
+      const y =
+        scaledRadius * Math.sin(angle) - (i > 2 && i < 8 ? 15 * sizeScale : 0)-20; // Scale the y offset
 
       const isCurrentPerson = i === currentPersonIndex;
       const isHighlighted = this.shouldHighlightPerson(
@@ -187,8 +189,9 @@ export class Group {
         showIndexLabels: showIndexLabels,
         showAsUnknown: isCurrentPerson && showCurrentPersonAsUnknown,
         guess: personGuesses.length > i ? personGuesses[i] : undefined,
-        formula: formula, // Pass formula to person
-        hatColors: hatColorNumbers, // Pass numerical hat colors
+        formula: formula,
+        hatColors: hatColorNumbers,
+        sizeScale: sizeScale, // Pass scale to Person
       });
 
       people.push(person);

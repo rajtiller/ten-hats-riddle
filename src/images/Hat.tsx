@@ -64,22 +64,30 @@ export class HatClass implements Hat {
     y: number,
     angle: number = 0,
     isCurrentPerson: boolean = false,
-    isOnPerson: boolean = true // New parameter to distinguish between person hats and legend hats
+    isOnPerson: boolean = true, // New parameter to distinguish between person hats and legend hats
+    sizeScale: number = 1.0,
+    leftPosition?: number // Add leftPosition parameter
   ): JSX.Element {
     if (this.type === "none") return <></>;
 
-    const transform = `translate(${x}, ${y}) rotate(${angle})`;
+    const transform = `translate(${x}, ${y}) rotate(${angle}) scale(${sizeScale})`;
     const hatNumber = hatColorToNumber[this.color] ?? "";
     const isRainbow = this.color === "rainbow";
     const gradientId = `rainbow-gradient-${Math.random()
       .toString(36)
       .substring(2, 9)}`;
 
-    // Show "???" for current person, number for others, nothing for rainbow
-    let displayText = "?";
+    // Determine what text to display
+    let displayText = "";
+
     if (isCurrentPerson && this.color === "#d3d3d3") {
+      // Current person shows "YOU"
       displayText = "???";
+    } else if (isRainbow && leftPosition !== undefined) {
+      // Rainbow hats show left position labels
+      displayText = `l[${leftPosition}]`;
     } else if (!isRainbow) {
+      // Colored hats show their number
       displayText = hatNumber.toString();
     }
 
@@ -90,7 +98,7 @@ export class HatClass implements Hat {
             x="0"
             y={yPos}
             textAnchor="middle"
-            fontSize="20"
+            fontSize={displayText.length > 2 ? "14" : "20"} // Smaller font for longer text
             fontFamily="monospace"
             fontWeight="900"
             fill="white"
@@ -103,7 +111,7 @@ export class HatClass implements Hat {
             x="0"
             y={yPos}
             textAnchor="middle"
-            fontSize="20"
+            fontSize={displayText.length > 2 ? "14" : "20"} // Smaller font for longer text
             fontFamily="monospace"
             fontWeight="900"
             fill="black"

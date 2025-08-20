@@ -24,8 +24,9 @@ export interface PersonProps {
   showIndexLabels?: boolean;
   showAsUnknown?: boolean;
   guess?: number;
-  formula?: string; // Add formula prop for calculation display
-  hatColors?: number[]; // Add hat colors for calculation
+  formula?: string;
+  hatColors?: number[];
+  sizeScale?: number; // Add size scale prop
 }
 
 export class Person {
@@ -51,6 +52,7 @@ export class Person {
   guess?: number;
   formula?: string;
   hatColors?: number[];
+  sizeScale: number; // Add size scale property
 
   constructor({
     x = 0,
@@ -77,6 +79,7 @@ export class Person {
     guess = undefined,
     formula = undefined,
     hatColors = undefined,
+    sizeScale = 1.15, // Default 15% larger
   }: PersonProps = {}) {
     this.x = x;
     this.y = y;
@@ -100,24 +103,25 @@ export class Person {
     this.guess = guess;
     this.formula = formula;
     this.hatColors = hatColors;
+    this.sizeScale = sizeScale;
   }
 
   renderIndexHighlight(): JSX.Element {
     if (!this.isHighlighted || !this.showIndexLabels) return <></>;
 
     if (this.isCurrentPerson) {
-      const labelX = this.x + 28;
-      const labelY = this.y + 49;
+      const labelX = this.x + 28 * this.sizeScale;
+      const labelY = this.y + 49 * this.sizeScale;
 
       return (
         <g>
           <circle
             cx={labelX}
-            cy={labelY - 3}
-            r="17"
+            cy={labelY - 3 * this.sizeScale}
+            r={17 * this.sizeScale}
             fill="none"
             stroke="#ffeb3b"
-            strokeWidth="3"
+            strokeWidth={3 * this.sizeScale}
             opacity="0.8"
             style={{
               animation: "pulse 1.5s ease-in-out infinite",
@@ -127,14 +131,14 @@ export class Person {
             {`
               @keyframes pulse {
                 0%, 100% { 
-                  stroke-width: 3;
+                  stroke-width: ${3 * this.sizeScale};
                   opacity: 0.8;
-                  r: 17;
+                  r: ${17 * this.sizeScale};
                 }
                 50% { 
-                  stroke-width: 4;
+                  stroke-width: ${4 * this.sizeScale};
                   opacity: 1;
-                  r: 20;
+                  r: ${20 * this.sizeScale};
                 }
               }
             `}
@@ -153,11 +157,11 @@ export class Person {
       <g>
         <circle
           cx={this.x}
-          cy={this.y - 21}
-          r="35"
+          cy={this.y - 21 * this.sizeScale}
+          r={35 * this.sizeScale}
           fill="none"
           stroke="#ffeb3b"
-          strokeWidth="4"
+          strokeWidth={4 * this.sizeScale}
           opacity="0.8"
           style={{
             animation: "pulse 1.5s ease-in-out infinite",
@@ -167,14 +171,14 @@ export class Person {
           {`
             @keyframes pulse {
               0%, 100% { 
-                stroke-width: 4;
+                stroke-width: ${4 * this.sizeScale};
                 opacity: 0.8;
-                r: 35;
+                r: ${35 * this.sizeScale};
               }
               50% { 
-                stroke-width: 6;
+                stroke-width: ${6 * this.sizeScale};
                 opacity: 1;
-                r: 39;
+                r: ${39 * this.sizeScale};
               }
             }
           `}
@@ -194,7 +198,7 @@ export class Person {
   }
 
   renderHead(): JSX.Element {
-    const transform = `translate(${this.x}, ${this.y}) rotate(${this.angle})`;
+    const transform = `translate(${this.x}, ${this.y}) rotate(${this.angle}) scale(${this.sizeScale})`;
 
     return (
       <g transform={transform}>
@@ -212,7 +216,7 @@ export class Person {
   }
 
   renderShoulders(): JSX.Element {
-    const transform = `translate(${this.x}, ${this.y}) rotate(${this.angle})`;
+    const transform = `translate(${this.x}, ${this.y}) rotate(${this.angle}) scale(${this.sizeScale})`;
     return (
       <g transform={transform}>
         <ellipse
@@ -231,7 +235,7 @@ export class Person {
   renderFace(): JSX.Element {
     if (!this.showFace) return <></>;
 
-    const transform = `translate(${this.x}, ${this.y}) rotate(${this.angle})`;
+    const transform = `translate(${this.x}, ${this.y}) rotate(${this.angle}) scale(${this.sizeScale})`;
 
     return (
       <g transform={transform}>
@@ -268,25 +272,25 @@ export class Person {
   renderPersonNumber(): JSX.Element {
     if (!this.showPersonNumber) return <></>;
 
-    const labelX = this.x + 28;
-    const labelY = this.y + 49;
+    const labelX = this.x + 28 * this.sizeScale;
+    const labelY = this.y + 49 * this.sizeScale;
 
     return (
       <g>
         <circle
           cx={labelX}
-          cy={labelY - 3}
-          r="11"
+          cy={labelY - 3 * this.sizeScale}
+          r={11 * this.sizeScale}
           fill="white"
           stroke="#333"
-          strokeWidth="1.4"
+          strokeWidth={1.4 * this.sizeScale}
           opacity="0.9"
         />
         <text
           x={labelX}
           y={labelY}
           textAnchor="middle"
-          fontSize="14"
+          fontSize={14 * this.sizeScale}
           fontFamily="monospace"
           fontWeight="bold"
           fill="black"
@@ -300,26 +304,26 @@ export class Person {
   renderIndexLabel(): JSX.Element {
     if (!this.showIndexLabels) return <></>;
 
-    const labelX = this.x + 28;
-    const labelY = this.y + 49;
+    const labelX = this.x + 28 * this.sizeScale;
+    const labelY = this.y + 49 * this.sizeScale;
 
     if (this.isCurrentPerson) {
       return (
         <g>
           <circle
             cx={labelX}
-            cy={labelY - 3}
-            r="11"
+            cy={labelY - 3 * this.sizeScale}
+            r={11 * this.sizeScale}
             fill="white"
             stroke="#333"
-            strokeWidth="1.4"
+            strokeWidth={1.4 * this.sizeScale}
             opacity="0.9"
           />
           <text
             x={labelX}
             y={labelY}
             textAnchor="middle"
-            fontSize="14"
+            fontSize={14 * this.sizeScale}
             fontFamily="monospace"
             fontWeight="bold"
             fill="black"
@@ -346,18 +350,18 @@ export class Person {
         <g>
           <circle
             cx={labelX}
-            cy={labelY - 3}
-            r="11"
+            cy={labelY - 3 * this.sizeScale}
+            r={11 * this.sizeScale}
             fill="white"
             stroke="#333"
-            strokeWidth="1.4"
+            strokeWidth={1.4 * this.sizeScale}
             opacity="0.9"
           />
           <text
             x={labelX}
             y={labelY}
             textAnchor="middle"
-            fontSize="11"
+            fontSize={11 * this.sizeScale}
             fontFamily="monospace"
             fontWeight="bold"
             fill="black"
@@ -370,7 +374,7 @@ export class Person {
   }
 
   renderPersonLabel(): JSX.Element {
-    const labelY = this.y + 95;
+    const labelY = this.y + 95 * this.sizeScale;
 
     if (!this.showPersonNumber && !this.showIndexLabels) {
       return (
@@ -379,7 +383,7 @@ export class Person {
             x={this.x}
             y={labelY}
             textAnchor="middle"
-            fontSize="14"
+            fontSize={14 * this.sizeScale}
             fontFamily="monospace"
             fontWeight="bold"
             fill="#0066cc"
@@ -426,9 +430,7 @@ export class Person {
   renderGuessWithoutTooltip(): JSX.Element {
     if (this.guess === undefined || this.guess === -1) return <></>;
 
-    const guessY = this.y - 48;
-    const guessColor = this.getGuessColor(this.guess);
-    const textColor = this.getTextColor(guessColor);
+    const guessY = this.y - 48 * this.sizeScale;
 
     return (
       <g>
@@ -453,7 +455,9 @@ export class Person {
           this.y,
           this.angle,
           this.isCurrentPerson,
-          true
+          true,
+          this.sizeScale,
+          this.leftPosition
         )}
         {this.showPersonNumber
           ? this.renderPersonNumber()

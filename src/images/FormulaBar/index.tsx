@@ -168,7 +168,7 @@ const FormulaBar: React.FC<
             boxSizing: "border-box",
           }}
         >
-          Person i:
+          {"??? = "}
         </div>
 
         <div
