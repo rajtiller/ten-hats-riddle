@@ -22,7 +22,9 @@ const HatLegend: React.FC<HatLegendProps> = () => {
   const renderHat = (color: string) => {
     const hat = new HatClass(color, "cap");
     return (
-      <svg width="40" height="30" viewBox="-25 -35 50 35">
+      <svg width="40" height="40" viewBox="-25 -40 50 40">
+        {" "}
+        {/* Increased height and adjusted viewBox */}
         {hat.render(0, 0, 0)}
       </svg>
     );
@@ -73,14 +75,28 @@ const HatLegend: React.FC<HatLegendProps> = () => {
             marginBottom: "8px",
             fontSize: "14px",
             fontFamily: "monospace",
+            height: "40px", // Fixed height to maintain consistent spacing
           }}
         >
-          <div style={{ marginRight: "10px" }}>{renderHat(hatInfo.color)}</div>
+          <div
+            style={{
+              marginRight: "10px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "40px", // Fixed width for consistent spacing
+              height: "40px", // Fixed height
+            }}
+          >
+            {renderHat(hatInfo.color)}
+          </div>
 
           <span
             style={{
               marginRight: "8px",
               minWidth: "60px",
+              display: "flex",
+              alignItems: "center",
               ...getTextStyle(hatInfo.color),
             }}
           >
@@ -89,13 +105,17 @@ const HatLegend: React.FC<HatLegendProps> = () => {
 
           <span
             style={{
-              backgroundColor: "#d3d3d3", // Changed from white to light gray
-              border: "1px solid #999", // Changed border color to match gray theme
+              backgroundColor: "#d3d3d3",
+              border: "1px solid #999",
               padding: "2px 6px",
               borderRadius: "3px",
               minWidth: "30px",
               textAlign: "center",
               color: "black",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "24px", // Fixed height for the number badge
             }}
           >
             {hatInfo.value}

@@ -146,16 +146,15 @@ const TenHatsRiddle: React.FC = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",
+        justifyContent: "space-between", // Changed from center to space-between
         backgroundColor: "#f0f0f0",
         position: "relative",
+        padding: "20px 0", // Add padding top and bottom
       }}
     >
       {/* Title */}
       <div
         style={{
-          position: "absolute",
-          top: "20px",
           fontSize: "24px",
           fontFamily: "monospace",
           fontWeight: "bold",
@@ -165,11 +164,11 @@ const TenHatsRiddle: React.FC = () => {
         Ten Hats Riddle
       </div>
 
-      {/* State indicator with success rate - moved down to give more space */}
+      {/* State indicator with success rate */}
       <div
         style={{
           position: "absolute",
-          top: "650px", // Moved down further to account for larger circle
+          top: "50px",
           fontSize: "16px",
           fontFamily: "monospace",
           color: "#666",
@@ -177,7 +176,7 @@ const TenHatsRiddle: React.FC = () => {
         }}
       >
         {appState === "input"
-          ? ""
+          ? "🤔 Create a formula to determine your hat color"
           : appState === "results" && testResult?.successCount !== undefined
           ? `Success Rate: ${formatSuccessRate(testResult.successCount)}`
           : "THIS SHOULD NOT APPEAR"}
@@ -186,20 +185,19 @@ const TenHatsRiddle: React.FC = () => {
       {/* Hat Legend */}
       <HatLegend />
 
-      {/* Main content area - moved down and adjusted spacing */}
+      {/* Main content area with Group */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: "50px",
-          marginTop: "90px", // Increased from 40px to 90px (moved down 50px)
+          justifyContent: "center",
+          flex: 1, // Take up available space
         }}
       >
-        {/* Group of people - increased radius and moved down */}
         <Group
           numberOfPeople={10}
-          radius={10} // Increased from 9.5 to 10 (about 10px more radius)
+          radius={10}
           hatColors={getHatColorsForState()}
           showPersonNumbers={appState === "results"}
           currentPersonIndex={currentPersonIndex}
@@ -209,23 +207,31 @@ const TenHatsRiddle: React.FC = () => {
             appState === "results" ? testResult?.personGuesses : undefined
           }
         />
+      </div>
 
+      {/* Bottom section for Formula bar and success message */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "20px",
+          width: "100%",
+          paddingBottom: "10px", // Small padding from bottom of screen
+        }}
+      >
         {/* Formula bar - show in input state OR results state for failures */}
         {(appState === "input" ||
           (appState === "results" && !testResult?.isCorrect)) && (
-          <div style={{ marginTop: "20px" }}>
-            <FormulaBar
-              width={600}
-              height={120}
-              onTestResult={handleTestResult}
-              onPersonHighlight={setPersonHighlight}
-              initialFormula={
-                appState === "results" ? currentFormula : undefined
-              }
-              showAsReadOnly={appState === "results"}
-              onTryAgain={appState === "results" ? handleGuessAgain : undefined}
-            />
-          </div>
+          <FormulaBar
+            width={600}
+            height={120}
+            onTestResult={handleTestResult}
+            onPersonHighlight={setPersonHighlight}
+            initialFormula={appState === "results" ? currentFormula : undefined}
+            showAsReadOnly={appState === "results"}
+            onTryAgain={appState === "results" ? handleGuessAgain : undefined}
+          />
         )}
 
         {/* Success message - only show for successful results */}
@@ -240,7 +246,6 @@ const TenHatsRiddle: React.FC = () => {
               maxWidth: "600px",
               textAlign: "center",
               fontFamily: "monospace",
-              marginTop: "20px",
             }}
           >
             <div
