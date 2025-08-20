@@ -179,7 +179,7 @@ const TenHatsRiddle: React.FC = () => {
         }}
       >
         {appState === "input"
-          ? "🤔 Create a formula to determine your hat color"
+          ? ""
           : appState === "results" && testResult?.successCount !== undefined
           ? `Success Rate: ${formatSuccessRate(testResult.successCount)}`
           : ""}

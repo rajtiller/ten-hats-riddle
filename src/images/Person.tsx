@@ -423,7 +423,7 @@ export class Person {
         {/* Background circle for guess */}
         <circle
           cx={this.x}
-          cy={guessY}
+          cy={guessY+15}
           r="14" // Increased from 10 (10 * 1.4)
           fill={guessColor}
           stroke="#333"
@@ -433,7 +433,7 @@ export class Person {
         {/* Guess text with contrasting color */}
         <text
           x={this.x}
-          y={guessY + 4} // Increased from 3 (3 * 1.4)
+          y={guessY + 19} // Increased from 3 (3 * 1.4)
           textAnchor="middle"
           fontSize="17" // Increased from 12 (12 * 1.4)
           fontFamily="monospace"
@@ -441,17 +441,6 @@ export class Person {
           fill={textColor}
         >
           {this.guess}
-        </text>
-        {/* Small "guess" label */}
-        <text
-          x={this.x}
-          y={guessY - 20} // Increased from -14 (-14 * 1.4)
-          textAnchor="middle"
-          fontSize="10" // Increased from 7 (7 * 1.4)
-          fontFamily="monospace"
-          fill="#666"
-        >
-          guess
         </text>
       </g>
     );

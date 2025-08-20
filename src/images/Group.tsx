@@ -127,7 +127,7 @@ export class Group {
       const angle = Math.PI / 2 + adjustedIndex * angleStep;
       const scaledRadius = this.radius * 20;
       const x = scaledRadius * Math.cos(angle);
-      const y = scaledRadius * Math.sin(angle);
+      const y = scaledRadius * Math.sin(angle) - (i > 2 && i < 8 ? 15 : 0); // Adjust y position for better spacing
 
       const isCurrentPerson = i === currentPersonIndex;
       const isHighlighted = this.shouldHighlightPerson(
@@ -155,7 +155,7 @@ export class Group {
 
       const person = new Person({
         x,
-        y,
+        y, // Adjust y position for better spacing
         angle: 0,
         personNumber: i,
         showPersonNumber: showPersonNumbers,

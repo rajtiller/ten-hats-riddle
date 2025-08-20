@@ -1,7 +1,6 @@
-fix spacing, things are overlapping
-consider making square braces like round parentheses
 make it so evrerybody's guess is displayed in a text box (w/ explanation)
 make spacing in fomular bar consistent, especially after deleting
 implement test function
 make it so hats for two people are black and white
 make success rate bold and color percentage based on success rate
+consider making square braces like round parentheses
