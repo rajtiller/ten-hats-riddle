@@ -68,7 +68,7 @@ const TenHatsRiddle: React.FC = () => {
 
   const handleTestResult = (result: number[], formula: string) => {
     setCurrentFormula(formula);
-    
+
     // Clear person highlight when transitioning to results state
     setPersonHighlight(null);
 
@@ -159,7 +159,7 @@ const TenHatsRiddle: React.FC = () => {
         overflow: "hidden",
       }}
     >
-      {/* Title */}
+      {/* Title - reduced height */}
       <div
         style={{
           fontSize: "24px",
@@ -167,7 +167,11 @@ const TenHatsRiddle: React.FC = () => {
           fontWeight: "bold",
           color: "#333",
           textAlign: "center",
-          padding: "20px 0",
+          padding: "10px 0", // Reduced from "20px 0"
+          height: "44px", // Fixed height instead of flexible padding
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         Ten Hats Riddle
@@ -177,7 +181,7 @@ const TenHatsRiddle: React.FC = () => {
       <div
         style={{
           position: "absolute",
-          top: "325px",
+          top: "315px", // Adjusted for smaller title
           left: "50%",
           transform: "translateX(-50%)",
           fontSize: "16px",
@@ -249,7 +253,9 @@ const TenHatsRiddle: React.FC = () => {
             width={600}
             height={120}
             onTestResult={handleTestResult}
-            onPersonHighlight={appState === "input" ? setPersonHighlight : undefined} 
+            onPersonHighlight={
+              appState === "input" ? setPersonHighlight : undefined
+            }
             initialFormula={appState === "results" ? currentFormula : undefined}
             showAsReadOnly={appState === "results"}
             onTryAgain={appState === "results" ? handleGuessAgain : undefined}

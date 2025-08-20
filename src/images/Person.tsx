@@ -1,4 +1,4 @@
-import React, { type JSX, useState, useEffect } from "react";
+import React, { type JSX } from "react";
 import { HatClass } from "./Hat";
 
 export interface PersonProps {
@@ -422,25 +422,23 @@ export class Person {
     return darkBackgrounds.includes(backgroundColor) ? "white" : "black";
   }
 
-  renderGuess(): JSX.Element {
+  // New method that renders guess without tooltip (used in Group.render())
+  renderGuessWithoutTooltip(): JSX.Element {
     if (this.guess === undefined || this.guess === -1) return <></>;
 
-    const guessY = this.y - 48; // Adjusted for lifted hats
+    const guessY = this.y - 48;
     const guessColor = this.getGuessColor(this.guess);
     const textColor = this.getTextColor(guessColor);
 
     return (
-      <GuessWithTooltip
-        x={this.x}
-        y={guessY}
-        guess={this.guess}
-        guessColor={guessColor}
-        textColor={textColor}
-        personNumber={this.personNumber}
-        formula={this.formula}
-        hatColors={this.hatColors}
-      />
+      <g>
+      </g>
     );
+  }
+
+  // Legacy method for backward compatibility (not used in new Group component)
+  renderGuess(): JSX.Element {
+    return this.renderGuessWithoutTooltip();
   }
 
   render(): JSX.Element {
@@ -466,252 +464,6 @@ export class Person {
     );
   }
 }
-
-// New component for guess with hover tooltip
-interface GuessWithTooltipProps {
-  x: number;
-  y: number;
-  guess: number;
-  guessColor: string;
-  textColor: string;
-  personNumber: number;
-  formula?: string;
-  hatColors?: number[];
-}
-
-const GuessWithTooltip: React.FC<GuessWithTooltipProps> = ({
-  x,
-  y,
-  guess,
-  guessColor,
-  textColor,
-  personNumber,
-  formula,
-  hatColors,
-}) => {
-  const [showTooltip, setShowTooltip] = useState(false);
-  const [animationToggle, setAnimationToggle] = useState(false);
-
-  // Animation timer for switching between variable names and values
-  useEffect(() => {
-    if (!showTooltip) return;
-
-    const interval = setInterval(() => {
-      setAnimationToggle((prev) => !prev);
-    }, 1500); // Switch every 1.5 seconds
-
-    return () => clearInterval(interval);
-  }, [showTooltip]);
-
-  const generateCalculationSteps = (): {
-    originalFormula: string;
-    substitutedFormula: string;
-    animatedFormula: string;
-    calculatedValue: number;
-    finalResult: number;
-  } | null => {
-    if (!formula || !hatColors || hatColors.length !== 10) return null;
-
-    try {
-      // Original formula
-      const originalFormula = formula;
-
-      // Create substituted formula (all variables replaced with values)
-      let substitutedFormula = formula;
-
-      // Replace 'i' with person's guessed hat color
-      substitutedFormula = substitutedFormula.replace(
-        /\bi\b/g,
-        guess.toString()
-      );
-
-      // Replace 'all' with sum of all visible hat colors (excluding this person)
-      const visibleHats = hatColors.filter(
-        (_, index) => index !== personNumber
-      );
-      const allSum = visibleHats.reduce((sum, color) => sum + color, 0);
-      substitutedFormula = substitutedFormula.replace(
-        /\ball\b/g,
-        allSum.toString()
-      );
-
-      // Replace l[n] patterns
-      substitutedFormula = substitutedFormula.replace(
-        /l\[(\d+)\]/g,
-        (match, position) => {
-          const pos = parseInt(position);
-          const targetPersonIndex = (personNumber + pos) % 10;
-          return hatColors[targetPersonIndex].toString();
-        }
-      );
-
-      // Replace r[n] patterns
-      substitutedFormula = substitutedFormula.replace(
-        /r\[(\d+)\]/g,
-        (match, position) => {
-          const pos = parseInt(position);
-          const targetPersonIndex = (personNumber - pos + 10) % 10;
-          return hatColors[targetPersonIndex].toString();
-        }
-      );
-
-      // Create animated formula (switches between variables and values)
-      let animatedFormula = formula;
-
-      if (animationToggle) {
-        // Show values
-        animatedFormula = animatedFormula.replace(/\bi\b/g, guess.toString());
-        animatedFormula = animatedFormula.replace(
-          /\ball\b/g,
-          allSum.toString()
-        );
-        animatedFormula = animatedFormula.replace(
-          /l\[(\d+)\]/g,
-          (match, position) => {
-            const pos = parseInt(position);
-            const targetPersonIndex = (personNumber + pos) % 10;
-            return hatColors[targetPersonIndex].toString();
-          }
-        );
-        animatedFormula = animatedFormula.replace(
-          /r\[(\d+)\]/g,
-          (match, position) => {
-            const pos = parseInt(position);
-            const targetPersonIndex = (personNumber - pos + 10) % 10;
-            return hatColors[targetPersonIndex].toString();
-          }
-        );
-      } else {
-        // Show original variables (no changes needed)
-        animatedFormula = formula;
-      }
-
-      // Calculate the result
-      const processedFormula = substitutedFormula.replace(/x/g, "*");
-      const calculatedValue = new Function(
-        `"use strict"; return (${processedFormula})`
-      )();
-      const finalResult = ((calculatedValue % 10) + 10) % 10;
-
-      return {
-        originalFormula,
-        substitutedFormula,
-        animatedFormula,
-        calculatedValue,
-        finalResult: Math.floor(finalResult),
-      };
-    } catch (error) {
-      console.error("Error generating calculation:", error);
-      return null;
-    }
-  };
-
-  const calculation = generateCalculationSteps();
-
-  return (
-    <g>
-      {/* Guess circle */}
-      <circle
-        cx={x}
-        cy={y-6}
-        r="14"
-        fill={guessColor}
-        stroke="#333"
-        strokeWidth="2.1"
-        opacity="0.9"
-        onMouseEnter={() => setShowTooltip(true)}
-        onMouseLeave={() => setShowTooltip(false)}
-        style={{ cursor: calculation ? "pointer" : "default" }}
-      />
-
-      {/* Guess text */}
-      <text
-        x={x}
-        y={y -2}
-        textAnchor="middle"
-        fontSize="17"
-        fontFamily="monospace"
-        fontWeight="bold"
-        fill={textColor}
-        onMouseEnter={() => setShowTooltip(true)}
-        onMouseLeave={() => setShowTooltip(false)}
-        style={{
-          cursor: calculation ? "pointer" : "default",
-          pointerEvents: "none",
-        }}
-      >
-        {guess}
-      </text>
-
-      {/* Tooltip */}
-      {showTooltip && calculation && (
-        <g>
-          {/* Tooltip background */}
-          <rect
-            x={x - 150}
-            y={y - 120}
-            width="300"
-            height="90"
-            fill="rgba(0, 0, 0, 0.9)"
-            stroke="#fff"
-            strokeWidth="1"
-            rx="5"
-            ry="5"
-          />
-
-          {/* Tooltip title */}
-          <text
-            x={x}
-            y={y - 100}
-            textAnchor="middle"
-            fontSize="12"
-            fontFamily="monospace"
-            fontWeight="bold"
-            fill="#fff"
-          >
-            Person {personNumber} Calculation:
-          </text>
-
-          {/* Animated formula */}
-          <text
-            x={x}
-            y={y - 80}
-            textAnchor="middle"
-            fontSize="11"
-            fontFamily="monospace"
-            fill="#90EE90"
-          >
-            {calculation.animatedFormula}
-          </text>
-
-          {/* Equals to calculated value */}
-          <text
-            x={x}
-            y={y - 60}
-            textAnchor="middle"
-            fontSize="11"
-            fontFamily="monospace"
-            fill="#FFD700"
-          >
-            = {calculation.calculatedValue}
-          </text>
-
-          {/* Mod 10 operation */}
-          <text
-            x={x}
-            y={y - 40}
-            textAnchor="middle"
-            fontSize="11"
-            fontFamily="monospace"
-            fill="#FFA500"
-          >
-            {calculation.calculatedValue} mod 10 = {calculation.finalResult}
-          </text>
-        </g>
-      )}
-    </g>
-  );
-};
 
 const PersonComponent: React.FC<PersonProps> = (props = {}) => {
   const person = new Person(props);

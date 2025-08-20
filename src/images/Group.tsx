@@ -1,4 +1,4 @@
-import React, { type JSX } from "react";
+import React, { type JSX, useState } from "react";
 import { Person } from "./Person";
 import { type PersonHighlight } from "./FormulaBar/FormulaDisplay";
 
@@ -15,6 +15,19 @@ interface GroupProps {
   personGuesses?: number[];
   formula?: string; // Add formula prop
   hatColorNumbers?: number[]; // Add numerical hat colors for calculation
+}
+
+// Interface for tooltip data
+interface TooltipData {
+  x: number;
+  y: number;
+  guess: number;
+  guessColor: string;
+  textColor: string;
+  personNumber: number;
+  formula?: string;
+  hatColors?: number[];
+  show: boolean;
 }
 
 export class Group {
@@ -187,8 +200,27 @@ export class Group {
   render(): JSX.Element {
     return (
       <g>
+        {/* Render all people (including guesses but WITHOUT tooltips) */}
         {this.people.map((person, index) => (
-          <g key={index}>{person.render()}</g>
+          <g key={`person-${index}`}>
+            {person.renderHighlight()}
+            {person.renderShoulders()}
+            {person.renderHead()}
+            {person.renderFace()}
+            {person.hat.render(
+              person.x,
+              person.y,
+              person.angle,
+              person.isCurrentPerson,
+              true
+            )}
+            {person.showPersonNumber
+              ? person.renderPersonNumber()
+              : person.renderIndexLabel()}
+            {person.renderPersonLabel()}
+            {person.renderGuessWithoutTooltip()}{" "}
+            {/* New method without tooltip */}
+          </g>
         ))}
       </g>
     );
@@ -197,6 +229,7 @@ export class Group {
 
 const GroupComponent: React.FC<GroupProps> = (props = {}) => {
   console.log("GroupComponent props:", props);
+  const [activeTooltip, setActiveTooltip] = useState<TooltipData | null>(null);
 
   const group = new Group(props);
   const padding = 80;
@@ -207,9 +240,249 @@ const GroupComponent: React.FC<GroupProps> = (props = {}) => {
   } ${canvasSize} ${canvasSize}`;
 
   return (
-    <svg width={canvasSize} height={canvasSize} viewBox={viewBox}>
-      {group.render()}
-    </svg>
+    <div style={{ position: "relative" }}>
+      <svg width={canvasSize} height={canvasSize} viewBox={viewBox}>
+        {/* Main group content */}
+        {group.render()}
+
+        {/* Render all guess circles with hover handlers LAST for top z-index */}
+        {group.people.map((person, index) => {
+          if (person.guess === undefined || person.guess === -1) return null;
+
+          const guessY = person.y - 48;
+          const guessColor = person.getGuessColor(person.guess);
+          const textColor = person.getTextColor(guessColor);
+
+          return (
+            <g key={`top-guess-${index}`}>
+              <circle
+                cx={person.x}
+                cy={guessY - 6}
+                r="14"
+                fill={guessColor}
+                stroke="#333"
+                strokeWidth="2.1"
+                opacity="0.9"
+                onMouseEnter={() =>
+                  setActiveTooltip({
+                    x: person.x,
+                    y: guessY,
+                    guess: person.guess!,
+                    guessColor,
+                    textColor,
+                    personNumber: person.personNumber,
+                    formula: person.formula,
+                    hatColors: person.hatColors,
+                    show: true,
+                  })
+                }
+                onMouseLeave={() => setActiveTooltip(null)}
+                style={{ cursor: person.formula ? "pointer" : "default" }}
+              />
+              <text
+                x={person.x}
+                y={guessY - 2}
+                textAnchor="middle"
+                fontSize="17"
+                fontFamily="monospace"
+                fontWeight="bold"
+                fill={textColor}
+                style={{ pointerEvents: "none" }}
+              >
+                {person.guess}
+              </text>
+            </g>
+          );
+        })}
+
+        {/* Render active tooltip on top of everything */}
+        {activeTooltip && (
+          <TooltipComponent
+            tooltipData={activeTooltip}
+            onClose={() => setActiveTooltip(null)}
+          />
+        )}
+      </svg>
+    </div>
+  );
+};
+
+// Separate tooltip component
+interface TooltipComponentProps {
+  tooltipData: TooltipData;
+  onClose: () => void;
+}
+
+const TooltipComponent: React.FC<TooltipComponentProps> = ({ tooltipData }) => {
+  const [animationToggle, setAnimationToggle] = useState(false);
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setAnimationToggle((prev) => !prev);
+    }, 1500);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const generateCalculationSteps = (): {
+    animatedFormula: string;
+    calculatedValue: number;
+    finalResult: number;
+  } | null => {
+    const { formula, hatColors, personNumber, guess } = tooltipData;
+
+    if (!formula || !hatColors || hatColors.length !== 10) return null;
+
+    try {
+      // Create substituted formula
+      let substitutedFormula = formula;
+
+      substitutedFormula = substitutedFormula.replace(
+        /\bi\b/g,
+        guess.toString()
+      );
+
+      const visibleHats = hatColors.filter(
+        (_, index) => index !== personNumber
+      );
+      const allSum = visibleHats.reduce((sum, color) => sum + color, 0);
+      substitutedFormula = substitutedFormula.replace(
+        /\ball\b/g,
+        allSum.toString()
+      );
+
+      substitutedFormula = substitutedFormula.replace(
+        /l\[(\d+)\]/g,
+        (match, position) => {
+          const pos = parseInt(position);
+          const targetPersonIndex = (personNumber + pos) % 10;
+          return hatColors[targetPersonIndex].toString();
+        }
+      );
+
+      substitutedFormula = substitutedFormula.replace(
+        /r\[(\d+)\]/g,
+        (match, position) => {
+          const pos = parseInt(position);
+          const targetPersonIndex = (personNumber - pos + 10) % 10;
+          return hatColors[targetPersonIndex].toString();
+        }
+      );
+
+      // Create animated formula
+      let animatedFormula = formula;
+
+      if (animationToggle) {
+        animatedFormula = animatedFormula.replace(/\bi\b/g, guess.toString());
+        animatedFormula = animatedFormula.replace(
+          /\ball\b/g,
+          allSum.toString()
+        );
+        animatedFormula = animatedFormula.replace(
+          /l\[(\d+)\]/g,
+          (match, position) => {
+            const pos = parseInt(position);
+            const targetPersonIndex = (personNumber + pos) % 10;
+            return hatColors[targetPersonIndex].toString();
+          }
+        );
+        animatedFormula = animatedFormula.replace(
+          /r\[(\d+)\]/g,
+          (match, position) => {
+            const pos = parseInt(position);
+            const targetPersonIndex = (personNumber - pos + 10) % 10;
+            return hatColors[targetPersonIndex].toString();
+          }
+        );
+      }
+
+      const processedFormula = substitutedFormula.replace(/x/g, "*");
+      const calculatedValue = new Function(
+        `"use strict"; return (${processedFormula})`
+      )();
+      const finalResult = ((calculatedValue % 10) + 10) % 10;
+
+      return {
+        animatedFormula,
+        calculatedValue,
+        finalResult: Math.floor(finalResult),
+      };
+    } catch (error) {
+      console.error("Error generating calculation:", error);
+      return null;
+    }
+  };
+
+  const calculation = generateCalculationSteps();
+
+  if (!calculation) return null;
+
+  const { x, y, personNumber } = tooltipData;
+
+  return (
+    <g>
+      {/* Tooltip background */}
+      <rect
+        x={x - 150}
+        y={y - 120}
+        width="300"
+        height="90"
+        fill="rgba(0, 0, 0, 0.95)"
+        stroke="#fff"
+        strokeWidth="2"
+        rx="5"
+        ry="5"
+      />
+
+      {/* Tooltip title */}
+      <text
+        x={x}
+        y={y - 100}
+        textAnchor="middle"
+        fontSize="12"
+        fontFamily="monospace"
+        fontWeight="bold"
+        fill="#fff"
+      >
+        Person {personNumber} Calculation:
+      </text>
+
+      {/* Animated formula */}
+      <text
+        x={x}
+        y={y - 80}
+        textAnchor="middle"
+        fontSize="11"
+        fontFamily="monospace"
+        fill="#90EE90"
+      >
+        {calculation.animatedFormula}
+      </text>
+
+      {/* Equals to calculated value */}
+      <text
+        x={x}
+        y={y - 60}
+        textAnchor="middle"
+        fontSize="11"
+        fontFamily="monospace"
+        fill="#FFD700"
+      >
+        = {calculation.calculatedValue}
+      </text>
+
+      {/* Mod 10 operation */}
+      <text
+        x={x}
+        y={y - 40}
+        textAnchor="middle"
+        fontSize="11"
+        fontFamily="monospace"
+        fill="#FFA500"
+      >
+        {calculation.calculatedValue} mod 10 = {calculation.finalResult}
+      </text>
+    </g>
   );
 };
 
