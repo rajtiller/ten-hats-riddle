@@ -3,7 +3,14 @@ import { calculatePersonGuess } from "./evaluateFormula";
 export const testFormula = (formula: string): number[] => {
   const startTime = Date.now();
   const testDuration = 1000; // 1 second in milliseconds
+  const initialGuessses = [[0,0,0,0,0,0,0,0,0,0],[1,1,1,1,1,1,1,1,1,1],[0,1,2,3,4,5,6,7,8,9],[9,8,7,6,5,4,3,2,1,0],[0,1,0,1,0,1,0,1,0,1],[1,0,1,0,1,0,1,0,1,0]];
 
+  for (initialGuess of initialGuessses) {
+    // Check if the formula is correct for this initial guess
+    if (!hasCorrectGuess(formula, initialGuess)) {
+      return initialGuess; // Found a counter-example
+    }
+  }
   while (Date.now() - startTime < testDuration) {
     // Generate random hat configuration
     const guess = generateRandomHats();
