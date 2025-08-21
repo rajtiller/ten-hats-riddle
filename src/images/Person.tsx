@@ -437,9 +437,6 @@ export class Person {
   // New method that renders guess without tooltip (used in Group.render())
   renderGuessWithoutTooltip(): JSX.Element {
     if (this.guess === undefined || this.guess === -1) return <></>;
-
-    const guessY = this.y - 48 * this.sizeScale;
-
     return <g></g>;
   }
 

@@ -383,7 +383,7 @@ const TooltipComponent: React.FC<TooltipComponentProps> = ({ tooltipData }) => {
 
       substitutedFormula = substitutedFormula.replace(
         /l\[(\d+)\]/g,
-        (match, position) => {
+        (_, position) => {
           const pos = parseInt(position);
           const targetPersonIndex = (personNumber + pos) % 10;
           return hatColors[targetPersonIndex].toString();
@@ -392,7 +392,7 @@ const TooltipComponent: React.FC<TooltipComponentProps> = ({ tooltipData }) => {
 
       substitutedFormula = substitutedFormula.replace(
         /r\[(\d+)\]/g,
-        (match, position) => {
+        (_, position) => {
           const pos = parseInt(position);
           const targetPersonIndex = (personNumber - pos + 10) % 10;
           return hatColors[targetPersonIndex].toString();
@@ -417,7 +417,7 @@ const TooltipComponent: React.FC<TooltipComponentProps> = ({ tooltipData }) => {
         );
         animatedFormula = animatedFormula.replace(
           /l\[(\d+)\]/g,
-          (match, position) => {
+          (_, position) => {
             const pos = parseInt(position);
             const targetPersonIndex = (personNumber + pos) % 10;
             return hatColors[targetPersonIndex].toString();
@@ -425,7 +425,7 @@ const TooltipComponent: React.FC<TooltipComponentProps> = ({ tooltipData }) => {
         );
         animatedFormula = animatedFormula.replace(
           /r\[(\d+)\]/g,
-          (match, position) => {
+          (_, position) => {
             const pos = parseInt(position);
             const targetPersonIndex = (personNumber - pos + 10) % 10;
             return hatColors[targetPersonIndex].toString();

@@ -35,48 +35,42 @@ export const evaluateFormula = (
   processedFormula = processedFormula.replace(/\ball\b/g, allSum.toString());
 
   // Replace l[n] patterns with left neighbor hat colors
-  processedFormula = processedFormula.replace(
-    /l\[(\d+)\]/g,
-    (match, position) => {
-      const pos = parseInt(position);
-      if (pos < 1 || pos > 9) {
-        throw new Error(`Invalid left position: ${pos}. Must be 1-9`);
-      }
-
-      // Convert to 0-based index for hatColors array
-      // l[1] = hatColors[0], l[2] = hatColors[1], etc.
-      const arrayIndex = pos - 1;
-
-      if (arrayIndex >= hatColors.length) {
-        throw new Error(`Position l[${pos}] exceeds available hat colors`);
-      }
-
-      return hatColors[arrayIndex].toString();
+  processedFormula = processedFormula.replace(/l\[(\d+)\]/g, (_, position) => {
+    const pos = parseInt(position);
+    if (pos < 1 || pos > 9) {
+      throw new Error(`Invalid left position: ${pos}. Must be 1-9`);
     }
-  );
+
+    // Convert to 0-based index for hatColors array
+    // l[1] = hatColors[0], l[2] = hatColors[1], etc.
+    const arrayIndex = pos - 1;
+
+    if (arrayIndex >= hatColors.length) {
+      throw new Error(`Position l[${pos}] exceeds available hat colors`);
+    }
+
+    return hatColors[arrayIndex].toString();
+  });
 
   // Replace r[n] patterns with right neighbor hat colors
-  processedFormula = processedFormula.replace(
-    /r\[(\d+)\]/g,
-    (match, position) => {
-      const pos = parseInt(position);
-      if (pos < 1 || pos > 9) {
-        throw new Error(`Invalid right position: ${pos}. Must be 1-9`);
-      }
-
-      // For right positions, we need to map them to the correct array indices
-      // r[1] corresponds to the person 1 position to the right
-      // This depends on the specific positioning logic in your application
-      // For now, let's assume r[n] maps to hatColors[9-n] (reverse order)
-      const arrayIndex = 9 - pos;
-
-      if (arrayIndex < 0 || arrayIndex >= hatColors.length) {
-        throw new Error(`Position r[${pos}] maps to invalid array index`);
-      }
-
-      return hatColors[arrayIndex].toString();
+  processedFormula = processedFormula.replace(/r\[(\d+)\]/g, (_, position) => {
+    const pos = parseInt(position);
+    if (pos < 1 || pos > 9) {
+      throw new Error(`Invalid right position: ${pos}. Must be 1-9`);
     }
-  );
+
+    // For right positions, we need to map them to the correct array indices
+    // r[1] corresponds to the person 1 position to the right
+    // This depends on the specific positioning logic in your application
+    // For now, let's assume r[n] maps to hatColors[9-n] (reverse order)
+    const arrayIndex = 9 - pos;
+
+    if (arrayIndex < 0 || arrayIndex >= hatColors.length) {
+      throw new Error(`Position r[${pos}] maps to invalid array index`);
+    }
+
+    return hatColors[arrayIndex].toString();
+  });
 
   // If formula still contains CURRENT_PERSON_HAT, we need that value
   if (processedFormula.includes("CURRENT_PERSON_HAT")) {
@@ -150,7 +144,7 @@ export const calculatePersonGuess = (
   // Replace l[n] patterns - these represent people to the left of the current person
   processedFormula = processedFormula.replace(
     /l\[(\d+)\]/g,
-    (match, position) => {
+    (_, position) => {
       const pos = parseInt(position);
       if (pos < 1 || pos > 9) {
         throw new Error(`Invalid left position: ${pos}. Must be 1-9`);
@@ -165,7 +159,7 @@ export const calculatePersonGuess = (
   // Replace r[n] patterns - these represent people to the right of the current person
   processedFormula = processedFormula.replace(
     /r\[(\d+)\]/g,
-    (match, position) => {
+    (_, position) => {
       const pos = parseInt(position);
       if (pos < 1 || pos > 9) {
         throw new Error(`Invalid right position: ${pos}. Must be 1-9`);
