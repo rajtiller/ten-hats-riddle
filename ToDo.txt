@@ -4,4 +4,5 @@ implement test function
 make it so hats for two people are black and white
 make success rate bold and color percentage based on success rate
 consider making square braces like round parentheses
+make formula bar better (spacing, copying, pasting, limit the input so people don't make crazy long formulas)
 fix eyes

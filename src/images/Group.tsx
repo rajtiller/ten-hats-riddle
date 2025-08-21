@@ -258,7 +258,7 @@ const GroupComponent: React.FC<GroupProps> = (props = {}) => {
   const group = new Group(props);
   const padding = 80;
   const scaledRadius = group.radius * 20;
-  const canvasHeight = (scaledRadius + padding) * 2+40;
+  const canvasHeight = (scaledRadius + padding) * 2 + 40;
   const canvasWidth = (scaledRadius + padding) * 2 + 140; // fixed cut off for guess boxes
 
   // Adjust viewBox to show more space at the top for person 5's hat/guess bubble
@@ -399,6 +399,9 @@ const TooltipComponent: React.FC<TooltipComponentProps> = ({ tooltipData }) => {
         }
       );
 
+      // Replace BOTH 'x' and '×' with '*' BEFORE evaluation
+      const processedFormula = substitutedFormula.replace(/[x×]/g, "*");
+
       // Create animated formula
       let animatedFormula = formula;
 
@@ -428,9 +431,14 @@ const TooltipComponent: React.FC<TooltipComponentProps> = ({ tooltipData }) => {
             return hatColors[targetPersonIndex].toString();
           }
         );
+        // Also replace both 'x' and '×' with '*' in animated formula for display consistency
+        animatedFormula = animatedFormula.replace(/[x×]/g, "*");
       }
 
-      const processedFormula = substitutedFormula.replace(/x/g, "*");
+      console.log(`Original formula: ${formula}`);
+      console.log(`Substituted formula: ${substitutedFormula}`);
+      console.log(`Processed formula: ${processedFormula}`);
+
       const calculatedValue = new Function(
         `"use strict"; return (${processedFormula})`
       )();
@@ -443,6 +451,7 @@ const TooltipComponent: React.FC<TooltipComponentProps> = ({ tooltipData }) => {
       };
     } catch (error) {
       console.error("Error generating calculation:", error);
+      console.error("Failed at formula processing");
       return null;
     }
   };
