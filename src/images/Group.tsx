@@ -258,7 +258,7 @@ const GroupComponent: React.FC<GroupProps> = (props = {}) => {
   const group = new Group(props);
   const padding = 80;
   const scaledRadius = group.radius * 20;
-  const canvasHeight = (scaledRadius + padding) * 2;
+  const canvasHeight = (scaledRadius + padding) * 2+40;
   const canvasWidth = (scaledRadius + padding) * 2 + 140; // fixed cut off for guess boxes
 
   // Adjust viewBox to show more space at the top for person 5's hat/guess bubble
