@@ -4,3 +4,5 @@ make formula bar better (spacing, copying, pasting, limit the input so people do
 fix spacing around dropdown
 improve test function so it can give percentage?
 make everything supported for mobile
+add misc info on explanation: could be a game to find a formula that passes certain counter example but not others
+unsolved problem: find the minimum set of counter examples required to disprove all incorrect formulas
