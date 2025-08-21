@@ -55,10 +55,10 @@ const TenHatsRiddle: React.FC = () => {
         const guess = calculatePersonGuess(hatColors, formula, personIndex);
         guesses.push(guess);
       } catch (error) {
-        console.error(
-          `Error calculating guess for person ${personIndex}:`,
-          error
-        );
+        // console.error(
+        //   `Error calculating guess for person ${personIndex}:`,
+        //   error
+        // );
         guesses.push(-1); // -1 indicates error
       }
     }
@@ -140,6 +140,60 @@ const TenHatsRiddle: React.FC = () => {
     }
   };
 
+  // Success message component that matches FormulaBar dimensions
+  const SuccessMessage: React.FC = () => (
+    <div
+      style={{
+        width: 600,
+        height: 120,
+        border: "2px solid #c3e6cb",
+        padding: "5px",
+        backgroundColor: "#d4edda",
+        boxSizing: "border-box",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "10px",
+      }}
+    >
+      <div
+        style={{
+          fontSize: "18px",
+          fontWeight: "bold",
+          color: "#155724",
+          fontFamily: "monospace",
+          textAlign: "center",
+        }}
+      >
+        ✅ You got it! Your formula works for all cases.
+      </div>
+
+      <button
+        onClick={handleGuessAgain}
+        style={{
+          padding: "12px 24px",
+          fontSize: "16px",
+          fontFamily: "monospace",
+          fontWeight: "bold",
+          backgroundColor: "#007bff",
+          color: "white",
+          border: "none",
+          borderRadius: "6px",
+          cursor: "pointer",
+          transition: "background-color 0.2s",
+        }}
+        onMouseOver={(e) => {
+          e.currentTarget.style.backgroundColor = "#0056b3";
+        }}
+        onMouseOut={(e) => {
+          e.currentTarget.style.backgroundColor = "#007bff";
+        }}
+      >
+        Try Another Formula
+      </button>
+    </div>
+  );
 
   return (
     <div
@@ -187,7 +241,9 @@ const TenHatsRiddle: React.FC = () => {
       >
         {appState === "input"
           ? ""
-          : appState === "results" && testResult?.successCount !== undefined
+          : appState === "results" &&
+            testResult?.successCount !== undefined &&
+            !testResult?.isCorrect
           ? `Counter-Example Found`
           : ""}
       </div>
@@ -203,11 +259,7 @@ const TenHatsRiddle: React.FC = () => {
           alignItems: "center",
           justifyContent: "center",
           flex: 1,
-          paddingBottom:
-            appState === "input" ||
-            (appState === "results" && !testResult?.isCorrect)
-              ? "140px"
-              : "20px",
+          paddingBottom: "140px", // Always same padding since formula bar area is always present
         }}
       >
         <Group
@@ -228,7 +280,7 @@ const TenHatsRiddle: React.FC = () => {
         />
       </div>
 
-      {/* Bottom section - positioned absolutely at bottom */}
+      {/* Bottom section - positioned absolutely at bottom - ALWAYS PRESENT */}
       <div
         style={{
           position: "absolute",
@@ -241,9 +293,9 @@ const TenHatsRiddle: React.FC = () => {
           backgroundColor: "#f0f0f0",
         }}
       >
-        {/* Formula bar - show in input state OR results state for failures */}
-        {(appState === "input" ||
-          (appState === "results" && !testResult?.isCorrect)) && (
+        {/* Formula bar area - always present but content changes */}
+        {appState === "input" ||
+        (appState === "results" && !testResult?.isCorrect) ? (
           <FormulaBar
             width={600}
             height={120}
@@ -255,57 +307,9 @@ const TenHatsRiddle: React.FC = () => {
             showAsReadOnly={appState === "results"}
             onTryAgain={appState === "results" ? handleGuessAgain : undefined}
           />
-        )}
-
-        {/* Success message - only show for successful results */}
-        {appState === "results" && testResult?.isCorrect && (
-          <div
-            style={{
-              backgroundColor: "#d4edda",
-              color: "#155724",
-              border: "2px solid #c3e6cb",
-              borderRadius: "8px",
-              padding: "20px",
-              maxWidth: "600px",
-              textAlign: "center",
-              fontFamily: "monospace",
-              margin: "20px",
-            }}
-          >
-            <div
-              style={{
-                fontSize: "18px",
-                fontWeight: "bold",
-                marginBottom: "10px",
-              }}
-            >
-              ✅ You got it! Your formula works for all cases.
-            </div>
-
-            <button
-              onClick={handleGuessAgain}
-              style={{
-                padding: "12px 24px",
-                fontSize: "16px",
-                fontFamily: "monospace",
-                fontWeight: "bold",
-                backgroundColor: "#007bff",
-                color: "white",
-                border: "none",
-                borderRadius: "6px",
-                cursor: "pointer",
-                transition: "background-color 0.2s",
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.backgroundColor = "#0056b3";
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.backgroundColor = "#007bff";
-              }}
-            >
-              Try Another Formula
-            </button>
-          </div>
+        ) : (
+          // Success message in same dimensions as FormulaBar
+          <SuccessMessage />
         )}
       </div>
     </div>
