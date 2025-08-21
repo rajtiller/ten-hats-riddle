@@ -48,9 +48,9 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => (
       >
         <h2 style={{ color: "#007bff", marginTop: "-10px" }}>The Problem</h2>
         <p>
-          Ten people are standing in a circle, each wearing a hat with a number
-          from 0-9 (repeats allowed). Each person can see everyone else's hat
-          but not their own. They must simultaneously guess their own hat
+          Ten people are standing in a circle, each wearing a hat with a random
+          number from 0-9 (repeats allowed). Each person can see everyone else's
+          hat but not their own. They must simultaneously guess their own hat
           number. The goal is for at least one of them to guess their own hat
           number correctly. Each person has been given an index,{" "}
           <strong
@@ -76,12 +76,13 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => (
           >
             i
           </strong>{" "}
-          guess? Try the puzzle here:
+          guess? <br />
+          <br /> Try the puzzle here:
         </p>
 
         {
           <>
-            <h2 style={{ color: "#007bff", marginTop: "5px" }}>
+            <h2 style={{ color: "#007bff", marginTop: "45px" }}>
               The Solution
             </h2>
             <p>
@@ -97,15 +98,26 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => (
               >
                 i - all
               </strong>{" "}
-              works no matter what!
+              works no matter what! <br /> (Note:{" "}
+              <strong
+                style={{
+                  fontFamily: "monospace",
+                  backgroundColor: "#f8f9fa",
+                  padding: "2px 4px",
+                  border: "1px solid #ddd",
+                  borderRadius: "3px",
+                }}
+              >
+                all
+              </strong>{" "}
+              is the sum of all hats visible to a person)
             </p>
           </>
         }
 
         <h2 style={{ color: "#007bff", marginTop: "15px" }}>How It Works</h2>
         <p>
-          The key insight is that to an outside observer the sum of all the hats
-          (sumHats) mod 10 is a number 0-9. Give each person an index,{" "}
+          Let{" "}
           <strong
             style={{
               fontFamily: "monospace",
@@ -115,12 +127,143 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => (
               borderRadius: "3px",
             }}
           >
-            i
+            sumHats
           </strong>{" "}
-          , to differentiate them. Person 0 will assume sumHats ≡ 0 (mod 10).
-          Person 1 will assume sumHats ≡ 1 (mod 10). And so on. Every person can
-          guess their own hat color accordingly to make this assumption true.
-          For example, if Person 0 sees nine other hats which sum to 38 (
+          be the sum of all ten hats, and 
+          let <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            k
+          </strong> ≡ <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            sumHats
+          </strong> (mod 10) ∈ [0,9]. <br/><br/> Notice: If even one person knew the value of k, then they'd know their own hat number. <br/>This is because <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            ???
+          </strong> + <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            all
+          </strong> = <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            sumHats
+          </strong>{" "}≡ {" "}<strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            k
+          </strong> (mod 10). Thus,  <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            ???
+          </strong> ≡ <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            k
+          </strong> - <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            all
+          </strong>{" "} (mod 10).<br/> Since <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            ???
+          </strong> ∈ [0,9], <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            ???
+          </strong> is simply equal to <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            k
+          </strong> - <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            all
+          </strong> <br/> <br/> Thus, we can employ the following strategy: k Person 0 will assume sumHats ≡ 0 (mod 10). Person 1 will assume
+          sumHats ≡ 1 (mod 10). And so on. Every person can guess their own hat
+          color accordingly to make this assumption true. For example, if Person
+          0 sees nine other hats which sum to 38 (
           <strong
             style={{
               fontFamily: "monospace",
@@ -132,19 +275,17 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => (
           >
             all
           </strong>
-          ), they must guess 2, bringing the total to 40 ≡ 0 (mod 10). 
-          Let k ≡
-          sumHats (mod 10). Let's think from the perspective of person
-           k. They know sumHats ∈ [all, all + 9]. They have (correctly) 
-           assumed sumHats ≡ k (mod 10). So they can deduce sumHats.
-            From there, they will guess their own hat, ???, is simply
-             sumHats - all. Thus, they've guaranteed that at least 
-             one person will guess their own hat color correctly.
-             To implement this strategy, person i will go through this logic: ??? + all ≡ i (mod 10) ={">"} ??? ≡ i - all (mod 10). 
-    
+          ), they must guess 2, bringing the total to 40 ≡ 0 (mod 10). Let k ≡
+          sumHats (mod 10). Let's think from the perspective of person k. They
+          know sumHats ∈ [all, all + 9]. They have (correctly) assumed sumHats ≡
+          k (mod 10). So they can deduce sumHats. From there, they will guess
+          their own hat, ???, is simply sumHats - all. Thus, they've guaranteed
+          that at least one person will guess their own hat color correctly. To
+          implement this strategy, person i will go through this logic: ??? +
+          all ≡ i (mod 10) ={">"} ??? ≡ i - all (mod 10).
         </p>
 
-        <h2 style={{ color: "#007bff", marginTop: "30px" }}>Misc</h2>
+        <h2 style={{ color: "#007bff", marginTop: "15px" }}>Misc</h2>
         <p>
           This guarantees there's no situation in which two or more people guess
           their own hat color correctly, as the sumHats mod 10 cannot be both 0

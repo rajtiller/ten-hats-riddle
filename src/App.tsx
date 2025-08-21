@@ -97,7 +97,6 @@ function App() {
       {/* Explanation page */}
       {selectedPage === 2 && (
         <Explanation
-          formula={explanationFormula}
           onNavigateToPage={setSelectedPage}
         />
       )}
