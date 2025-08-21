@@ -19,7 +19,7 @@ const HatLegend: React.FC<HatLegendProps> = () => {
     { name: "Brown", color: "#8b4513", value: 9 },
   ];
 
-  const sizeScale = 1.15; // Same scale as used for people in the group
+  const sizeScale = 1.13; // Same scale as used for people in the group (reduced from 1.15)
 
   const getTextStyle = (color: string) => {
     return {

@@ -140,7 +140,7 @@ export class Group {
   ): Person[] {
     const people: Person[] = [];
     const angleStep = (2 * Math.PI) / this.numberOfPeople;
-    const sizeScale = 1.15; // 15% larger
+    const sizeScale = 1.13; // 13% larger (reduced from 1.15)
 
     for (let i = 0; i < this.numberOfPeople; i++) {
       const adjustedIndex =
@@ -263,8 +263,9 @@ const GroupComponent: React.FC<GroupProps> = (props = {}) => {
 
   // Adjust viewBox to show more space at the top for person 5's hat/guess bubble
   const extraTopSpace = 60; // Additional space at the top
+  const shiftUp = -4; // Shift entire group up by 5 pixels
   const viewBox = `-${canvasHeight / 2} -${
-    canvasHeight / 2 + extraTopSpace
+    canvasHeight / 2 + extraTopSpace + shiftUp
   } ${canvasHeight} ${canvasHeight + extraTopSpace}`;
 
   return (
@@ -277,7 +278,7 @@ const GroupComponent: React.FC<GroupProps> = (props = {}) => {
         {group.people.map((person, index) => {
           if (person.guess === undefined || person.guess === -1) return null;
 
-          const guessY = person.y - 48;
+          const guessY = person.y - 63;
           const guessColor = person.getGuessColor(person.guess);
           const textColor = person.getTextColor(guessColor);
 

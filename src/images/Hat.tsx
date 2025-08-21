@@ -82,7 +82,7 @@ export class HatClass implements Hat {
     // Determine what text to display
     let displayText = "";
 
-    if (isCurrentPerson) {
+    if (isCurrentPerson && hatNumber === undefined) {
       // Current person always shows "YOU" regardless of hat color
       displayText = "???";
     } else if (isRainbow) {
