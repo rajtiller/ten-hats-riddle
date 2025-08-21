@@ -5,7 +5,7 @@ import HatLegend from "./HatLegend";
 import { type PersonHighlight } from "./FormulaBar/FormulaDisplay";
 import { calculatePersonGuess } from "./FormulaBar/evaluateFormula";
 
-type AppState = "input" | "results";
+type AppState = "input" | "results" | "explanation";
 
 interface TestResult {
   isCorrect: boolean;
@@ -114,6 +114,10 @@ const TenHatsRiddle: React.FC = () => {
     setPersonHighlight(null);
   };
 
+  const handleSeeExplanation = () => {
+    setAppState("explanation");
+  };
+
   const getHatColorsForState = (): string[] => {
     if (appState === "input") {
       // Current person gets light gray, others get rainbow
@@ -170,7 +174,7 @@ const TenHatsRiddle: React.FC = () => {
       </div>
 
       <button
-        onClick={handleGuessAgain}
+        onClick={handleSeeExplanation}
         style={{
           padding: "12px 24px",
           fontSize: "16px",
@@ -190,10 +194,145 @@ const TenHatsRiddle: React.FC = () => {
           e.currentTarget.style.backgroundColor = "#007bff";
         }}
       >
-        Try Another Formula
+        See Explanation
       </button>
     </div>
   );
+
+  // Explanation page component
+  const ExplanationPage: React.FC = () => (
+    <div
+      style={{
+        width: "100vw",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: "#f8f9fa",
+        padding: "20px",
+        boxSizing: "border-box",
+        overflow: "auto",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "800px",
+          margin: "0 auto",
+          backgroundColor: "white",
+          padding: "30px",
+          borderRadius: "8px",
+          boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+        }}
+      >
+        <h1
+          style={{
+            fontFamily: "monospace",
+            fontSize: "32px",
+            color: "#333",
+            textAlign: "center",
+            marginBottom: "30px",
+          }}
+        >
+          Ten Hats Riddle - Explanation
+        </h1>
+
+        <div
+          style={{
+            fontFamily: "Arial, sans-serif",
+            lineHeight: "1.6",
+            color: "#333",
+          }}
+        >
+          <h2 style={{ color: "#007bff", marginTop: "30px" }}>The Problem</h2>
+          <p>
+            Ten people are standing in a circle, each wearing a hat with a
+            number from 0-9. Each person can see everyone else's hat but not
+            their own. They must simultaneously guess their own hat number. The
+            goal is to find a strategy where at most one person guesses
+            incorrectly.
+          </p>
+
+          <h2 style={{ color: "#007bff", marginTop: "30px" }}>The Solution</h2>
+          <p>
+            Your formula{" "}
+            <strong
+              style={{
+                fontFamily: "monospace",
+                backgroundColor: "#f8f9fa",
+                padding: "2px 4px",
+              }}
+            >
+              {currentFormula}
+            </strong>{" "}
+            works! This is a valid solution to the ten hats riddle.
+          </p>
+
+          <h2 style={{ color: "#007bff", marginTop: "30px" }}>How It Works</h2>
+          <p>
+            The key insight is that each person uses the visible hat numbers to
+            calculate a guess based on modular arithmetic. When everyone follows
+            the same formula, the mathematical properties ensure that at most
+            one person will be wrong.
+          </p>
+
+          <h2 style={{ color: "#007bff", marginTop: "30px" }}>
+            Formula Components
+          </h2>
+          <ul>
+            <li>
+              <strong>i</strong> - The person's position number (0-9)
+            </li>
+            <li>
+              <strong>l[n]</strong> - The hat number of the person n positions
+              to the left
+            </li>
+            <li>
+              <strong>r[n]</strong> - The hat number of the person n positions
+              to the right
+            </li>
+            <li>
+              <strong>all</strong> - The sum of all visible hat numbers
+            </li>
+          </ul>
+
+          <p style={{ marginTop: "30px" }}>
+            All calculations are done modulo 10, so the final guess is always a
+            single digit.
+          </p>
+
+          <div style={{ textAlign: "center", marginTop: "40px" }}>
+            <button
+              onClick={handleGuessAgain}
+              style={{
+                padding: "15px 30px",
+                fontSize: "18px",
+                fontFamily: "monospace",
+                fontWeight: "bold",
+                backgroundColor: "#28a745",
+                color: "white",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                transition: "background-color 0.2s",
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.backgroundColor = "#218838";
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.backgroundColor = "#28a745";
+              }}
+            >
+              Try Another Formula
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Render explanation page if in explanation state
+  if (appState === "explanation") {
+    return <ExplanationPage />;
+  }
 
   return (
     <div
