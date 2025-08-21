@@ -1,8 +1,5 @@
-duynmically allocated guess to be the size it needs to be
-make test button disabled once pressed, maybe make a loading screen
-implement test function
+fix spacing of people once correct guess is gotten
 make it so hats for two people are black and white
-make success rate bold and color percentage based on success rate
-consider making square braces like round parentheses
 make formula bar better (spacing, copying, pasting, limit the input so people don't make crazy long formulas)
 fix eyes
+improve test function so it can give percentage?

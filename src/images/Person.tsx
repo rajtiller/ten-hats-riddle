@@ -341,17 +341,14 @@ export class Person {
         </g>
       );
     } else {
-      const relativeIndex = this.leftPosition;
+      const leftPosition = this.leftPosition;
+      const rightPosition = this.rightPosition;
       let indexLabel = "";
 
-      if (relativeIndex === 1) {
-        indexLabel = "i+1";
-      } else if (relativeIndex === 9) {
-        indexLabel = "i-1";
-      } else if (relativeIndex <= 5) {
-        indexLabel = `i+${relativeIndex}`;
+      if (leftPosition <= 5 && leftPosition >= 1) {
+        indexLabel = `i+${leftPosition}`;
       } else {
-        indexLabel = `i-${10 - relativeIndex}`;
+        indexLabel = `i-${rightPosition}`;
       }
 
       return (
