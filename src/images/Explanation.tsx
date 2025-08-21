@@ -1,14 +1,10 @@
 import React from "react";
 
 interface ExplanationProps {
-  formula?: string;
   onNavigateToPage: (pageIndex: number) => void;
 }
 
-const Explanation: React.FC<ExplanationProps> = ({
-  formula,
-  onNavigateToPage,
-}) => (
+const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => (
   <div
     style={{
       width: "100vw",
@@ -53,18 +49,43 @@ const Explanation: React.FC<ExplanationProps> = ({
         <h2 style={{ color: "#007bff", marginTop: "30px" }}>The Problem</h2>
         <p>
           Ten people are standing in a circle, each wearing a hat with a number
-          from 0-9. Each person can see everyone else's hat but not their own.
-          They must simultaneously guess their own hat number. The goal is to
-          find a strategy where at most one person guesses incorrectly.
+          from 0-9 (repeats allowed). Each person can see everyone else's hat
+          but not their own. They must simultaneously guess their own hat
+          number. The goal is for at least one of them to guess their own hat
+          number correctly. Each person has been given an index,{" "}
+          <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            i
+          </strong>
+          , from 0-9 ahead of time. What should person{" "}
+          <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            i
+          </strong>{" "}
+          guess? Try the puzzle here:
         </p>
 
-        {formula && (
+        {
           <>
-            <h2 style={{ color: "#007bff", marginTop: "30px" }}>
-              Your Solution
+            <h2 style={{ color: "#007bff", marginTop: "15px" }}>
+              The Solution
             </h2>
             <p>
-              Your formula{" "}
+              The formula{" "}
               <strong
                 style={{
                   fontFamily: "monospace",
@@ -74,49 +95,60 @@ const Explanation: React.FC<ExplanationProps> = ({
                   borderRadius: "3px",
                 }}
               >
-                {formula}
+                i - all
               </strong>{" "}
-              works! This is a valid solution to the ten hats riddle.
+              works no matter what!
             </p>
           </>
-        )}
+        }
 
-        <h2 style={{ color: "#007bff", marginTop: "30px" }}>How It Works</h2>
+        <h2 style={{ color: "#007bff", marginTop: "15px" }}>How It Works</h2>
         <p>
-          The key insight is that each person uses the visible hat numbers to
-          calculate a guess based on modular arithmetic. When everyone follows
-          the same formula, the mathematical properties ensure that at most one
-          person will be wrong.
+          The key insight is that to an outside observer the sum of all the hats
+          (sumHats) mod 10 is a number 0-9. Give each person an index,{" "}
+          <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            i
+          </strong>{" "}
+          , to differentiate them. Person 0 will assume sumHats ≡ 0 (mod 10).
+          Person 1 will assume sumHats ≡ 1 (mod 10). And so on. Every person can
+          guess their own hat color accordingly to make this assumption true.
+          For example, if Person 0 sees nine other hats which sum to 38 (
+          <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            all
+          </strong>
+          ), they must guess 2, bringing the total to 40 ≡ 0 (mod 10). 
+          Let k ≡
+          sumHats (mod 10). Let's think from the perspective of person
+           k. They know sumHats ∈ [all, all + 9]. They have (correctly) 
+           assumed sumHats ≡ k (mod 10). So they can deduce sumHats.
+            From there, they will guess their own hat, ???, is simply
+             sumHats - all. Thus, they've guaranteed that at least 
+             one person will guess their own hat color correctly.
+             To implement this strategy, person i will go through this logic: ??? + all ≡ i (mod 10) ={">"} ??? ≡ i - all (mod 10). 
+    
         </p>
 
-        <h2 style={{ color: "#007bff", marginTop: "30px" }}>
-          Formula Components
-        </h2>
-        <ul>
-          <li>
-            <strong>i</strong> - The person's position number (0-9)
-          </li>
-          <li>
-            <strong>l[n]</strong> - The hat number of the person n positions to
-            the left
-          </li>
-          <li>
-            <strong>r[n]</strong> - The hat number of the person n positions to
-            the right
-          </li>
-          <li>
-            <strong>all</strong> - The sum of all visible hat numbers
-          </li>
-        </ul>
-
-        <h2 style={{ color: "#007bff", marginTop: "30px" }}>
-          Mathematical Foundation
-        </h2>
+        <h2 style={{ color: "#007bff", marginTop: "30px" }}>Misc</h2>
         <p>
-          The strategy relies on error-correcting codes. When each person
-          follows the same formula, the resulting guesses form a pattern where
-          at most one error can occur. This is similar to how computer systems
-          detect and correct data transmission errors.
+          This guarantees there's no situation in which two or more people guess
+          their own hat color correctly, as the sumHats mod 10 cannot be both 0
+          and 1.
         </p>
 
         <p style={{ marginTop: "20px" }}>
