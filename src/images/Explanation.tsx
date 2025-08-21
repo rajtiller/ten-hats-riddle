@@ -46,7 +46,7 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => (
           color: "#333",
         }}
       >
-        <h2 style={{ color: "#007bff", marginTop: "30px" }}>The Problem</h2>
+        <h2 style={{ color: "#007bff", marginTop: "-10px" }}>The Problem</h2>
         <p>
           Ten people are standing in a circle, each wearing a hat with a number
           from 0-9 (repeats allowed). Each person can see everyone else's hat
@@ -81,7 +81,7 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => (
 
         {
           <>
-            <h2 style={{ color: "#007bff", marginTop: "15px" }}>
+            <h2 style={{ color: "#007bff", marginTop: "5px" }}>
               The Solution
             </h2>
             <p>
