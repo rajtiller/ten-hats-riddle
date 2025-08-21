@@ -2,6 +2,5 @@ fix spacing of people once correct guess is gotten
 make it so hats for two people are black and white
 make formula bar better (spacing, copying, pasting, limit the input so people don't make crazy long formulas)
 fix spacing around dropdown
-add a few simple cases so testFormula doens't always give random outputs
 improve test function so it can give percentage?
 make everything supported for mobile
