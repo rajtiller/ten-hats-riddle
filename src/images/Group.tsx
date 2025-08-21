@@ -52,7 +52,7 @@ export class Group {
     this.numberOfPeople = numberOfPeople;
     this.radius = Math.max(1, Math.min(10, radius));
 
-    console.log("Group constructor - personHighlight:", personHighlight);
+    // console.log("Group constructor - personHighlight:", personHighlight);
 
     this.people =
       people ||
@@ -76,24 +76,24 @@ export class Group {
   ): boolean {
     if (!highlight) return false;
 
-    console.log(
-      `Checking highlight for person ${personIndex}, highlight:`,
-      highlight
-    );
+    // console.log(
+    //   `Checking highlight for person ${personIndex}, highlight:`,
+    //   highlight
+    // );
 
     switch (highlight.type) {
       case "current":
         const shouldHighlightCurrent = personIndex === currentPersonIndex;
-        console.log(
-          `Current person check: ${personIndex} === ${currentPersonIndex} = ${shouldHighlightCurrent}`
-        );
+        // console.log(
+        //   `Current person check: ${personIndex} === ${currentPersonIndex} = ${shouldHighlightCurrent}`
+        // );
         return shouldHighlightCurrent;
 
       case "all":
         const shouldHighlightAll = personIndex !== currentPersonIndex;
-        console.log(
-          `All people check: ${personIndex} !== ${currentPersonIndex} = ${shouldHighlightAll}`
-        );
+        // console.log(
+        //   `All people check: ${personIndex} !== ${currentPersonIndex} = ${shouldHighlightAll}`
+        // );
         return shouldHighlightAll;
 
       case "left":
@@ -102,9 +102,9 @@ export class Group {
             (personIndex - currentPersonIndex + this.numberOfPeople) %
             this.numberOfPeople;
           const shouldHighlightLeft = relativePosition === highlight.position;
-          console.log(
-            `Left position check: person ${personIndex}, relative pos ${relativePosition}, target ${highlight.position} = ${shouldHighlightLeft}`
-          );
+          // console.log(
+          //   `Left position check: person ${personIndex}, relative pos ${relativePosition}, target ${highlight.position} = ${shouldHighlightLeft}`
+          // );
           return shouldHighlightLeft;
         }
         return false;
@@ -115,9 +115,9 @@ export class Group {
             (currentPersonIndex - personIndex + this.numberOfPeople) %
             this.numberOfPeople;
           const shouldHighlightRight = relativePosition === highlight.position;
-          console.log(
-            `Right position check: person ${personIndex}, relative pos ${relativePosition}, target ${highlight.position} = ${shouldHighlightRight}`
-          );
+          // console.log(
+          //   `Right position check: person ${personIndex}, relative pos ${relativePosition}, target ${highlight.position} = ${shouldHighlightRight}`
+          // );
           return shouldHighlightRight;
         }
         return false;
@@ -161,9 +161,9 @@ export class Group {
         personHighlight
       );
 
-      console.log(
-        `Person ${i}: isCurrentPerson=${isCurrentPerson}, isHighlighted=${isHighlighted}`
-      );
+      // console.log(
+      //   `Person ${i}: isCurrentPerson=${isCurrentPerson}, isHighlighted=${isHighlighted}`
+      // );
 
       const hatColor = hatColors[i] || "#ff0000";
 
@@ -252,7 +252,7 @@ export class Group {
 }
 
 const GroupComponent: React.FC<GroupProps> = (props = {}) => {
-  console.log("GroupComponent props:", props);
+  // console.log("GroupComponent props:", props);
   const [activeTooltip, setActiveTooltip] = useState<TooltipData | null>(null);
 
   const group = new Group(props);
@@ -435,9 +435,9 @@ const TooltipComponent: React.FC<TooltipComponentProps> = ({ tooltipData }) => {
         animatedFormula = animatedFormula.replace(/[x×]/g, "*");
       }
 
-      console.log(`Original formula: ${formula}`);
-      console.log(`Substituted formula: ${substitutedFormula}`);
-      console.log(`Processed formula: ${processedFormula}`);
+      // console.log(`Original formula: ${formula}`);
+      // console.log(`Substituted formula: ${substitutedFormula}`);
+      // console.log(`Processed formula: ${processedFormula}`);
 
       const calculatedValue = new Function(
         `"use strict"; return (${processedFormula})`

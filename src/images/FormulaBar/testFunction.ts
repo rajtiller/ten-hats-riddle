@@ -8,13 +8,11 @@ export const testFormula = (formula: string): number[] => {
     // Generate random hat configuration
     const guess = generateRandomHats();
 
-    // test - check if anyone guesses their hat color correctly
+    // check if anyone guesses their hat color correctly
     if (!hasCorrectGuess(formula, guess)) {
-      console.log("TIME TAKEN:",Date.now()-startTime);
-      return guess; // Found a counter-example
+        return guess; // Found a counter-example
+      }
     }
-  }
-
   return []; // No counter-example found within 1 second - formula appears correct
 };
 

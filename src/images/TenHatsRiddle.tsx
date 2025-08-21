@@ -140,11 +140,6 @@ const TenHatsRiddle: React.FC = () => {
     }
   };
 
-  const formatSuccessRate = (successCount: number): string => {
-    const total = 10000000000; // 10 billion
-    const percentage = ((successCount / total) * 100).toFixed(3);
-    return `${percentage}%`;
-  };
 
   return (
     <div
@@ -186,14 +181,14 @@ const TenHatsRiddle: React.FC = () => {
           transform: "translateX(-50%)",
           fontSize: "16px",
           fontFamily: "monospace",
-          color: "#666",
+          color: "#e41010ff",
           textAlign: "center",
         }}
       >
         {appState === "input"
           ? ""
           : appState === "results" && testResult?.successCount !== undefined
-          ? `Success Rate: ${formatSuccessRate(testResult.successCount)}`
+          ? `Counter-Example Found`
           : ""}
       </div>
 

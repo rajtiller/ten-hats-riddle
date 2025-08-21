@@ -39,14 +39,14 @@ const TestButton: React.FC<TestButtonProps> = ({ formula, onTestResult }) => {
       }
 
       // Log result
-      console.log(evaluation.message);
+      // console.log(evaluation.message);
       if (result.length > 0) {
-        console.log(
-          "Hat distribution:",
-          result
-            .map((color, person) => `Person ${person}: Color ${color}`)
-            .join(", ")
-        );
+        // console.log(
+        //   "Hat distribution:",
+        //   result
+        //     .map((color, person) => `Person ${person}: Color ${color}`)
+        //     .join(", ")
+        // );
       }
     } catch (error) {
       setErrorMessage(
