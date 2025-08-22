@@ -126,6 +126,9 @@ export class Group {
         const hatColor =
           hatColors[i] || (i === 1 ? "half-black-white" : "#d3d3d3");
 
+        // Show "other" label only for the other person and only during input state
+        const showOtherLabel = i === 1 && showIndexLabels && !showPersonNumbers;
+
         const person = new Person({
           x,
           y,
@@ -144,6 +147,7 @@ export class Group {
           formula: formula,
           hatColors: hatColorNumbers,
           sizeScale: sizeScale,
+          showOtherLabel: showOtherLabel, // Pass the showOtherLabel flag
         });
 
         people.push(person);
@@ -209,6 +213,7 @@ export class Group {
           formula: formula,
           hatColors: hatColorNumbers,
           sizeScale: sizeScale,
+          showOtherLabel: false, // No "other" label for 10-hat version
         });
 
         people.push(person);
@@ -236,7 +241,8 @@ export class Group {
               person.sizeScale,
               person.leftPosition,
               person.rightPosition,
-              person.isLeftSide
+              person.isLeftSide,
+              person.showOtherLabel
             )}
             {person.showPersonNumber
               ? person.renderPersonNumber()

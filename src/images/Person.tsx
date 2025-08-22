@@ -29,6 +29,7 @@ export interface PersonProps {
   formula?: string;
   hatColors?: number[];
   sizeScale?: number; // Add size scale prop
+  showOtherLabel?: boolean; // New prop for showing "other" label
 }
 
 export class Person {
@@ -57,6 +58,7 @@ export class Person {
   formula?: string;
   hatColors?: number[];
   sizeScale: number; // Add size scale property
+  showOtherLabel: boolean; // Add showOtherLabel property
 
   constructor({
     x = 0,
@@ -86,6 +88,7 @@ export class Person {
     formula = undefined,
     hatColors = undefined,
     sizeScale = 1.13, // Default 13% larger (reduced from 1.15)
+    showOtherLabel = false, // Default to false
   }: PersonProps = {}) {
     this.x = x;
     this.y = y;
@@ -112,6 +115,7 @@ export class Person {
     this.formula = formula;
     this.hatColors = hatColors;
     this.sizeScale = sizeScale;
+    this.showOtherLabel = showOtherLabel;
   }
 
   renderIndexHighlight(): JSX.Element {
@@ -499,7 +503,8 @@ export class Person {
           this.sizeScale,
           this.leftPosition,
           this.rightPosition, // Pass right position
-          this.isLeftSide // Pass left/right flag
+          this.isLeftSide, // Pass left/right flag
+          this.showOtherLabel // Pass showOtherLabel to hat
         )}
         {this.showPersonNumber
           ? this.renderPersonNumber()

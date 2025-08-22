@@ -79,7 +79,8 @@ export class HatClass implements Hat {
     sizeScale: number = 1.0,
     leftPosition?: number,
     rightPosition?: number,
-    isLeftSide?: boolean
+    isLeftSide?: boolean,
+    showOtherLabel: boolean = false // New parameter for showing "other" label
   ): JSX.Element {
     if (this.type === "none") return <></>;
 
@@ -110,9 +111,15 @@ export class HatClass implements Hat {
       ) {
         displayText = `r[${rightPosition}]`;
       }
+    } else if (isHalfBlackWhite && showOtherLabel) {
+      // Half black/white hat shows "other" when specified
+      displayText = "other";
     } else if (!isRainbow && !isHalfBlackWhite && hatNumber !== undefined) {
       // Colored hats show their number (including 0)
       displayText = hatNumber.toString();
+    } else if (this.color === "#ffffff") {
+      // White hats always show "1"
+      displayText = "1";
     }
 
     const renderHatText = (yPos: number) =>

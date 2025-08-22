@@ -297,14 +297,14 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
     </div>
   );
 
-  // Hat color legend component with actual hat visuals
+  // Hat color legend component with actual hat visuals - BIGGER SIZE
   const HatColorLegend: React.FC = () => {
     const hatColors = [
       { name: "Black", color: "#000000", value: 0 },
       { name: "White", color: "#ffffff", value: 1 },
     ];
 
-    const sizeScale = 1.0; // Scale for the legend hats
+    const sizeScale = 1.8; // Increased from 1.0 to make hats bigger
 
     return (
       <div
@@ -317,19 +317,20 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
           border: "2px solid #333",
           borderRadius: "8px",
           padding: "15px",
-          minWidth: "150px",
+          minWidth: "180px", // Increased to accommodate bigger hats
           zIndex: 10,
         }}
       >
         <h3
           style={{
             margin: "0 0 15px 0",
-            fontSize: "14px",
+            fontSize: "18px", // Increased from 14px
             fontFamily: "monospace",
             textAlign: "center",
             borderBottom: "1px solid #666",
             paddingBottom: "8px",
             color: "#333",
+            fontWeight: "bold",
           }}
         >
           Hat Colors
@@ -339,11 +340,11 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
           const hat = new HatClass(hatInfo.color, "cap");
 
           // Calculate scaled dimensions
-          const scaledSize = Math.ceil(40 * sizeScale); // Scale the container size
-          const viewBoxWidth = Math.ceil(70 * sizeScale); // Scale viewBox width
-          const viewBoxHeight = Math.ceil(50 * sizeScale); // Scale viewBox height
-          const viewBoxX = Math.ceil(-35 * sizeScale); // Scale viewBox x offset
-          const viewBoxY = Math.ceil(-45 * sizeScale); // Scale viewBox y offset
+          const scaledSize = Math.ceil(60 * sizeScale); // Increased base size
+          const viewBoxWidth = Math.ceil(70 * sizeScale);
+          const viewBoxHeight = Math.ceil(50 * sizeScale);
+          const viewBoxX = Math.ceil(-35 * sizeScale);
+          const viewBoxY = Math.ceil(-45 * sizeScale);
 
           return (
             <div
@@ -351,36 +352,35 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
               style={{
                 display: "flex",
                 alignItems: "center",
-                marginBottom: "8px",
-                fontSize: "14px",
+                marginBottom: "12px", // Increased spacing
+                fontSize: "16px", // Increased from 14px
                 fontFamily: "monospace",
-                height: `${scaledSize}px`, // Scale container height
+                height: `${scaledSize}px`,
               }}
             >
               <div
                 style={{
-                  marginRight: "10px",
+                  marginRight: "12px", // Increased spacing
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  width: `${scaledSize}px`, // Scale container width
-                  height: `${scaledSize}px`, // Scale container height
+                  width: `${scaledSize}px`,
+                  height: `${scaledSize}px`,
                 }}
               >
                 <svg
                   width={scaledSize}
                   height={scaledSize}
-                  viewBox={`${viewBoxX} ${viewBoxY} ${viewBoxWidth} ${viewBoxHeight}`} // Apply scaled viewBox
+                  viewBox={`${viewBoxX} ${viewBoxY} ${viewBoxWidth} ${viewBoxHeight}`}
                 >
-                  {hat.render(0, 0, 0, false, false, sizeScale)}{" "}
-                  {/* Render actual hat */}
+                  {hat.render(0, 0, 0, false, false, sizeScale)}
                 </svg>
               </div>
 
               <span
                 style={{
-                  marginRight: "8px",
-                  minWidth: "60px",
+                  marginRight: "10px",
+                  minWidth: "70px", // Increased width
                   display: "flex",
                   alignItems: "center",
                   color: "#333",
