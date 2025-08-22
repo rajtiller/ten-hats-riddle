@@ -21,7 +21,16 @@ const HatLegend: React.FC<HatLegendProps> = () => {
 
   const sizeScale = 1.13; // Same scale as used for people in the group (reduced from 1.15)
 
-  const getTextStyle = (color: string) => {
+  const getTextStyle = (color: string, name: string) => {
+    if (name === "White") {
+      return {
+        color: color,
+        fontWeight: "bold" as const,
+        textShadow:
+          "0.5px 0.5px 0 #000, -0.5px -0.5px 0 #000, 0.5px -0.5px 0 #000, -0.5px 0.5px 0 #000",
+        WebkitTextStroke: "0.5px black",
+      };
+    }
     return {
       color: color,
       fontWeight: "bold" as const,
@@ -110,7 +119,7 @@ const HatLegend: React.FC<HatLegendProps> = () => {
                 minWidth: "60px",
                 display: "flex",
                 alignItems: "center",
-                ...getTextStyle(hatInfo.color),
+                ...getTextStyle(hatInfo.color, hatInfo.name),
               }}
             >
               {hatInfo.name}
