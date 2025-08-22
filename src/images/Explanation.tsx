@@ -50,7 +50,7 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => (
         <p>
           Ten people are standing in a circle, each wearing a hat with a random
           number from 0-9 (repeats allowed). Each person can see everyone else's
-          hat but not their own. They must simultaneously guess their own hat
+          hat but not their own. After ten minutes (for observation and calculation), all players must simultaneously guess their own hat
           number. The goal is for at least one of them to guess their own hat
           number correctly. Each person has been given an index,{" "}
           <strong
@@ -76,7 +76,7 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => (
           >
             i
           </strong>{" "}
-          guess? <br />
+          's guess be? <br />
           <br /> Try the puzzle here:
         </p>
 
@@ -96,9 +96,9 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => (
                   borderRadius: "3px",
                 }}
               >
-                i - all
+                i - all (mod 10)
               </strong>{" "}
-              works no matter what! <br /> (Note:{" "}
+              works no matter what! <br/> (where {" "}
               <strong
                 style={{
                   fontFamily: "monospace",
@@ -115,7 +115,7 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => (
           </>
         }
 
-        <h2 style={{ color: "#007bff", marginTop: "15px" }}>How It Works</h2>
+        <h2 style={{ color: "#007bff", marginTop: "30px" }}>How It Works</h2>
         <p>
           Let{" "}
           <strong
@@ -129,8 +129,8 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => (
           >
             sumHats
           </strong>{" "}
-          be the sum of all ten hats, and 
-          let <strong
+          be the sum of all ten hats, and let{" "}
+          <strong
             style={{
               fontFamily: "monospace",
               backgroundColor: "#f8f9fa",
@@ -140,7 +140,9 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => (
             }}
           >
             k
-          </strong> ≡ <strong
+          </strong>{" "}
+          ≡{" "}
+          <strong
             style={{
               fontFamily: "monospace",
               backgroundColor: "#f8f9fa",
@@ -150,37 +152,9 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => (
             }}
           >
             sumHats
-          </strong> (mod 10) ∈ [0,9]. <br/><br/> Notice: If even one person knew the value of k, then they'd know their own hat number. <br/>This is because <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            ???
-          </strong> + <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            all
-          </strong> = <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            sumHats
-          </strong>{" "}≡ {" "}<strong
+          </strong>{" "}
+          (mod 10) ∈ [0,9]. <br />
+          <br /> Assume, for now, that one of the ten people is able to guess the value of <strong
             style={{
               fontFamily: "monospace",
               backgroundColor: "#f8f9fa",
@@ -190,7 +164,7 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => (
             }}
           >
             k
-          </strong> (mod 10). Thus,  <strong
+          </strong> correctly. <br/><br/>Then they could deduce their own hat number (<strong
             style={{
               fontFamily: "monospace",
               backgroundColor: "#f8f9fa",
@@ -200,27 +174,8 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => (
             }}
           >
             ???
-          </strong> ≡ <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            k
-          </strong> - <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            all
-          </strong>{" "} (mod 10).<br/> Since <strong
+          </strong>) like so:<br /> <br />
+          <strong
             style={{
               fontFamily: "monospace",
               backgroundColor: "#f8f9fa",
@@ -230,40 +185,8 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => (
             }}
           >
             ???
-          </strong> ∈ [0,9], <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            ???
-          </strong> is simply equal to <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            k
-          </strong> - <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            all
-          </strong> <br/> <br/> Thus, we can employ the following strategy: k Person 0 will assume sumHats ≡ 0 (mod 10). Person 1 will assume
-          sumHats ≡ 1 (mod 10). And so on. Every person can guess their own hat
-          color accordingly to make this assumption true. For example, if Person
-          0 sees nine other hats which sum to 38 (
+          </strong>{" "}
+          +{" "}
           <strong
             style={{
               fontFamily: "monospace",
@@ -274,16 +197,215 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => (
             }}
           >
             all
-          </strong>
-          ), they must guess 2, bringing the total to 40 ≡ 0 (mod 10). Let k ≡
-          sumHats (mod 10). Let's think from the perspective of person k. They
-          know sumHats ∈ [all, all + 9]. They have (correctly) assumed sumHats ≡
-          k (mod 10). So they can deduce sumHats. From there, they will guess
-          their own hat, ???, is simply sumHats - all. Thus, they've guaranteed
-          that at least one person will guess their own hat color correctly. To
-          implement this strategy, person i will go through this logic: ??? +
-          all ≡ i (mod 10) ={">"} ??? ≡ i - all (mod 10).
-        </p>
+          </strong>{" "}
+          ={" "}
+          <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            sumHats
+          </strong>{" "}
+          ≡{" "}
+          <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            k
+          </strong>{" "}
+          (mod 10) <br/><br /><strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            ???
+          </strong>{" "}
+          +{" "}
+          <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            all
+          </strong>{" "}
+          ≡{" "}
+          <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            k
+          </strong>{" "}
+          (mod 10) <br /> <br />So,{" "}
+          <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            ???
+          </strong>{" "}
+          ≡{" "}
+          <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            k
+          </strong>{" "}
+          -{" "}
+          <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            all
+          </strong>{" "}
+          (mod 10).
+          <br /> <br />Since{" "}
+          <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            ???
+          </strong>{" "}
+          ∈ [0,9],{" "}
+          <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            ???
+          </strong>{" "}
+          ={" "}
+          <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            k
+          </strong>{" "}
+          -{" "}
+          <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            all
+          </strong>{" "}
+          (mod 10)<br /> <br />  Thus, we just need to ensure at least one person guesses <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            k
+          </strong>{" "}
+          correctly.<br/><br/> There are ten possibilities for k and ten people, so have each person guess a different value.<br/><br/> Through pigeon hole principle, exactly one person is guaranteed to be correct. <br/><br/>  For simplicity, let person <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            i
+          </strong> guess <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            k
+          </strong> = <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            i
+          </strong>. <br/><br/>Then we end up with person <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            i
+          </strong>'s guess being {" "}
+          <strong
+            style={{
+              fontFamily: "monospace",
+              backgroundColor: "#f8f9fa",
+              padding: "2px 4px",
+              border: "1px solid #ddd",
+              borderRadius: "3px",
+            }}
+          >
+            i - all (mod 10)
+          </strong>{" "}
+          </p>
 
         <h2 style={{ color: "#007bff", marginTop: "15px" }}>Misc</h2>
         <p>
