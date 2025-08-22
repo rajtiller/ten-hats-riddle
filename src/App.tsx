@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import TenHatsRiddle from "./images/TenHatsRiddle";
 import Group from "./images/Group";
@@ -8,15 +8,29 @@ import Explanation from "./images/Explanation";
 function App() {
   const [selectedPage, setSelectedPage] = useState(0);
   const [explanationFormula, setExplanationFormula] = useState<string>("");
+  const [shouldAutoScroll, setShouldAutoScroll] = useState(false);
 
   const handlePageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedPage(parseInt(event.target.value));
+    setShouldAutoScroll(false); // Reset auto scroll when manually changing pages
   };
 
   const handleShowExplanation = (formula?: string) => {
     setExplanationFormula(formula || "");
+    setShouldAutoScroll(true); // Trigger auto scroll
     setSelectedPage(2); // Navigate to explanation page
   };
+
+  // Reset auto scroll after it's been used
+  useEffect(() => {
+    if (shouldAutoScroll && selectedPage === 2) {
+      // Reset the flag after a short delay to ensure the component has mounted
+      const timer = setTimeout(() => {
+        setShouldAutoScroll(false);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [shouldAutoScroll, selectedPage]);
 
   return (
     <div
@@ -98,6 +112,7 @@ function App() {
       {selectedPage === 2 && (
         <Explanation
           onNavigateToPage={setSelectedPage}
+          shouldAutoScroll={shouldAutoScroll}
         />
       )}
     </div>

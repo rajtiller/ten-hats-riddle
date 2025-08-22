@@ -1,26 +1,51 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 interface ExplanationProps {
   onNavigateToPage: (pageIndex: number) => void;
+  shouldAutoScroll?: boolean;
 }
 
-const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => {
+const Explanation: React.FC<ExplanationProps> = ({
+  onNavigateToPage,
+  shouldAutoScroll = false,
+}) => {
   const [showSolution, setShowSolution] = useState(false);
   const solutionRef = useRef<HTMLHeadingElement>(null);
 
   const handleSeeSlution = () => {
-    setShowSolution(!showSolution);
-
-    // If showing solution, scroll to it
     if (!showSolution) {
+      // Show solution first
+      setShowSolution(true);
+
+      // Then scroll after a short delay to ensure content is rendered
       setTimeout(() => {
         solutionRef.current?.scrollIntoView({
           behavior: "smooth",
           block: "start",
+          inline: "nearest",
         });
-      }, 100); // Small delay to ensure content is rendered
+      }, 150);
+    } else {
+      // Hide solution
+      setShowSolution(false);
     }
   };
+
+  // Auto scroll effect when component mounts with shouldAutoScroll=true
+  useEffect(() => {
+    if (shouldAutoScroll) {
+      // Show solution and scroll
+      setShowSolution(true);
+
+      setTimeout(() => {
+        solutionRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+          inline: "nearest",
+        });
+      }, 300); // Slightly longer delay for page transition
+    }
+  }, [shouldAutoScroll]);
 
   return (
     <div
@@ -71,7 +96,8 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => {
             everyone else's hat but not their own. After ten minutes (for
             observation and calculation), all players must simultaneously guess
             their own hat number. The goal is for at least one of them to guess
-            their own hat number correctly. Each person has been given a unique index,{" "}
+            their own hat number correctly. Each person has been given a unique
+            index,{" "}
             <strong
               style={{
                 fontFamily: "monospace",

@@ -1,8 +1,6 @@
-fix spacing of people once correct guess is gotten
 make it so hats for two people are black and white
 make formula bar better (spacing, copying, pasting, limit the input so people don't make crazy long formulas)
 fix spacing around dropdown
 make everything supported for mobile
-make sure even a correct formula shows a simluation
 add misc info on explanation: could be a game to find a formula that passes certain counter example but not others
 unsolved problem: find the minimum set of counter examples required to disprove all incorrect formulas
