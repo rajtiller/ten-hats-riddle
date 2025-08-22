@@ -8,7 +8,7 @@ interface FormulaDisplayProps {
 }
 
 export interface PersonHighlight {
-  type: "current" | "all" | "left" | "right";
+  type: "current" | "all" | "left" | "right" | "other";
   position?: number; // For l[n] or r[n]
 }
 

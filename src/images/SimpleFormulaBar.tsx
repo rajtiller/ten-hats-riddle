@@ -64,8 +64,8 @@ const SimpleFormulaBar: React.FC<SimpleFormulaBarProps> = ({
       case ")":
         insertAtCursor(")");
         break;
-      case "me":
-        insertAtCursor("me");
+      case "i":
+        insertAtCursor("i");
         break;
       case "other":
         insertAtCursor("other");
@@ -124,10 +124,10 @@ const SimpleFormulaBar: React.FC<SimpleFormulaBarProps> = ({
     );
   };
 
-  // Buttons for two hats riddle
+  // Buttons for two hats riddle - updated order: 0, 1, (, ), del, then new line with i, other, +, -, ÷, ×
   const buttons = [
-    ["0", "1", "(", ")", "me", "other"],
-    ["mod", "+", "-", "÷", "x", "del"],
+    ["0", "1", "(", ")", "del"],
+    ["i", "other", "+", "-", "÷", "×"],
   ];
 
   return (

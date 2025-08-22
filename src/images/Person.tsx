@@ -215,7 +215,7 @@ export class Person {
       <g>
         <circle
           cx={this.x}
-          cy={this.y-45}
+          cy={this.y - 45}
           r={45 * this.sizeScale}
           fill="none"
           stroke="#28a745"
@@ -403,15 +403,8 @@ export class Person {
         </g>
       );
     } else {
-      const leftPosition = this.leftPosition;
-      const rightPosition = this.rightPosition;
-      let indexLabel = "";
-
-      if (leftPosition <= 5 && leftPosition >= 1) {
-        indexLabel = `i+${leftPosition}`;
-      } else {
-        indexLabel = `i-${rightPosition}`;
-      }
+      // For two hats riddle, the other person should be labeled "i+1"
+      const indexLabel = "i+1";
 
       return (
         <g>
@@ -465,32 +458,18 @@ export class Person {
   }
 
   getGuessColor(guess: number): string {
+    // For two hats riddle, only black and white
     const guessColors = [
       "#000000", // Black - 0
-      "#008080", // Teal - 1
-      "#ff0000", // Red - 2
-      "#ffa500", // Orange - 3
-      "#008000", // Green - 4
-      "#0000ff", // Blue - 5
-      "#8b00ff", // Violet - 6
-      "#ff00ff", // Magenta - 7
-      "#d2b48c", // Tan - 8
-      "#8b4513", // Brown - 9
+      "#ffffff", // White - 1
     ];
 
     return guessColors[guess] || "#666666";
   }
 
   getTextColor(backgroundColor: string): string {
-    const darkBackgrounds = [
-      "#000000",
-      "#008080",
-      "#008000",
-      "#0000ff",
-      "#8b00ff",
-      "#8b4513",
-    ];
-    return darkBackgrounds.includes(backgroundColor) ? "white" : "black";
+    // For two hats riddle
+    return backgroundColor === "#000000" ? "white" : "black";
   }
 
   // New method that renders guess without tooltip (used in Group.render())

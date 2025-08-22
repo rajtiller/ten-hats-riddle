@@ -59,6 +59,17 @@ export class HatClass implements Hat {
     );
   }
 
+  private createHalfBlackWhiteGradient(id: string): JSX.Element {
+    return (
+      <defs>
+        <linearGradient id={id} x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="50%" stopColor="#000000" />
+          <stop offset="50%" stopColor="#ffffff" />
+        </linearGradient>
+      </defs>
+    );
+  }
+
   render(
     x: number,
     y: number,
@@ -75,15 +86,14 @@ export class HatClass implements Hat {
     const transform = `translate(${x}, ${y}) rotate(${angle}) scale(${sizeScale})`;
     const hatNumber = hatColorToNumber[this.color];
     const isRainbow = this.color === "rainbow";
-    const gradientId = `rainbow-gradient-${Math.random()
-      .toString(36)
-      .substring(2, 9)}`;
+    const isHalfBlackWhite = this.color === "half-black-white";
+    const gradientId = `gradient-${Math.random().toString(36).substring(2, 9)}`;
 
     // Determine what text to display
     let displayText = "";
 
-    if (isCurrentPerson && hatNumber === undefined) {
-      // Current person always shows "YOU" regardless of hat color
+    if (isCurrentPerson && hatNumber === undefined && !isHalfBlackWhite) {
+      // Current person always shows "???" regardless of hat color
       displayText = "???";
     } else if (isRainbow) {
       // Rainbow hats show position labels
@@ -100,7 +110,7 @@ export class HatClass implements Hat {
       ) {
         displayText = `r[${rightPosition}]`;
       }
-    } else if (!isRainbow && hatNumber !== undefined) {
+    } else if (!isRainbow && !isHalfBlackWhite && hatNumber !== undefined) {
       // Colored hats show their number (including 0)
       displayText = hatNumber.toString();
     }
@@ -137,7 +147,12 @@ export class HatClass implements Hat {
         </>
       ) : null;
 
-    const fillColor = isRainbow ? `url(#${gradientId})` : this.color;
+    let fillColor = this.color;
+    if (isRainbow) {
+      fillColor = `url(#${gradientId})`;
+    } else if (isHalfBlackWhite) {
+      fillColor = `url(#${gradientId})`;
+    }
 
     // Apply small lift offset only for hats on people, not legend hats
     const liftOffset = isOnPerson ? -5 : 0;
@@ -147,6 +162,7 @@ export class HatClass implements Hat {
         return (
           <g transform={transform}>
             {isRainbow && this.createRainbowGradient(gradientId)}
+            {isHalfBlackWhite && this.createHalfBlackWhiteGradient(gradientId)}
             <ellipse
               cx="0"
               cy={-22 + liftOffset}
@@ -172,6 +188,7 @@ export class HatClass implements Hat {
         return (
           <g transform={transform}>
             {isRainbow && this.createRainbowGradient(gradientId)}
+            {isHalfBlackWhite && this.createHalfBlackWhiteGradient(gradientId)}
             <ellipse
               cx="0"
               cy={-22 + liftOffset}
@@ -197,6 +214,7 @@ export class HatClass implements Hat {
         return (
           <g transform={transform}>
             {isRainbow && this.createRainbowGradient(gradientId)}
+            {isHalfBlackWhite && this.createHalfBlackWhiteGradient(gradientId)}
             <ellipse
               cx="0"
               cy={-17 + liftOffset}
@@ -229,6 +247,7 @@ export class HatClass implements Hat {
         return (
           <g transform={transform}>
             {isRainbow && this.createRainbowGradient(gradientId)}
+            {isHalfBlackWhite && this.createHalfBlackWhiteGradient(gradientId)}
             <ellipse
               cx="0"
               cy={-14 + liftOffset}

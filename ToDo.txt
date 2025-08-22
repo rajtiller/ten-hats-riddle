@@ -1,5 +1,12 @@
-make it so hats for two people are black and white
-fix spacing around dropdown
+make the guess box on the left for two people
+add spacing between everything in the formula bar
+make the displayed hats on the left actually be hats, like in the tne hat version
+make sure the ten hat version isn't changed
+make sure white hats are labeled with a one
+add links from ten hat page to explanaiton page
+add the word other to the other person's hat
+randomize order in which hat combinations are checked for 2 hat problem
+add description to correct version of two hat problem explaining that one person guesses same, one person guesses diff
 add misc info on explanation: could be a game to find a formula that passes certain counter example but not others
 unsolved problem: find the minimum set of counter examples required to disprove all incorrect formulas
 add explanation button to main page

@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import TenHatsRiddle from "./images/TenHatsRiddle";
-import Group from "./images/Group";
-import SimpleFormulaBar from "./images/SimpleFormulaBar";
+import TwoHatsRiddle from "./images/TwoHatsRiddle";
 import Explanation from "./images/Explanation";
 
 function App() {
@@ -38,7 +37,7 @@ function App() {
       case 0:
         return "140px"; // Ten Hats Riddle - medium width
       case 1:
-        return "140px"; // Two Hats Riddle - longer
+        return "140px"; // Two Hats Riddle - same width
       case 2:
         return "100px"; // Solution - shorter
       default:
@@ -99,29 +98,7 @@ function App() {
 
       {/* Two hats riddle */}
       {selectedPage === 1 && (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            height: "100vh",
-            paddingTop: "60px",
-            paddingBottom: "140px",
-            justifyContent: "center",
-          }}
-        >
-          <Group numberOfPeople={2} radius={5} />
-          <div
-            style={{
-              position: "absolute",
-              bottom: "10px",
-              left: "50%",
-              transform: "translateX(-50%)",
-            }}
-          >
-            <SimpleFormulaBar />
-          </div>
-        </div>
+        <TwoHatsRiddle onNavigateToPage={setSelectedPage} />
       )}
 
       {/* Explanation page */}
