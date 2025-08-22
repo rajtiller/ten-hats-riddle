@@ -289,11 +289,11 @@ const GroupComponent: React.FC<GroupProps> = (props = {}) => {
         {group.people.map((person, index) => {
           if (person.guess === undefined || person.guess === -1) return null;
 
-          // For two hats riddle, position guess boxes to the left of both people
+          // For two hats riddle, position guess boxes above the heads
           let guessX, guessY;
           if (group.numberOfPeople === 2) {
-            guessX = person.x - 120; // Position to the left
-            guessY = person.y - 10; // Slight vertical adjustment
+            guessX = person.x; // Center above head
+            guessY = person.y - 80; // Position above head
           } else {
             guessX = person.x;
             guessY = person.y - 63; // Original position for 10 hat version

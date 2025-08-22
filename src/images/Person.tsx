@@ -219,8 +219,8 @@ export class Person {
       <g>
         <circle
           cx={this.x}
-          cy={this.y - 45}
-          r={45 * this.sizeScale}
+          cy={this.y-45}
+          r={35 * this.sizeScale} // Changed from 45 to 35 to match yellow circle size
           fill="none"
           stroke="#28a745"
           strokeWidth={4 * this.sizeScale}
@@ -235,12 +235,12 @@ export class Person {
               0%, 100% { 
                 stroke-width: ${4 * this.sizeScale};
                 opacity: 0.9;
-                r: ${45 * this.sizeScale};
+                r: ${35 * this.sizeScale}; // Changed from 45 to 35
               }
               50% { 
                 stroke-width: ${6 * this.sizeScale};
                 opacity: 1;
-                r: ${48 * this.sizeScale};
+                r: ${39 * this.sizeScale}; // Changed from 48 to 39
               }
             }
           `}

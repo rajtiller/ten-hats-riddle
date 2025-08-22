@@ -387,21 +387,64 @@ const handleDelete = (context: DeleteContext) => {
     const charBeforeOther =
       cursorPosition > 5 ? formula[cursorPosition - 6] : "";
     if (!/[a-zA-Z]/.test(charBeforeOther)) {
-      const newFormula =
+      let newFormula =
         formula.slice(0, cursorPosition - 5) + formula.slice(cursorPosition);
+
+      // Remove trailing spaces
+      newFormula = newFormula.trimEnd();
+
       setFormula(newFormula);
-      setCursorPosition(cursorPosition - 5);
+      setCursorPosition(Math.min(cursorPosition - 5, newFormula.length));
       if (errorMessage) setErrorMessage("");
       return;
     }
   }
 
-  // Check if cursor is in front of a space and auto-delete it
+  // Enhanced delete behavior for space + preceding item
   if (charAtCursor === " ") {
-    const newFormula =
-      formula.slice(0, cursorPosition - 1) + formula.slice(cursorPosition);
+    // Look backwards to find the last non-space character
+    let deleteStart = cursorPosition - 1; // Start at the space
+
+    // Skip any additional spaces
+    while (deleteStart > 0 && formula[deleteStart - 1] === " ") {
+      deleteStart--;
+    }
+
+    // Now find the start of the non-space item before the space(s)
+    if (deleteStart > 0) {
+      const charBeforeSpaces = formula[deleteStart - 1];
+
+      // Handle "other" word
+      if (
+        deleteStart >= 5 &&
+        formula.substring(deleteStart - 5, deleteStart) === "other"
+      ) {
+        const charBeforeOther = deleteStart > 5 ? formula[deleteStart - 6] : "";
+        if (!/[a-zA-Z]/.test(charBeforeOther)) {
+          deleteStart -= 5; // Delete "other"
+        } else {
+          deleteStart -= 1; // Just delete one character
+        }
+      }
+      // Handle single character items (numbers, operators, parentheses, 'i')
+      else if (/[01+\-×()i]/.test(charBeforeSpaces)) {
+        deleteStart -= 1; // Delete one character
+      }
+      // Default: delete one character
+      else {
+        deleteStart -= 1;
+      }
+    }
+
+    // Delete from deleteStart to cursorPosition (inclusive of space(s))
+    let newFormula =
+      formula.slice(0, deleteStart) + formula.slice(cursorPosition);
+
+    // Remove trailing spaces
+    newFormula = newFormula.trimEnd();
+
     setFormula(newFormula);
-    setCursorPosition(cursorPosition - 1);
+    setCursorPosition(Math.min(deleteStart, newFormula.length));
     if (errorMessage) setErrorMessage("");
     return;
   }
@@ -413,20 +456,28 @@ const handleDelete = (context: DeleteContext) => {
       cursorPosition < formula.length ? formula[cursorPosition] : "";
 
     if (!/[a-zA-Z]/.test(charBeforeI) && !/[a-zA-Z]/.test(charAfterI)) {
-      const newFormula =
+      let newFormula =
         formula.slice(0, cursorPosition - 1) + formula.slice(cursorPosition);
+
+      // Remove trailing spaces
+      newFormula = newFormula.trimEnd();
+
       setFormula(newFormula);
-      setCursorPosition(cursorPosition - 1);
+      setCursorPosition(Math.min(cursorPosition - 1, newFormula.length));
       if (errorMessage) setErrorMessage("");
       return;
     }
   }
 
-  // Default delete behavior
-  const newFormula =
+  // Default delete behavior - single character
+  let newFormula =
     formula.slice(0, cursorPosition - 1) + formula.slice(cursorPosition);
+
+  // Remove trailing spaces
+  newFormula = newFormula.trimEnd();
+
   setFormula(newFormula);
-  setCursorPosition(cursorPosition - 1);
+  setCursorPosition(Math.min(cursorPosition - 1, newFormula.length));
   if (errorMessage) setErrorMessage("");
 };
 
@@ -552,12 +603,12 @@ const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
         width,
         height: height + (errorMessage ? 30 : 0),
         border: "2px solid #333",
-        padding: "5px",
+        padding: "8px", // Increased padding for better spacing
         backgroundColor: "#f5f5f5",
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
-        gap: "2px",
+        gap: "8px", // Increased gap between elements
         position: "relative",
       }}
     >
@@ -593,10 +644,10 @@ const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
       {/* Formula input with labels */}
       <div
         style={{
-          height: "32px",
+          height: "36px", // Slightly increased height
           display: "flex",
           alignItems: "center",
-          gap: "0px",
+          gap: "6px", // Added gap between formula elements
           flex: "0 0 auto",
         }}
       >
@@ -606,12 +657,13 @@ const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
             color: "black",
             fontFamily: "monospace",
             fontSize: "14px",
-            padding: "6px 8px",
+            padding: "8px 10px", // Increased padding
             display: "flex",
             alignItems: "center",
             userSelect: "none",
             height: "100%",
             boxSizing: "border-box",
+            borderRadius: "3px", // Added border radius
           }}
         >
           {"??? = "}
@@ -623,7 +675,7 @@ const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
             height: "100%",
             border: "1px solid #666",
             backgroundColor: showAsReadOnly ? "#f9f9f9" : "white",
-            padding: "6px",
+            padding: "8px", // Increased padding
             fontFamily: "monospace",
             fontSize: "14px",
             display: "flex",
@@ -632,6 +684,7 @@ const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
             cursor: showAsReadOnly ? "default" : "default",
             userSelect: "none",
             boxSizing: "border-box",
+            borderRadius: "3px", // Added border radius
           }}
         >
           <TwoHatsFormulaDisplay
@@ -648,12 +701,13 @@ const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
             color: "black",
             fontFamily: "monospace",
             fontSize: "14px",
-            padding: "6px 8px",
+            padding: "8px 10px", // Increased padding
             display: "flex",
             alignItems: "center",
             userSelect: "none",
             height: "100%",
             boxSizing: "border-box",
+            borderRadius: "3px", // Added border radius
           }}
         >
           mod 2
@@ -663,8 +717,8 @@ const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
           onClick={showAsReadOnly && onTryAgain ? onTryAgain : handleTest}
           disabled={!showAsReadOnly && !validation.isValid}
           style={{
-            marginLeft: "8px",
-            padding: "6px 12px",
+            marginLeft: "6px", // Increased margin
+            padding: "8px 14px", // Increased padding
             backgroundColor: showAsReadOnly
               ? "#dc3545"
               : validation.isValid
@@ -672,7 +726,7 @@ const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
               : "#ccc",
             color: showAsReadOnly || validation.isValid ? "white" : "#999",
             border: "1px solid #666",
-            borderRadius: "3px",
+            borderRadius: "6px", // Increased border radius
             cursor:
               showAsReadOnly || validation.isValid ? "pointer" : "not-allowed",
             fontFamily: "monospace",
@@ -680,6 +734,7 @@ const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
             fontWeight: "bold",
             height: "100%",
             boxSizing: "border-box",
+            transition: "background-color 0.2s", // Added transition
           }}
         >
           {showAsReadOnly ? "TRY AGAIN" : "TEST"}

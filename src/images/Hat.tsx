@@ -79,8 +79,7 @@ export class HatClass implements Hat {
     sizeScale: number = 1.0,
     leftPosition?: number,
     rightPosition?: number,
-    isLeftSide?: boolean,
-    showOtherLabel: boolean = false // New parameter for showing "other" label
+    isLeftSide?: boolean
   ): JSX.Element {
     if (this.type === "none") return <></>;
 
@@ -88,6 +87,7 @@ export class HatClass implements Hat {
     const hatNumber = hatColorToNumber[this.color];
     const isRainbow = this.color === "rainbow";
     const isHalfBlackWhite = this.color === "half-black-white";
+    const isWhite = this.color === "#ffffff";
     const gradientId = `gradient-${Math.random().toString(36).substring(2, 9)}`;
 
     // Determine what text to display
@@ -111,15 +111,15 @@ export class HatClass implements Hat {
       ) {
         displayText = `r[${rightPosition}]`;
       }
-    } else if (isHalfBlackWhite && showOtherLabel) {
-      // Half black/white hat shows "other" when specified
+    } else if (isHalfBlackWhite) {
+      // Half black/white hats show "other" label
       displayText = "other";
-    } else if (!isRainbow && !isHalfBlackWhite && hatNumber !== undefined) {
-      // Colored hats show their number (including 0)
-      displayText = hatNumber.toString();
-    } else if (this.color === "#ffffff") {
+    } else if (isWhite) {
       // White hats always show "1"
       displayText = "1";
+    } else if (!isRainbow && !isHalfBlackWhite && hatNumber !== undefined) {
+      // Other colored hats show their number (including 0)
+      displayText = hatNumber.toString();
     }
 
     const renderHatText = (yPos: number) =>
@@ -129,12 +129,12 @@ export class HatClass implements Hat {
             x="0"
             y={yPos}
             textAnchor="middle"
-            fontSize={displayText.length > 2 ? "14" : "20"}
+            fontSize={displayText.length > 2 ? "12" : "18"} // Adjusted font sizes
             fontFamily="monospace"
             fontWeight="900"
             fill="white"
             stroke="white"
-            strokeWidth="2.1"
+            strokeWidth="2.5"
           >
             {displayText}
           </text>
@@ -142,7 +142,7 @@ export class HatClass implements Hat {
             x="0"
             y={yPos}
             textAnchor="middle"
-            fontSize={displayText.length > 2 ? "14" : "20"}
+            fontSize={displayText.length > 2 ? "12" : "18"} // Adjusted font sizes
             fontFamily="monospace"
             fontWeight="900"
             fill="black"

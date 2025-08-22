@@ -324,7 +324,7 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
         <h3
           style={{
             margin: "0 0 15px 0",
-            fontSize: "18px", // Increased from 14px
+            fontSize: "20px", // Increased from 18px
             fontFamily: "monospace",
             textAlign: "center",
             borderBottom: "1px solid #666",
@@ -339,12 +339,12 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
         {hatColors.map((hatInfo, index) => {
           const hat = new HatClass(hatInfo.color, "cap");
 
-          // Calculate scaled dimensions
-          const scaledSize = Math.ceil(60 * sizeScale); // Increased base size
-          const viewBoxWidth = Math.ceil(70 * sizeScale);
-          const viewBoxHeight = Math.ceil(50 * sizeScale);
-          const viewBoxX = Math.ceil(-35 * sizeScale);
-          const viewBoxY = Math.ceil(-45 * sizeScale);
+          // Calculate scaled dimensions - increased size
+          const scaledSize = Math.ceil(50 * sizeScale); // Increased from 40
+          const viewBoxWidth = Math.ceil(80 * sizeScale); // Increased from 70
+          const viewBoxHeight = Math.ceil(60 * sizeScale); // Increased from 50
+          const viewBoxX = Math.ceil(-40 * sizeScale); // Adjusted from -35
+          const viewBoxY = Math.ceil(-50 * sizeScale); // Adjusted from -45
 
           return (
             <div
@@ -352,7 +352,7 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
               style={{
                 display: "flex",
                 alignItems: "center",
-                marginBottom: "12px", // Increased spacing
+                marginBottom: "10px", // Increased from 8px
                 fontSize: "16px", // Increased from 14px
                 fontFamily: "monospace",
                 height: `${scaledSize}px`,
@@ -360,7 +360,7 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
             >
               <div
                 style={{
-                  marginRight: "12px", // Increased spacing
+                  marginRight: "12px", // Increased from 10px
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -373,14 +373,15 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
                   height={scaledSize}
                   viewBox={`${viewBoxX} ${viewBoxY} ${viewBoxWidth} ${viewBoxHeight}`}
                 >
-                  {hat.render(0, 0, 0, false, false, sizeScale)}
+                  {hat.render(0, 0, 0, false, false, sizeScale * 1.2)}{" "}
+                  {/* Increased scale */}
                 </svg>
               </div>
 
               <span
                 style={{
-                  marginRight: "10px",
-                  minWidth: "70px", // Increased width
+                  marginRight: "10px", // Increased from 8px
+                  minWidth: "70px", // Increased from 60px
                   display: "flex",
                   alignItems: "center",
                   color: "#333",
@@ -394,15 +395,17 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
                 style={{
                   backgroundColor: "#d3d3d3",
                   border: "1px solid #999",
-                  padding: "2px 6px",
-                  borderRadius: "3px",
-                  minWidth: "30px",
+                  padding: "4px 8px", // Increased padding
+                  borderRadius: "4px", // Increased border radius
+                  minWidth: "35px", // Increased from 30px
                   textAlign: "center",
                   color: "black",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  height: "24px", // Fixed height for the number badge
+                  height: "28px", // Increased from 24px
+                  fontSize: "14px", // Added explicit font size
+                  fontWeight: "bold",
                 }}
               >
                 {hatInfo.value}
@@ -465,13 +468,27 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
           alignItems: "center",
         }}
       >
-        {appState === "input"
-          ? ""
-          : appState === "results" && testResult?.isCorrect
-          ? "✅ Correct Formula - Example Shown"
-          : appState === "results" && !testResult?.isCorrect
-          ? "❌ Counter-Example Found"
-          : ""}
+        {appState === "input" ? (
+          ""
+        ) : appState === "results" && testResult?.isCorrect ? (
+          <div
+            style={{
+              cursor: "pointer",
+              padding: "5px 10px",
+              borderRadius: "5px",
+              backgroundColor: "rgba(40, 167, 69, 0.1)",
+              border: "1px solid #28a745",
+              position: "relative",
+            }}
+            title="Click to learn why this formula works for all cases"
+          >
+            ✅ Why Does This Work?
+          </div>
+        ) : appState === "results" && !testResult?.isCorrect ? (
+          "❌ Counter-Example Found"
+        ) : (
+          ""
+        )}
       </div>
 
       {/* Main content area with Group */}
