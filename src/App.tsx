@@ -32,6 +32,20 @@ function App() {
     }
   }, [shouldAutoScroll, selectedPage]);
 
+  // Get dropdown width based on current page
+  const getDropdownWidth = () => {
+    switch (selectedPage) {
+      case 0:
+        return "140px"; // Ten Hats Riddle - medium width
+      case 1:
+        return "140px"; // Two Hats Riddle - longer
+      case 2:
+        return "100px"; // Solution - shorter
+      default:
+        return "140px";
+    }
+  };
+
   return (
     <div
       style={{
@@ -54,7 +68,7 @@ function App() {
           value={selectedPage}
           onChange={handlePageChange}
           style={{
-            padding: "8px 12px",
+            padding: "8px 8px",
             fontSize: "14px",
             borderRadius: "0px",
             border: "1px solid red",
@@ -62,6 +76,8 @@ function App() {
             color: "white",
             textAlign: "center",
             textAlignLast: "center",
+            width: getDropdownWidth(), // Dynamic width
+            minWidth: "100px", // Ensure minimum width
           }}
         >
           <option value={0} style={{ textAlign: "center" }}>

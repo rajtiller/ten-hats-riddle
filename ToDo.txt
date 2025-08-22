@@ -1,6 +1,6 @@
 make it so hats for two people are black and white
-make formula bar better (spacing, copying, pasting, limit the input so people don't make crazy long formulas)
 fix spacing around dropdown
-make everything supported for mobile
 add misc info on explanation: could be a game to find a formula that passes certain counter example but not others
 unsolved problem: find the minimum set of counter examples required to disprove all incorrect formulas
+add explanation button to main page
+make everything supported for mobile
