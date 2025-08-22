@@ -200,7 +200,7 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
           e.currentTarget.style.backgroundColor = "#007bff";
         }}
       >
-        See Explanation
+        See Solution
       </button>
     </div>
   );

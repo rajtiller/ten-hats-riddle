@@ -57,7 +57,7 @@ function App() {
             Two Hats Riddle
           </option>
           <option value={2} style={{ textAlign: "center" }}>
-            Explanation
+            Solution
           </option>
         </select>
       </div>
