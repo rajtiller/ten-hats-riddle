@@ -331,6 +331,7 @@ const testTwoHatsFormula = (formula: string): number[] => {
   ];
 
   for (const combination of allCombinations) {
+    // Check if at least one person guesses correctly
     let someoneGuessedCorrectly = false;
 
     for (let personIndex = 0; personIndex < 2; personIndex++) {
@@ -347,13 +348,16 @@ const testTwoHatsFormula = (formula: string): number[] => {
       }
     }
 
+    // If no one guessed correctly, this is a counter-example
     if (!someoneGuessedCorrectly) {
-      return combination; // Counter-example found
+      return combination;
     }
   }
 
-  // No counter-example found
-  return [0, 1, -1]; // -1 indicates correct formula
+  // No counter-example found - formula is correct
+  // Return a valid example with special marker
+  let ret = allCombinations[Math.floor(Math.random()*4)];
+  return [...ret,-1]; // -1 indicates correct formula
 };
 
 interface DeleteContext {

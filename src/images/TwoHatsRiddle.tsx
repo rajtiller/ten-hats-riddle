@@ -100,43 +100,6 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
     return guesses;
   };
 
-  const testTwoHatsFormula = (formula: string): number[] => {
-    // Test all 4 possibilities: (0,0), (0,1), (1,0), (1,1)
-    const allCombinations = [
-      [0, 0],
-      [0, 1],
-      [1, 0],
-      [1, 1],
-    ];
-
-    for (const combination of allCombinations) {
-      // Check if at least one person guesses correctly
-      let someoneGuessedCorrectly = false;
-
-      for (let personIndex = 0; personIndex < 2; personIndex++) {
-        try {
-          const guess = calculatePersonGuess(combination, formula, personIndex);
-          const actualHatColor = combination[personIndex];
-
-          if (guess === actualHatColor) {
-            someoneGuessedCorrectly = true;
-            break;
-          }
-        } catch (error) {
-          continue;
-        }
-      }
-
-      // If no one guessed correctly, this is a counter-example
-      if (!someoneGuessedCorrectly) {
-        return combination;
-      }
-    }
-
-    // No counter-example found - formula is correct
-    // Return a valid example with special marker
-    return [0, 1, -1]; // -1 indicates correct formula
-  };
 
   const handleTestResult = (result: number[], formula: string) => {
     setCurrentFormula(formula);
