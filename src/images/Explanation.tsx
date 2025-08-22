@@ -177,300 +177,334 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => {
           {/* Solution Section - Hidden by default */}
           {showSolution && (
             <>
+              <h2
+                ref={solutionRef}
+                style={{ color: "#007bff", marginTop: "30px" }}
+              >
+                Solution
+              </h2>
+              <p>
+                Let{" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  sumHats
+                </strong>{" "}
+                be the sum of all ten hats, and let{" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  k
+                </strong>{" "}
+                ≡{" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  sumHats
+                </strong>{" "}
+                (mod 10) ∈ [0,9]. <br />
+                <br /> Assume, for now, that one of the ten people is able to
+                guess the value of{" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  k
+                </strong>{" "}
+                correctly. <br />
+                <br />
+                Then they could deduce their own hat number (
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  ???
+                </strong>
+                ) like so:
+                <br /> <br />
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  ???
+                </strong>{" "}
+                +{" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  all
+                </strong>{" "}
+                ={" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  sumHats
+                </strong>{" "}
+                ≡{" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  k
+                </strong>{" "}
+                (mod 10) <br />
+                <br />
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  ???
+                </strong>{" "}
+                +{" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  all
+                </strong>{" "}
+                ≡{" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  k
+                </strong>{" "}
+                (mod 10) <br /> <br />
+                So,{" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  ???
+                </strong>{" "}
+                ≡{" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  k
+                </strong>{" "}
+                -{" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  all
+                </strong>{" "}
+                (mod 10).
+                <br /> <br />
+                Since{" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  ???
+                </strong>{" "}
+                ∈ [0,9],{" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  ???
+                </strong>{" "}
+                ={" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  k
+                </strong>{" "}
+                -{" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  all
+                </strong>{" "}
+                (mod 10)
+                <br /> <br /> Thus, we just need to ensure at least one person
+                guesses{" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  k
+                </strong>{" "}
+                correctly.
+                <br />
+                <br /> There are ten possibilities for k and ten people, so have
+                each person guess a different value.
+                <br />
+                <br /> For simplicity, let person{" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  i
+                </strong>{" "}
+                guess{" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  k
+                </strong>{" "}
+                ={" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  i
+                </strong>
+                . <br />
+                <br />
+                Then we end up with person{" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  i
+                </strong>
+                's guess being{" "}
+                <strong
+                  style={{
+                    fontFamily: "monospace",
+                    backgroundColor: "#f8f9fa",
+                    padding: "2px 4px",
+                    border: "1px solid #ddd",
+                    borderRadius: "3px",
+                  }}
+                >
+                  i - all
+                </strong>{" "}
+                (mod 10)
+              </p>
 
-              <h2 style={{ color: "#007bff", marginTop: "30px" }}>Solution</h2>
-        <p>
-          Let{" "}
-          <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            sumHats
-          </strong>{" "}
-          be the sum of all ten hats, and let{" "}
-          <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            k
-          </strong>{" "}
-          ≡{" "}
-          <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            sumHats
-          </strong>{" "}
-          (mod 10) ∈ [0,9]. <br />
-          <br /> Assume, for now, that one of the ten people is able to guess the value of <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            k
-          </strong> correctly. <br/><br/>Then they could deduce their own hat number (<strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            ???
-          </strong>) like so:<br /> <br />
-          <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            ???
-          </strong>{" "}
-          +{" "}
-          <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            all
-          </strong>{" "}
-          ={" "}
-          <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            sumHats
-          </strong>{" "}
-          ≡{" "}
-          <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            k
-          </strong>{" "}
-          (mod 10) <br/><br /><strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            ???
-          </strong>{" "}
-          +{" "}
-          <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            all
-          </strong>{" "}
-          ≡{" "}
-          <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            k
-          </strong>{" "}
-          (mod 10) <br /> <br />So,{" "}
-          <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            ???
-          </strong>{" "}
-          ≡{" "}
-          <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            k
-          </strong>{" "}
-          -{" "}
-          <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            all
-          </strong>{" "}
-          (mod 10).
-          <br /> <br />Since{" "}
-          <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            ???
-          </strong>{" "}
-          ∈ [0,9],{" "}
-          <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            ???
-          </strong>{" "}
-          ={" "}
-          <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            k
-          </strong>{" "}
-          -{" "}
-          <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            all
-          </strong>{" "}
-          (mod 10)<br /> <br />  Thus, we just need to ensure at least one person guesses <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            k
-          </strong>{" "}
-          correctly.<br/><br/> There are ten possibilities for k and ten people, so have each person guess a different value.<br/><br/>  For simplicity, let person <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            i
-          </strong> guess <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            k
-          </strong> = <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            i
-          </strong>. <br/><br/>Then we end up with person <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            i
-          </strong>'s guess being {" "}
-          <strong
-            style={{
-              fontFamily: "monospace",
-              backgroundColor: "#f8f9fa",
-              padding: "2px 4px",
-              border: "1px solid #ddd",
-              borderRadius: "3px",
-            }}
-          >
-            i - all
-          </strong>{" "} (mod 10)
-          </p>
-
-        
               <h2 style={{ color: "#007bff", marginTop: "15px" }}>Misc</h2>
               <p>
                 This guarantees there's no situation in which two or more people
