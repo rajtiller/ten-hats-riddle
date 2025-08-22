@@ -3,24 +3,22 @@ import { calculatePersonGuess } from "./evaluateFormula";
 export const testFormula = (formula: string): number[] => {
   const startTime = Date.now();
   const testDuration = 1000; // 1 second in milliseconds
-  // const initialGuessses = [[0,0,0,0,0,0,0,0,0,0],[1,1,1,1,1,1,1,1,1,1],[0,1,0,1,0,1,0,1,0,1],[0,1,2,3,4,5,4,3,2,1],[0,1,2,3,4,0,1,2,3,4],[0,1,2,3,4,5,6,7,8,9],[9,8,7,6,5,4,3,2,1,0]];
 
-  // for (const initialGuess of initialGuessses) {
-  //   // Check if the formula is correct for this initial guess
-  //   if (!hasCorrectGuess(formula, initialGuess)) {
-  //     return initialGuess; // Found a counter-example
-  //   }
-  // }
   while (Date.now() - startTime < testDuration) {
     // Generate random hat configuration
     const guess = generateRandomHats();
 
     // check if anyone guesses their hat color correctly
     if (!hasCorrectGuess(formula, guess)) {
-        return guess; // Found a counter-example
-      }
+      return guess; // Found a counter-example
     }
-  return []; // No counter-example found within 1 second - formula appears correct
+  }
+
+  // No counter-example found - formula appears correct
+  // Return a random valid configuration with a special marker
+  const randomValidConfig = generateRandomHats();
+  // Add a marker at index 10 to indicate this is a correct formula
+  return [...randomValidConfig, -1]; // -1 indicates correct formula
 };
 
 // Generate random hat configuration for testing
@@ -53,7 +51,14 @@ export interface TestResult {
 }
 
 export const evaluateTestResult = (result: number[]): TestResult => {
-  if (result.length === 0) {
+  if (result.length === 11 && result[10] === -1) {
+    // Correct formula with example configuration
+    return {
+      isCorrect: true,
+      counterExample: result.slice(0, 10), // First 10 elements are the example
+      message: "✅ Correct solution!",
+    };
+  } else if (result.length === 0) {
     return {
       isCorrect: true,
       message: "✅ Correct solution!",

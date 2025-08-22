@@ -71,7 +71,7 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => {
             everyone else's hat but not their own. After ten minutes (for
             observation and calculation), all players must simultaneously guess
             their own hat number. The goal is for at least one of them to guess
-            their own hat number correctly. Each person has been given an index,{" "}
+            their own hat number correctly. Each person has been given a unique index,{" "}
             <strong
               style={{
                 fontFamily: "monospace",

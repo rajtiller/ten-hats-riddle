@@ -76,33 +76,49 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
     // Clear person highlight when transitioning to results state
     setPersonHighlight(null);
 
-    if (result.length === 0) {
-      // Correct solution
+    // Check if this is a correct formula with example (length 11 with -1 marker)
+    if (result.length === 11 && result[10] === -1) {
+      // Correct solution with example configuration
+      const exampleConfig = result.slice(0, 10);
+      const personGuesses = calculateAllGuesses(exampleConfig, formula);
+      const hatColors = exampleConfig.map(
+        (colorIndex) => availableHatColors[colorIndex]
+      );
+
+      setCounterExampleHats(hatColors);
+      setCounterExampleNumbers(exampleConfig);
+      setTestResult({
+        isCorrect: true,
+        counterExample: exampleConfig,
+        message:
+          "✅ Correct solution! Here's an example where your formula works.",
+        formula: formula,
+        personGuesses: personGuesses,
+      });
+      setAppState("results");
+    } else if (result.length === 0) {
+      // Legacy correct solution path (shouldn't happen with new testFunction)
       setTestResult({
         isCorrect: true,
         message: "✅ Correct solution! Your formula works for all cases.",
-        successCount: 10000000000, // 10 billion successes
+        successCount: 10000000000,
         formula: formula,
       });
       setAppState("results");
     } else {
-      // Counter example found - extract success count if available
-      const successCount = result.length >= 11 ? result[10] : undefined;
-      const counterExample = result.slice(0, 10); // First 10 elements are the counter example
-
-      // Calculate what each person would guess with this formula and hat distribution
+      // Counter example found
+      const counterExample = result.slice(0, 10);
       const personGuesses = calculateAllGuesses(counterExample, formula);
-
       const hatColors = counterExample.map(
         (colorIndex) => availableHatColors[colorIndex]
       );
+
       setCounterExampleHats(hatColors);
-      setCounterExampleNumbers(counterExample); // Store numerical values too
+      setCounterExampleNumbers(counterExample);
       setTestResult({
         isCorrect: false,
         counterExample: counterExample,
         message: `❌ Counter example found! Here's a case where your formula fails.`,
-        successCount: successCount,
         formula: formula,
         personGuesses: personGuesses,
       });
@@ -240,12 +256,12 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
       <div
         style={{
           position: "absolute",
-          top: "625px", // Adjusted for smaller title
+          top: "625px",
           left: "0",
           right: "0",
           fontSize: "16px",
           fontFamily: "monospace",
-          color: "#e41010ff",
+          color: testResult?.isCorrect ? "#28a745" : "#e41010ff",
           textAlign: "center",
           width: "100%",
           display: "flex",
@@ -255,10 +271,10 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
       >
         {appState === "input"
           ? ""
-          : appState === "results" &&
-            testResult?.successCount !== undefined &&
-            !testResult?.isCorrect
-          ? `Counter-Example Found`
+          : appState === "results" && testResult?.isCorrect
+          ? "✅ Correct Formula - Example Shown"
+          : appState === "results" && !testResult?.isCorrect
+          ? "❌ Counter-Example Found"
           : ""}
       </div>
 
