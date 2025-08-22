@@ -32,10 +32,10 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
     useState<PersonHighlight | null>(null);
   const [currentFormula, setCurrentFormula] = useState<string>("");
 
-  // Hat colors - all valid colors for the rainbow effect
+  // Hat colors - all valid colors (updated with white instead of teal)
   const availableHatColors = [
     "#000000", // Black - 0
-    "#008080", // Teal - 1
+    "#ffffff", // White - 1 (changed from teal)
     "#ff0000", // Red - 2
     "#ffa500", // Orange - 3
     "#008000", // Green - 4

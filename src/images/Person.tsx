@@ -219,7 +219,7 @@ export class Person {
       <g>
         <circle
           cx={this.x}
-          cy={this.y-45}
+          cy={this.y - 45}
           r={35 * this.sizeScale} // Changed from 45 to 35 to match yellow circle size
           fill="none"
           stroke="#28a745"
@@ -462,18 +462,27 @@ export class Person {
   }
 
   getGuessColor(guess: number): string {
-    // For two hats riddle, only black and white
+    // Updated to use the correct color mapping for 10 hats riddle
     const guessColors = [
       "#000000", // Black - 0
-      "#ffffff", // White - 1
+      "#ffffff", // White - 1 (changed from teal)
+      "#ff0000", // Red - 2
+      "#ffa500", // Orange - 3
+      "#008000", // Green - 4
+      "#0000ff", // Blue - 5
+      "#8b00ff", // Violet - 6
+      "#ff00ff", // Magenta - 7
+      "#d2b48c", // Tan - 8
+      "#8b4513", // Brown - 9
     ];
 
     return guessColors[guess] || "#666666";
   }
 
   getTextColor(backgroundColor: string): string {
-    // For two hats riddle
-    return backgroundColor === "#000000" ? "white" : "black";
+    // Use white text for dark colors, black text for light colors
+    const darkColors = ["#000000", "#8b00ff", "#0000ff", "#008000", "#8b4513"];
+    return darkColors.includes(backgroundColor) ? "white" : "black";
   }
 
   // New method that renders guess without tooltip (used in Group.render())

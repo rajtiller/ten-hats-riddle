@@ -2,7 +2,7 @@ import { type JSX } from "react";
 
 export const hatColorToNumber: { [color: string]: number } = {
   "#000000": 0,
-  "#008080": 1, // Changed from #808080 (gray) to #008080 (teal)
+  "#ffffff": 1, // Changed from teal to white
   "#ff0000": 2,
   "#ffa500": 3,
   "#008000": 4,
@@ -33,7 +33,7 @@ export class HatClass implements Hat {
   private createRainbowGradient(id: string): JSX.Element {
     const allColors = [
       "#000000", // Black
-      "#008080", // Teal
+      "#ffffff", // White (changed from teal)
       "#ff0000", // Red
       "#ffa500", // Orange
       "#008000", // Green
@@ -79,7 +79,8 @@ export class HatClass implements Hat {
     sizeScale: number = 1.0,
     leftPosition?: number,
     rightPosition?: number,
-    isLeftSide?: boolean
+    isLeftSide?: boolean,
+    showOtherLabel?: boolean
   ): JSX.Element {
     if (this.type === "none") return <></>;
 
@@ -113,6 +114,9 @@ export class HatClass implements Hat {
       }
     } else if (isHalfBlackWhite) {
       // Half black/white hats show "other" label
+      displayText = "other";
+    } else if (showOtherLabel && !isCurrentPerson) {
+      // Show "other" label on non-current person's hat when requested
       displayText = "other";
     } else if (isWhite) {
       // White hats always show "1"
