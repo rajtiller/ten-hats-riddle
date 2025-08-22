@@ -195,14 +195,76 @@ export class Person {
     );
   }
 
-  renderHighlight(): JSX.Element {
-    if (!this.isHighlighted) return <></>;
-
-    if (this.isCurrentPerson) {
-      return this.renderIndexHighlight();
-    } else {
-      return this.renderHatHighlight();
+  renderSuccessHighlight(): JSX.Element {
+    // Check if this person guessed their own hat correctly
+    if (
+      this.guess === undefined ||
+      this.guess === -1 ||
+      !this.hatColors ||
+      this.hatColors.length <= this.personNumber
+    ) {
+      return <></>;
     }
+
+    const actualHatColor = this.hatColors[this.personNumber];
+    const guessedCorrectly = this.guess === actualHatColor;
+
+    if (!guessedCorrectly) return <></>;
+
+    return (
+      <g>
+        <circle
+          cx={this.x}
+          cy={this.y-45}
+          r={45 * this.sizeScale}
+          fill="none"
+          stroke="#28a745"
+          strokeWidth={4 * this.sizeScale}
+          opacity="0.9"
+          style={{
+            animation: "successPulse 2s ease-in-out infinite",
+          }}
+        />
+        <style>
+          {`
+            @keyframes successPulse {
+              0%, 100% { 
+                stroke-width: ${4 * this.sizeScale};
+                opacity: 0.9;
+                r: ${45 * this.sizeScale};
+              }
+              50% { 
+                stroke-width: ${6 * this.sizeScale};
+                opacity: 1;
+                r: ${48 * this.sizeScale};
+              }
+            }
+          `}
+        </style>
+      </g>
+    );
+  }
+
+  renderHighlight(): JSX.Element {
+    // First render success highlight if applicable
+    const successHighlight = this.renderSuccessHighlight();
+
+    // Then render regular highlight if needed
+    if (!this.isHighlighted) return successHighlight;
+
+    let regularHighlight = <></>;
+    if (this.isCurrentPerson) {
+      regularHighlight = this.renderIndexHighlight();
+    } else {
+      regularHighlight = this.renderHatHighlight();
+    }
+
+    return (
+      <g>
+        {successHighlight}
+        {regularHighlight}
+      </g>
+    );
   }
 
   renderHead(): JSX.Element {
