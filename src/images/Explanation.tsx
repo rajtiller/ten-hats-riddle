@@ -36,7 +36,7 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => {
             fontSize: "32px",
             color: "#333",
             textAlign: "center",
-            marginBottom: "30px",
+            marginBottom: "20px",
           }}
         >
           The Ten Hats Riddle
@@ -80,14 +80,30 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => {
             >
               i
             </strong>{" "}
-            's guess be? 
+            's guess be?
           </p>
-
+          <div
+            style={{
+              margin: "20px 0",
+              paddingTop: "0px",
+            }}
+          >
+            <img
+              src="/images/ten-hats-example.png"
+              alt="Ten people in a circle wearing colorful numbered hats, showing a counter-example where the formula fails"
+              style={{
+                maxWidth: "100%",
+                height: "auto",
+                border: "2px solid #333",
+                borderRadius: "8px",
+              }}
+            />
+          </div>
           {/* Action Buttons */}
           <div
             style={{
               textAlign: "center",
-              marginTop: "30px",
+              marginTop: "20px",
               marginBottom: "30px",
               display: "flex",
               gap: "20px",
