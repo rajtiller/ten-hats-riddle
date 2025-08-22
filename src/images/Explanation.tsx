@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
 interface ExplanationProps {
   onNavigateToPage: (pageIndex: number) => void;
@@ -6,6 +6,21 @@ interface ExplanationProps {
 
 const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => {
   const [showSolution, setShowSolution] = useState(false);
+  const solutionRef = useRef<HTMLHeadingElement>(null);
+
+  const handleSeeSlution = () => {
+    setShowSolution(!showSolution);
+
+    // If showing solution, scroll to it
+    if (!showSolution) {
+      setTimeout(() => {
+        solutionRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 100); // Small delay to ensure content is rendered
+    }
+  };
 
   return (
     <div
@@ -135,7 +150,7 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => {
             </button>
 
             <button
-              onClick={() => setShowSolution(!showSolution)}
+              onClick={handleSeeSlution}
               style={{
                 padding: "15px 30px",
                 fontSize: "18px",
@@ -162,7 +177,10 @@ const Explanation: React.FC<ExplanationProps> = ({ onNavigateToPage }) => {
           {/* Solution Section - Hidden by default */}
           {showSolution && (
             <>
-              <h2 style={{ color: "#007bff", marginTop: "45px" }}>
+              <h2
+                ref={solutionRef}
+                style={{ color: "#007bff", marginTop: "45px" }}
+              >
                 The Solution
               </h2>
               <p>
