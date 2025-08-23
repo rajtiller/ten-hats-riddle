@@ -261,7 +261,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -273,7 +273,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -285,7 +285,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -299,7 +299,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -313,7 +313,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -326,7 +326,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -338,7 +338,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -350,7 +350,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -362,7 +362,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -375,7 +375,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -387,7 +387,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -399,7 +399,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -412,7 +412,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -424,7 +424,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -436,7 +436,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -450,7 +450,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -462,7 +462,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -474,7 +474,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -486,7 +486,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -500,7 +500,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f9f9f9",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -517,7 +517,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f9f9f9",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -529,7 +529,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f9f9f9",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -541,7 +541,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f9f9f9",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -555,7 +555,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f9f9f9",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -567,7 +567,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f9f9f9",
+                      backgroundColor: "#92e28eff",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
