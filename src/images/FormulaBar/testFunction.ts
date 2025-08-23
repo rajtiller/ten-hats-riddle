@@ -4,15 +4,20 @@ export const testFormula = (formula: string): number[] => {
   const startTime = Date.now();
   const testDuration = 1000; // 1 second in milliseconds
 
+  let totalTests = 0;
+  let successfulTests = 0;
+  var firstCounterExample: number[] | null = null;
+
   while (Date.now() - startTime < testDuration) {
     // Generate random hat configuration
     const guess = generateRandomHats();
 
     // check if anyone guesses their hat color correctly
     if (!hasCorrectGuess(formula, guess)) {
-      return guess; // Found a counter-example
-    }
+      return guess;
+    } 
   }
+
 
   // No counter-example found - formula appears correct
   // Return a random valid configuration with a special marker

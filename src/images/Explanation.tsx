@@ -531,6 +531,108 @@ const Explanation: React.FC<ExplanationProps> = ({
                 (mod 10)
               </p>
 
+              <h2 style={{ color: "#007bff", marginTop: "30px" }}>
+                Unsolved Problems
+              </h2>
+
+              <div
+                style={{
+                  border: "2px solid #ffc107",
+                  backgroundColor: "#fff8dc",
+                  borderRadius: "8px",
+                  padding: "20px",
+                  marginBottom: "20px",
+                }}
+              >
+                <h3
+                  style={{
+                    color: "#856404",
+                    marginTop: "0",
+                    marginBottom: "15px",
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  🔍 Counter-Example Efficiency
+                </h3>
+                <p style={{ marginBottom: "0", color: "#333" }}>
+                  To disprove a formula, you don't need to check all 10^10 hat
+                  distributions. In fact, most formulas can be disproved with
+                  just a few well-chosen counter-examples. What is the fewest
+                  number of counter-examples necessary to disprove any incorrect
+                  formula?
+                </p>
+              </div>
+
+              <div
+                style={{
+                  border: "2px solid #17a2b8",
+                  backgroundColor: "#e7f7ff",
+                  borderRadius: "8px",
+                  padding: "20px",
+                  marginBottom: "30px",
+                }}
+              >
+                <h3
+                  style={{
+                    color: "#0c5460",
+                    marginTop: "0",
+                    marginBottom: "15px",
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  📊 Optimal Incorrect Formula
+                </h3>
+                <p style={{ marginBottom: "0", color: "#333" }}>
+                  Among all incorrect formulas, which one has the highest
+                  success rate? After some quick tests, the best I found was{" "}
+                  <code
+                    style={{
+                      backgroundColor: "#f8f9fa",
+                      padding: "2px 6px",
+                      borderRadius: "3px",
+                      fontFamily: "monospace",
+                      fontSize: "14px",
+                      border: "1px solid #dee2e6",
+                    }}
+                  >
+                    i + all
+                  </code>{" "}
+                  which achieved ~67% success rate. Most formulas achieve{" "}
+                  <code
+                    style={{
+                      backgroundColor: "#f8f9fa",
+                      padding: "2px 6px",
+                      borderRadius: "3px",
+                      fontFamily: "monospace",
+                      fontSize: "14px",
+                      border: "1px solid #dee2e6",
+                    }}
+                  >
+                    1-0.9^10 = 65.13%
+                  </code>{" "}
+                  success rate, which is the same as guessing randomly.
+                  <br />
+                  <br />
+                  Similarly, the worst algorithm I could find is{" "}
+                  <code
+                    style={{
+                      backgroundColor: "#f8f9fa",
+                      padding: "2px 6px",
+                      borderRadius: "3px",
+                      fontFamily: "monospace",
+                      fontSize: "14px",
+                      border: "1px solid #dee2e6",
+                    }}
+                  >
+                    all * all
+                  </code>{" "}
+                  which achieves a success rate of ~29%. We know that this
+                  percentage must be greater than 0%.
+                </p>
+              </div>
+
               <h2 style={{ color: "#007bff", marginTop: "30px" }}>Misc</h2>
               <p>
                 The nature of the problem guarantees any correct solution will
@@ -662,22 +764,29 @@ const Explanation: React.FC<ExplanationProps> = ({
                       top: "0%", // Top row
                       width: "20%",
                       height: "25%", // 25% of total height (50% of one row)
-                      backgroundColor: "#d18888ff", // Light red
-                      borderRight: "1px solid #dc3545",
-                      borderBottom: "1px solid #dc3545",
-                      fontFamily: "monospace",
-                      fontSize: "8px",
-                      fontWeight: "bold",
-                      color: "#ffffffff",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      zIndex: 1,
                     }}
                   >
-                    <div style={{ fontSize: "10px", lineHeight: "1.1" }}>
-                      Person 4 (5%)
+                    <div
+                      style={{
+                        backgroundColor: "#d18888ff", // Light red
+                        borderRight: "1px solid #dc3545",
+                        borderBottom: "1px solid #dc3545",
+                        fontFamily: "monospace",
+                        fontSize: "8px",
+                        fontWeight: "bold",
+                        color: "#ffffffff",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "100%",
+                        position: "relative",
+                        zIndex: 1,
+                      }}
+                    >
+                      <div style={{ fontSize: "10px", lineHeight: "1.1" }}>
+                        Person 4 (5%)
+                      </div>
                     </div>
                   </div>
 
@@ -689,22 +798,29 @@ const Explanation: React.FC<ExplanationProps> = ({
                       top: "25%", // Start of intersection
                       width: "20%",
                       height: "25%", // 25% of total height
-                      backgroundColor: "#8b0000", // Dark red for intersection
-                      borderRight: "1px solid #dc3545",
-                      borderBottom: "1px solid #dc3545",
-                      fontFamily: "monospace",
-                      fontSize: "6px",
-                      fontWeight: "bold",
-                      color: "#ffffffff",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      zIndex: 3,
                     }}
                   >
-                    <div style={{ fontSize: "10px", lineHeight: "1.1" }}>
-                      Person 4 & 9 (5%)
+                    <div
+                      style={{
+                        backgroundColor: "#8b0000", // Dark red for intersection
+                        borderRight: "1px solid #dc3545",
+                        borderBottom: "1px solid #dc3545",
+                        fontFamily: "monospace",
+                        fontSize: "6px",
+                        fontWeight: "bold",
+                        color: "#ffffffff",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "100%",
+                        position: "relative",
+                        zIndex: 3,
+                      }}
+                    >
+                      <div style={{ fontSize: "10px", lineHeight: "1.1" }}>
+                        Person 4 & 9 (5%)
+                      </div>
                     </div>
                   </div>
 
@@ -716,22 +832,29 @@ const Explanation: React.FC<ExplanationProps> = ({
                       top: "50%", // Bottom portion
                       width: "20%",
                       height: "25%", // 25% of total height
-                      backgroundColor: "#d18888ff", // Light red
-                      borderRight: "1px solid #dc3545",
-                      borderBottom: "1px solid #dc3545",
-                      fontFamily: "monospace",
-                      fontSize: "8px",
-                      fontWeight: "bold",
-                      color: "#ffffffff",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      zIndex: 2,
                     }}
                   >
-                    <div style={{ fontSize: "10px", lineHeight: "1.1" }}>
-                      Person 9
+                    <div
+                      style={{
+                        backgroundColor: "#d18888ff", // Light red
+                        borderRight: "1px solid #dc3545",
+                        borderBottom: "1px solid #dc3545",
+                        fontFamily: "monospace",
+                        fontSize: "8px",
+                        fontWeight: "bold",
+                        color: "#ffffffff",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "100%",
+                        position: "relative",
+                        zIndex: 2,
+                      }}
+                    >
+                      <div style={{ fontSize: "10px", lineHeight: "1.1" }}>
+                        Person 9
+                      </div>
                     </div>
                   </div>
 
@@ -743,33 +866,41 @@ const Explanation: React.FC<ExplanationProps> = ({
                       top: "75%", // Bottom 25%
                       width: "20%",
                       height: "25%", // 25% of total height
-                      backgroundColor: "white", // White for uncovered
-                      borderRight: "1px solid #dc3545",
-                      fontFamily: "monospace",
-                      fontSize: "6px",
-                      fontWeight: "bold",
-                      color: "#dc3545",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      zIndex: 1,
                     }}
                   >
-                    <div style={{ fontSize: "10px", lineHeight: "1.1" }}>
-                      Uncovered
+                    <div
+                      style={{
+                        backgroundColor: "white", // White for uncovered
+                        borderRight: "1px solid #dc3545",
+                        fontFamily: "monospace",
+                        fontSize: "6px",
+                        fontWeight: "bold",
+                        color: "#dc3545",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "100%",
+                        position: "relative",
+                        zIndex: 1,
+                      }}
+                    >
+                      <div style={{ fontSize: "10px", lineHeight: "1.1" }}>
+                        Uncovered
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Credit section */}
+              {/* Credit section - moved to bottom */}
               <div
                 style={{
-                  marginTop: "50px",
                   padding: "20px",
                   borderRadius: "8px",
                   textAlign: "left",
+                  marginTop: "30px",
+                  marginBottom: "20px",
                 }}
               >
                 <p style={{ marginBottom: "0", textAlign: "left" }}>
@@ -796,20 +927,10 @@ const Explanation: React.FC<ExplanationProps> = ({
                 </p>
               </div>
 
-              <h2 style={{ color: "#007bff", marginTop: "30px" }}>
-                Unsolved Problems
-              </h2>
-              <p style={{ marginBottom: "20px" }}>
-                To disprove a formula, you don't need to check all 10^10 hat distributions. In fact, most formulas can be disproved with just a few well-chosen counter-examples. What is the fewest number of counter-examples necssary to disprove any incorrect formula?
-              </p>
-              <p style={{ marginBottom: "20px" }}>
-                Among all incorrect formulas, which one has the highest success rate? ()
-              </p>
-
               <div
                 style={{
                   textAlign: "center",
-                  marginTop: "40px",
+                  marginTop: "20px",
                   display: "flex",
                   gap: "20px",
                   justifyContent: "center",
