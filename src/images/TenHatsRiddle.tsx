@@ -31,6 +31,7 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
   const [personHighlight, setPersonHighlight] =
     useState<PersonHighlight | null>(null);
   const [currentFormula, setCurrentFormula] = useState<string>("");
+  const [showHoverExplanation, setShowHoverExplanation] = useState(false);
 
   // Hat colors - all valid colors (updated with white instead of teal)
   const availableHatColors = [
@@ -256,7 +257,105 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
           position: "relative",
         }}
       >
+        {/* Question mark button on the left */}
+        <button
+          onMouseEnter={() => setShowHoverExplanation(true)}
+          onMouseLeave={() => setShowHoverExplanation(false)}
+          style={{
+            position: "absolute",
+            left: "815px",
+            top: "30%",
+            transform: "translateY(-50%)",
+            width: "28px",
+            height: "28px",
+            borderRadius: "50%",
+            backgroundColor: "transparent",
+            color: "#007bff",
+            border: "none",
+            cursor: "pointer",
+            fontSize: "16px",
+            fontWeight: "bold",
+            fontFamily: "monospace",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transition: "all 0.2s",
+            zIndex: 1001,
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.transform = "translateY(-50%) scale(1.3)";
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.transform = "translateY(-50%) scale(1)";
+          }}
+          title="Hover to learn about the Ten Hats Riddle"
+        >
+          ?
+        </button>
         Ten Hats Riddle
+        {/* Hover Explanation Tooltip */}
+        {showHoverExplanation && (
+          <div
+            style={{
+              position: "absolute",
+              top: "calc(100% + 15px)",
+              left: "calc(835px - 000px)",
+              backgroundColor: "white",
+              border: "2px solid #007bff",
+              borderRadius: "8px",
+              padding: "20px",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+              zIndex: 1000,
+              width: "400px",
+              fontFamily: "Arial, sans-serif",
+              fontSize: "14px",
+              color: "#333",
+              lineHeight: "1.5",
+            }}
+          >
+            <h3 style={{ margin: "0 0 15px 0", color: "#007bff" }}>
+              Ten Hats Riddle
+            </h3>
+            <p style={{ margin: "0 0 15px 0" }}>
+              Ten people stand in a circle, each wearing a hat with a random
+              number from 0-9. Each person can see everyone else's hat but not
+              their own.
+            </p>
+            <p style={{ margin: "0 0 15px 0" }}>
+              <strong>Goal:</strong> All players must simultaneously guess their
+              own hat number, with at least one person guessing correctly.
+            </p>
+            <p style={{ margin: "0 0 15px 0" }}>
+              <strong>Your task:</strong> Find a formula that person{" "}
+              <span
+                style={{
+                  fontFamily: "monospace",
+                  backgroundColor: "#f0f0f0",
+                  padding: "2px 4px",
+                  borderRadius: "3px",
+                }}
+              >
+                i
+              </span>{" "}
+              can use to determine their guess based on what they see.
+            </p>
+            <p style={{ margin: "0", fontSize: "12px", fontStyle: "italic" }}>
+              Use the buttons below to build your formula, then test it!
+            </p>
+            <div
+              style={{
+                position: "absolute",
+                bottom: "100%",
+                left: "07px",
+                width: "0",
+                height: "0",
+                borderLeft: "10px solid transparent",
+                borderRight: "10px solid transparent",
+                borderBottom: "10px solid #007bff",
+              }}
+            />
+          </div>
+        )}
       </div>
 
       {/* Helpful information div */}
@@ -278,7 +377,8 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
           position: "absolute",
         }}
       >
-        Stuck? Try the <i>Two Hat Riddle</i> ➜{/* Arrow pointing to dropdown menu */}
+        Stuck? Try the <i>Two Hat Riddle</i> ➜
+        {/* Arrow pointing to dropdown menu */}
       </div>
 
       {/* State indicator with success rate */}

@@ -1,5 +1,5 @@
-multiply isn't wirking for two hat problem
 add question mark button for ten hat riddle
-add misc info on explanation: any correct formula never has two people correct ever
+add misc info on explanation: credit to youtube person
 unsolved problem: find the minimum set of counter examples required to disprove all incorrect formulas, what incorrect formula has the higest success rate
+add links to social media?
 make everything supported for mobile
