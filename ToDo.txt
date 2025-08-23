@@ -1,6 +1,4 @@
-all button isn't highlightin everyone
 multiply isn't wirking for two hat problem
-other isn't hgilighting
 add question mark button for ten hat riddle
 add misc info on explanation: any correct formula never has two people correct ever
 unsolved problem: find the minimum set of counter examples required to disprove all incorrect formulas, what incorrect formula has the higest success rate

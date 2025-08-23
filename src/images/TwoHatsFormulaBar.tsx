@@ -623,6 +623,10 @@ const handleButtonClick = (value: string, context: ButtonContext) => {
     case "-":
       insertAtCursor(" - ");
       break;
+    case "×": // Add this case for the multiply button
+    case "x": // Also handle "x" for backward compatibility
+      insertAtCursor(" × ");
+      break;
     default:
       if (["0", "1"].includes(value)) {
         insertAtCursor(value);
