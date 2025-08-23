@@ -368,24 +368,74 @@ const FormulaBar: React.FC<
 
     switch (value) {
       case "(":
+        // Check if we need a space before opening parenthesis
+        const charBefore =
+          cursorPosition > 0 ? formula[cursorPosition - 1] : "";
+        if (/[0-9]/.test(charBefore)) {
+          insertAtCursor(" (");
+        } else {
+          insertAtCursor("(");
+        }
+        break;
       case ")":
+        // Check if we need to remove space before closing parenthesis
+        if (cursorPosition > 0 && formula[cursorPosition - 1] === " ") {
+          // Remove the space before inserting the closing parenthesis
+          const newFormula =
+            formula.slice(0, cursorPosition - 1) +
+            ")" +
+            formula.slice(cursorPosition);
+          setFormula(newFormula);
+          setCursorPosition(cursorPosition); // Position stays the same after removing space and adding )
+        } else {
+          insertAtCursor(")");
+        }
+        break;
       case "i":
-        insertAtCursor(value);
+        // Check what comes after cursor position for proper spacing
+        const charAfter =
+          cursorPosition < formula.length ? formula[cursorPosition] : "";
+        if (charAfter === ")") {
+          insertAtCursor(" i");
+        } else {
+          insertAtCursor(" i ");
+        }
         break;
       case "l[":
         // Insert complete bracket construct with cursor between brackets
-        insertAtCursor("l[]");
-        setCursorPosition(cursorPosition + 2); // Position cursor between brackets
+        const charAfterL =
+          cursorPosition < formula.length ? formula[cursorPosition] : "";
+        if (charAfterL === ")") {
+          insertAtCursor(" l[] ");
+          setCursorPosition(cursorPosition + 3); // Position cursor between brackets
+        } else {
+          insertAtCursor(" l[] ");
+          setCursorPosition(cursorPosition + 3); // Position cursor between brackets
+        }
         setWaitingForBracketNumber(true);
         break;
       case "r[":
         // Insert complete bracket construct with cursor between brackets
-        insertAtCursor("r[]");
-        setCursorPosition(cursorPosition + 2); // Position cursor between brackets
+        const charAfterR =
+          cursorPosition < formula.length ? formula[cursorPosition] : "";
+        if (charAfterR === ")") {
+          insertAtCursor(" r[] ");
+          setCursorPosition(cursorPosition + 3); // Position cursor between brackets
+        } else {
+          insertAtCursor(" r[] ");
+          setCursorPosition(cursorPosition + 3); // Position cursor between brackets
+        }
         setWaitingForBracketNumber(true);
         break;
       case "all":
-        insertAtCursor(" all ");
+        // Check what comes after cursor position for proper spacing
+        const charAfterAll =
+          cursorPosition < formula.length ? formula[cursorPosition] : "";
+        if (charAfterAll === ")") {
+          insertAtCursor(" all");
+        } else {
+          insertAtCursor(" all ");
+        }
         break;
       case "del":
         handleDelete();

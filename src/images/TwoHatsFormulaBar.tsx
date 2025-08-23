@@ -599,41 +599,11 @@ interface ButtonContext {
   insertAtCursor: (text: string) => void;
   setCursorPosition: (position: number) => void;
   cursorPosition: number;
+  formula: string;
+  setFormula: (formula: string) => void;
   handleDelete: () => void;
 }
 
-const handleButtonClick = (value: string, context: ButtonContext) => {
-  const { insertAtCursor, handleDelete } = context;
-
-  switch (value) {
-    case "(":
-    case ")":
-    case "i":
-      insertAtCursor(value);
-      break;
-    case "other":
-      insertAtCursor(" other ");
-      break;
-    case "del":
-      handleDelete();
-      break;
-    case "+":
-      insertAtCursor(" + ");
-      break;
-    case "-":
-      insertAtCursor(" - ");
-      break;
-    case "×": // Add this case for the multiply button
-    case "x": // Also handle "x" for backward compatibility
-      insertAtCursor(" × ");
-      break;
-    default:
-      if (["0", "1"].includes(value)) {
-        insertAtCursor(value);
-      }
-      break;
-  }
-};
 
 const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
   width = 600,
@@ -668,6 +638,75 @@ const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
     if (errorMessage) setErrorMessage("");
   };
 
+  const handleButtonClick = (value: string, context: ButtonContext) => {
+    const { insertAtCursor, handleDelete, setCursorPosition } = context;
+
+    switch (value) {
+      case "(":
+        // Check if we need a space before opening parenthesis
+        const charBefore =
+          cursorPosition > 0 ? formula[cursorPosition - 1] : "";
+        if (/[0-9]/.test(charBefore)) {
+          insertAtCursor(" (");
+        } else {
+          insertAtCursor("(");
+        }
+        break;
+      case ")":
+        // Check if we need to remove space before closing parenthesis
+        if (cursorPosition > 0 && formula[cursorPosition - 1] === " ") {
+          // Remove the space before inserting the closing parenthesis
+          const newFormula =
+            formula.slice(0, cursorPosition - 1) +
+            ")" +
+            formula.slice(cursorPosition);
+          setFormula(newFormula);
+          setCursorPosition(cursorPosition); // Position stays the same after removing space and adding )
+        } else {
+          insertAtCursor(")");
+        }
+        break;
+      case "i":
+        // Check what comes after cursor position for proper spacing
+        const charAfter =
+          cursorPosition < formula.length ? formula[cursorPosition] : "";
+        if (charAfter === ")") {
+          insertAtCursor(" i");
+        } else {
+          insertAtCursor(" i ");
+        }
+        break;
+      case "other":
+        // Check what comes after cursor position for proper spacing
+        const charAfterOther =
+          cursorPosition < formula.length ? formula[cursorPosition] : "";
+        if (charAfterOther === ")") {
+          insertAtCursor(" other");
+        } else {
+          insertAtCursor(" other ");
+        }
+        break;
+      case "del":
+        handleDelete();
+        break;
+      case "+":
+        insertAtCursor(" + ");
+        break;
+      case "-":
+        insertAtCursor(" - ");
+        break;
+      case "×": // Add this case for the multiply button
+      case "x": // Also handle "x" for backward compatibility
+        insertAtCursor(" × ");
+        break;
+      default:
+        if (["0", "1"].includes(value)) {
+          insertAtCursor(value);
+        }
+        break;
+    }
+  };
+
   const handleTest = () => {
     const validation = validateTwoHatsFormula(formula);
 
@@ -698,6 +737,8 @@ const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
     insertAtCursor,
     setCursorPosition,
     cursorPosition,
+    formula,
+    setFormula,
     handleDelete: () => handleDelete(deleteContext),
   };
 

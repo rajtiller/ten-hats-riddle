@@ -1,4 +1,6 @@
-fix spacing in formula bar, especially when it comes to literals (add automatic spaces to all literalts, i, r[?], l[?], like how it is for all and other)
+make sure '(i' renders as 'i(' and not '( i' in both two and ten hats
+by default, make it so the cursor is at the end of the most recent token, if a space needs to be added once another token is entered make that logic work
+disable arrow keys
 add links to social media?
 add link to my youtube video for a video explantion
 make everything supported for mobile
