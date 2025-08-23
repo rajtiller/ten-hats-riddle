@@ -124,13 +124,14 @@ const FormulaBar: React.FC<
         <div
           style={{
             position: "absolute",
-            top: "-35px",
-            left: "0",
-            right: "0",
+            top: "-36px", // Changed from "-35px" to be flush
+            left: "-2px", // Align with border of container below
+            right: "-2px", // Align with border of container below
+            width: "auto", // Let left/right positioning determine width
             backgroundColor: "#ffebee",
             color: "#d32f2f",
-            border: "1px solid #d32f2f",
-            borderRadius: "3px",
+            border: "2px solid #d32f2f", // Match border width of container below
+            borderRadius: "0px", // Remove border radius to be flush
             padding: "6px 8px",
             fontSize: "12px",
             fontFamily: "monospace",
@@ -138,6 +139,7 @@ const FormulaBar: React.FC<
             textAlign: "center",
             zIndex: 10,
             boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+            boxSizing: "border-box", // Include border in width calculation
           }}
         >
           ⚠️ {validation.error}
