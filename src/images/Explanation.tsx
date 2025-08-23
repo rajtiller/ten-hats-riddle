@@ -647,7 +647,8 @@ const Explanation: React.FC<ExplanationProps> = ({
                   >
                     i + all
                   </code>{" "}
-                  which achieved ~67% success rate. Most formulas achieve a ~65% success rate (
+                  which achieved ~67% success rate. Most formulas achieve a ~65%
+                  success rate (
                   <code
                     style={{
                       backgroundColor: "#f8f9fa",
@@ -659,10 +660,12 @@ const Explanation: React.FC<ExplanationProps> = ({
                     }}
                   >
                     1-0.9^10
-                  </code>), which is the same as guessing randomly.
+                  </code>
+                  ), which is the same as guessing randomly.
                   <br />
                   <br />
-                  Likewise, the worst algorithm is unknown, though it is proven to be {'>'}0%. The worst I could find is{" "}
+                  Likewise, the worst algorithm is unknown, though it is proven
+                  to be {">"}0%. The worst I could find is{" "}
                   <code
                     style={{
                       backgroundColor: "#f8f9fa",
@@ -953,15 +956,30 @@ const Explanation: React.FC<ExplanationProps> = ({
               {/* Credit section - moved to bottom */}
               <div
                 style={{
-                  padding: "20px",
+                  border: "2px solid #6c757d",
+                  backgroundColor: "#f8f9fa",
                   borderRadius: "8px",
-                  textAlign: "left",
+                  padding: "20px",
                   marginTop: "30px",
                   marginBottom: "20px",
                 }}
               >
-                <p style={{ marginBottom: "0", textAlign: "left" }}>
-                  <b>Credit:</b> This riddle was inspired by <i>Going Null'</i>s{" "}
+                <h2
+                  style={{
+                    color: "#6c757d",
+                    marginTop: "0",
+                    marginBottom: "15px",
+                  }}
+                >
+                  Credit
+                </h2>
+                <p
+                  style={{
+                    marginBottom: "0",
+                    color: "#333",
+                  }}
+                >
+                  This riddle was inspired by <i>Going Null'</i>s{" "}
                   <a
                     href="https://www.youtube.com/watch?v=6hVPNONm7xw"
                     target="_blank"
