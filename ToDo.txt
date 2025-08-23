@@ -1,5 +1,7 @@
-by default, make it so the cursor is at the end of the most recent token, if a space needs to be added once another token is entered make that logic work
-disable arrow keys
-add links to social media?
+recolor 'SOlution' to be more green, 'Misc' to be purple, unsolved rpoblems to be blue and yellow respeticvly, also swap the blues of optimal incorrect formula and the setup
+make credit its own section at the bottom
+replace ^ with superscript
+make percentage thigns in code or bold or smt
+add links to social media? LinkedIn?
 add link to my youtube video for a video explantion
 make everything supported for mobile

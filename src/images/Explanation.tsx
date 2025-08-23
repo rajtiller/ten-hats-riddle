@@ -91,14 +91,14 @@ const Explanation: React.FC<ExplanationProps> = ({
         >
           <div
             style={{
-              border: "2px solid #007bff",
-              backgroundColor: "#f0f8ff",
+              border: "2px solid #17a2b8",
+              backgroundColor: "#e7f7ff",
               borderRadius: "8px",
-              padding: "20px",
-              marginBottom: "30px",
+              padding: "15px",
+              marginBottom: "20px",
             }}
           >
-            <h2 style={{ color: "#007bff", marginTop: "0" }}>The Problem</h2>
+            <h2 style={{ color: "#17a2b8", marginTop: "0" }}>The Setup</h2>
             <p>
               Ten people are standing in a circle, each wearing a hat with a
               random number from 0-9 (repeats allowed). Each person can see
@@ -132,24 +132,52 @@ const Explanation: React.FC<ExplanationProps> = ({
               </strong>{" "}
               's guess be?
             </p>
-            <div
+          </div>
+
+          <div
+            style={{
+              border: "2px solid #dc3545",
+              backgroundColor: "#fff5f5",
+              borderRadius: "8px",
+              padding: "20px",
+              margin: "20px 0 30px 0",
+            }}
+          >
+            <h3
               style={{
-                margin: "20px 0",
-                paddingTop: "0px",
+                color: "#dc3545",
+                marginTop: "0",
+                marginBottom: "15px",
+                fontSize: "18px",
+                fontWeight: "bold",
               }}
             >
-              <img
-                src="/images/ten-hats-example.png"
-                alt="Ten people in a circle wearing colorful numbered hats, showing a counter-example where the formula fails"
+              🎥 Video Overview
+            </h3>
+            <p style={{ marginBottom: "0", color: "#333" }}>
+              For a in-depth explanation of this puzzle, check out{" "}
+              <a
+                href="https://www.youtube.com/watch?v=YOUR_VIDEO_ID"
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{
-                  maxWidth: "100%",
-                  height: "auto",
-                  border: "2px solid #333",
-                  borderRadius: "8px",
+                  color: "#007bff",
+                  textDecoration: "none",
+                  fontWeight: "bold",
                 }}
-              />
-            </div>
+                onMouseOver={(e) => {
+                  e.currentTarget.style.textDecoration = "underline";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.textDecoration = "none";
+                }}
+              >
+                this video
+              </a>{" "}
+              .
+            </p>
           </div>
+
           {/* Action Buttons */}
           <div
             style={{
@@ -215,8 +243,8 @@ const Explanation: React.FC<ExplanationProps> = ({
             <>
               <div
                 style={{
-                  border: "2px solid #28a745",
-                  backgroundColor: "#f8fff9",
+                  border: "2px solid #198754",
+                  backgroundColor: "#d4edda",
                   borderRadius: "8px",
                   padding: "20px",
                   marginBottom: "30px",
@@ -224,7 +252,7 @@ const Explanation: React.FC<ExplanationProps> = ({
               >
                 <h2
                   ref={solutionRef}
-                  style={{ color: "#007bff", marginTop: "0" }}
+                  style={{ color: "#198754", marginTop: "0" }}
                 >
                   Solution
                 </h2>
@@ -489,7 +517,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#f9f9f9",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -501,7 +529,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#f9f9f9",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -513,7 +541,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#f9f9f9",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -527,7 +555,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#f9f9f9",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -539,7 +567,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   <strong
                     style={{
                       fontFamily: "monospace",
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#f9f9f9",
                       padding: "2px 4px",
                       border: "1px solid #ddd",
                       borderRadius: "3px",
@@ -557,8 +585,8 @@ const Explanation: React.FC<ExplanationProps> = ({
 
               <div
                 style={{
-                  border: "2px solid #ffc107",
-                  backgroundColor: "#fff8dc",
+                  border: "2px solid #007bff",
+                  backgroundColor: "#f0f8ff",
                   borderRadius: "8px",
                   padding: "20px",
                   marginBottom: "20px",
@@ -566,7 +594,7 @@ const Explanation: React.FC<ExplanationProps> = ({
               >
                 <h3
                   style={{
-                    color: "#856404",
+                    color: "#0056b3",
                     marginTop: "0",
                     marginBottom: "15px",
                     fontSize: "18px",
@@ -586,8 +614,8 @@ const Explanation: React.FC<ExplanationProps> = ({
 
               <div
                 style={{
-                  border: "2px solid #17a2b8",
-                  backgroundColor: "#e7f7ff",
+                  border: "2px solid #ffc107",
+                  backgroundColor: "#fff8dc",
                   borderRadius: "8px",
                   padding: "20px",
                   marginBottom: "30px",
@@ -595,7 +623,7 @@ const Explanation: React.FC<ExplanationProps> = ({
               >
                 <h3
                   style={{
-                    color: "#0c5460",
+                    color: "#856404",
                     marginTop: "0",
                     marginBottom: "15px",
                     fontSize: "18px",
@@ -619,7 +647,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   >
                     i + all
                   </code>{" "}
-                  which achieved ~67% success rate. Most formulas achieve{" "}
+                  which achieved ~67% success rate. Most formulas achieve a ~65% success rate (
                   <code
                     style={{
                       backgroundColor: "#f8f9fa",
@@ -630,12 +658,11 @@ const Explanation: React.FC<ExplanationProps> = ({
                       border: "1px solid #dee2e6",
                     }}
                   >
-                    1-0.9^10 = 65.13%
-                  </code>{" "}
-                  success rate, which is the same as guessing randomly.
+                    1-0.9^10
+                  </code>), which is the same as guessing randomly.
                   <br />
                   <br />
-                  Similarly, the worst algorithm I could find is{" "}
+                  Likewise, the worst algorithm is unknown, though it is proven to be {'>'}0%. The worst I could find is{" "}
                   <code
                     style={{
                       backgroundColor: "#f8f9fa",
@@ -648,8 +675,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   >
                     all * all
                   </code>{" "}
-                  which achieves a success rate of ~29%. We know that this
-                  percentage must be greater than 0%.
+                  which achieves a success rate of ~29%.
                 </p>
               </div>
 
@@ -662,7 +688,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                   marginBottom: "30px",
                 }}
               >
-                <h2 style={{ color: "#007bff", marginTop: "0" }}>Misc</h2>
+                <h2 style={{ color: "#6f42c1", marginTop: "0" }}>Misc</h2>
                 <p>
                   The nature of the problem guarantees any correct solution will
                   have <b>exactly</b> one person guess their hat correctly each
