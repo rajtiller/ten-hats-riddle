@@ -604,7 +604,6 @@ interface ButtonContext {
   handleDelete: () => void;
 }
 
-
 const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
   width = 600,
   height = 120,
@@ -667,20 +666,40 @@ const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
         }
         break;
       case "i":
-        // Check what comes after cursor position for proper spacing
+        // Check what comes before and after cursor position for proper spacing
+        const charBeforeX =
+          cursorPosition > 0 ? formula[cursorPosition - 1] : "";
         const charAfter =
           cursorPosition < formula.length ? formula[cursorPosition] : "";
-        if (charAfter === ")") {
+
+        if (charBeforeX === "(") {
+          // If preceded by opening parenthesis, don't add leading space
+          if (charAfter === ")") {
+            insertAtCursor("i");
+          } else {
+            insertAtCursor("i ");
+          }
+        } else if (charAfter === ")") {
           insertAtCursor(" i");
         } else {
           insertAtCursor(" i ");
         }
         break;
       case "other":
-        // Check what comes after cursor position for proper spacing
+        // Check what comes before and after cursor position for proper spacing
+        const charBeforeOther =
+          cursorPosition > 0 ? formula[cursorPosition - 1] : "";
         const charAfterOther =
           cursorPosition < formula.length ? formula[cursorPosition] : "";
-        if (charAfterOther === ")") {
+
+        if (charBeforeOther === "(") {
+          // If preceded by opening parenthesis, don't add leading space
+          if (charAfterOther === ")") {
+            insertAtCursor("other");
+          } else {
+            insertAtCursor("other ");
+          }
+        } else if (charAfterOther === ")") {
           insertAtCursor(" other");
         } else {
           insertAtCursor(" other ");

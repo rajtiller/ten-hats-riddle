@@ -392,10 +392,20 @@ const FormulaBar: React.FC<
         }
         break;
       case "i":
-        // Check what comes after cursor position for proper spacing
+        // Check what comes before and after cursor position for proper spacing
+        const charBeforeX =
+          cursorPosition > 0 ? formula[cursorPosition - 1] : "";
         const charAfter =
           cursorPosition < formula.length ? formula[cursorPosition] : "";
-        if (charAfter === ")") {
+
+        if (charBeforeX === "(") {
+          // If preceded by opening parenthesis, don't add leading space
+          if (charAfter === ")") {
+            insertAtCursor("i");
+          } else {
+            insertAtCursor("i ");
+          }
+        } else if (charAfter === ")") {
           insertAtCursor(" i");
         } else {
           insertAtCursor(" i ");
@@ -403,10 +413,17 @@ const FormulaBar: React.FC<
         break;
       case "l[":
         // Insert complete bracket construct with cursor between brackets
+        const charBeforeL =
+          cursorPosition > 0 ? formula[cursorPosition - 1] : "";
         const charAfterL =
           cursorPosition < formula.length ? formula[cursorPosition] : "";
-        if (charAfterL === ")") {
-          insertAtCursor(" l[] ");
+
+        if (charBeforeL === "(") {
+          // If preceded by opening parenthesis, don't add leading space
+          insertAtCursor("l[] ");
+          setCursorPosition(cursorPosition + 2); // Position cursor between brackets
+        } else if (charAfterL === ")") {
+          insertAtCursor(" l[]");
           setCursorPosition(cursorPosition + 3); // Position cursor between brackets
         } else {
           insertAtCursor(" l[] ");
@@ -416,10 +433,17 @@ const FormulaBar: React.FC<
         break;
       case "r[":
         // Insert complete bracket construct with cursor between brackets
+        const charBeforeR =
+          cursorPosition > 0 ? formula[cursorPosition - 1] : "";
         const charAfterR =
           cursorPosition < formula.length ? formula[cursorPosition] : "";
-        if (charAfterR === ")") {
-          insertAtCursor(" r[] ");
+
+        if (charBeforeR === "(") {
+          // If preceded by opening parenthesis, don't add leading space
+          insertAtCursor("r[] ");
+          setCursorPosition(cursorPosition + 2); // Position cursor between brackets
+        } else if (charAfterR === ")") {
+          insertAtCursor(" r[]");
           setCursorPosition(cursorPosition + 3); // Position cursor between brackets
         } else {
           insertAtCursor(" r[] ");
@@ -428,10 +452,20 @@ const FormulaBar: React.FC<
         setWaitingForBracketNumber(true);
         break;
       case "all":
-        // Check what comes after cursor position for proper spacing
+        // Check what comes before and after cursor position for proper spacing
+        const charBeforeAll =
+          cursorPosition > 0 ? formula[cursorPosition - 1] : "";
         const charAfterAll =
           cursorPosition < formula.length ? formula[cursorPosition] : "";
-        if (charAfterAll === ")") {
+
+        if (charBeforeAll === "(") {
+          // If preceded by opening parenthesis, don't add leading space
+          if (charAfterAll === ")") {
+            insertAtCursor("all");
+          } else {
+            insertAtCursor("all ");
+          }
+        } else if (charAfterAll === ")") {
           insertAtCursor(" all");
         } else {
           insertAtCursor(" all ");
