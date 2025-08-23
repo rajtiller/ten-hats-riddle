@@ -1,6 +1,3 @@
-find out why Group.tsx and TwoHatsRiddle.tsx have errors
-make the yellow circle darker
-find why hovering over guess isn't always working
 limit the size of an input formula
 fix spacing on formula bar for ten hats riddle
 add misc info on explanation: could be a game to find a formula that passes certain counter example but not others

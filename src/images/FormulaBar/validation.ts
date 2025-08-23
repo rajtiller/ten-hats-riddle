@@ -73,6 +73,13 @@ export const validateFormula = (formula: string): ValidationResult => {
 
   // Enhanced tokenization to handle multi-digit numbers
   const tokens = tokenizeFormula(cleanFormula);
+  if (tokens.length > 12) {
+    return {
+      isValid: false,
+      error:
+        "Formula is too long'",
+    };
+  }
   return validateTokens(tokens);
 };
 
