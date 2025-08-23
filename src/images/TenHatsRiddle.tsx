@@ -264,18 +264,18 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
         style={{
           backgroundColor: "white",
           color: "black",
-          padding: "8px 0px", // Reduced from "8px 32px"
+          padding: "8px 8px", // Reduced from "8px 32px"
           margin: "5px 0 5px 0px",
           borderRadius: "6px",
           border: "1px solid #ccc",
           fontSize: "12px",
           fontFamily: "Arial, sans-serif",
           textAlign: "center",
-          maxWidth: "190px",
+          maxWidth: "200px",
           boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-          right: "-1065px",
-          top: "-30px",
-          position: "relative",
+          right: "175px",
+          top: "14px",
+          position: "absolute",
         }}
       >
         Stuck? Try the <i>Two Hat Riddle</i> ➜{/* Arrow pointing to dropdown menu */}
