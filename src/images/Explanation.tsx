@@ -763,6 +763,39 @@ const Explanation: React.FC<ExplanationProps> = ({
                 </div>
               </div>
 
+              {/* Credit section */}
+              <div
+                style={{
+                  marginTop: "50px",
+                  padding: "20px",
+                  borderRadius: "8px",
+                  textAlign: "left",
+                }}
+              >
+                <p style={{ marginBottom: "0", textAlign: "left" }}>
+                  <b>Credit:</b> This riddle was inspired by <i>Going Null'</i>s{" "}
+                  <a
+                    href="https://www.youtube.com/watch?v=6hVPNONm7xw"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      color: "#007bff",
+                      textDecoration: "none",
+                      fontWeight: "bold",
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.textDecoration = "underline";
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.textDecoration = "none";
+                    }}
+                  >
+                    YouTube video
+                  </a>{" "}
+                  on the Ten Hats Riddle.
+                </p>
+              </div>
+
               <div
                 style={{
                   textAlign: "center",
