@@ -39,7 +39,7 @@ function App() {
       case 1:
         return "140px"; // Two Hats Riddle - same width
       case 2:
-        return "100px"; // Solution - shorter
+        return "80px"; // Solution - shorter
       default:
         return "140px";
     }
@@ -76,7 +76,7 @@ function App() {
             textAlign: "center",
             textAlignLast: "center",
             width: getDropdownWidth(), // Dynamic width
-            minWidth: "100px", // Ensure minimum width
+            minWidth: "80px", // Ensure minimum width
           }}
         >
           <option value={0} style={{ textAlign: "center" }}>
@@ -86,7 +86,7 @@ function App() {
             Two Hats Riddle
           </option>
           <option value={2} style={{ textAlign: "center" }}>
-            Solution
+            Setup
           </option>
         </select>
       </div>

@@ -1,10 +1,6 @@
-make the guess box on the left for two people
-add spacing between everything in the formula bar
-make the displayed hats on the left actually be hats, like in the tne hat version
-make sure the ten hat version isn't changed
 add links from ten hat page to explanaiton page
-add description to correct version of two hat problem explaining that one person guesses same, one person guesses diff
 add misc info on explanation: could be a game to find a formula that passes certain counter example but not others
 unsolved problem: find the minimum set of counter examples required to disprove all incorrect formulas
 add explanation button to main page
+add explanatino button for two hats riddle
 make everything supported for mobile

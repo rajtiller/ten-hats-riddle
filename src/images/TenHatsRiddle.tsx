@@ -134,9 +134,15 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
     setPersonHighlight(null);
   };
 
+  const handleExplanationClick = () => {
+    if (onShowExplanation) {
+      onShowExplanation(); // No formula - goes to explanation part
+    }
+  };
+
   const handleSeeExplanation = () => {
     if (onShowExplanation) {
-      onShowExplanation(currentFormula);
+      onShowExplanation(currentFormula); // With formula - goes to solution part
     }
   };
 
@@ -234,7 +240,7 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
         overflow: "hidden",
       }}
     >
-      {/* Title - reduced height */}
+      {/* Title with explanation button */}
       <div
         style={{
           fontSize: "24px",
@@ -242,14 +248,37 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
           fontWeight: "bold",
           color: "#333",
           textAlign: "center",
-          padding: "10px 0", // Reduced from "20px 0"
-          height: "44px", // Fixed height instead of flexible padding
+          padding: "10px 0",
+          height: "44px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          position: "relative",
         }}
       >
         Ten Hats Riddle
+      </div>
+
+      {/* Helpful information div */}
+      <div
+        style={{
+          backgroundColor: "white",
+          color: "black",
+          padding: "8px 0px", // Reduced from "8px 32px"
+          margin: "5px 0 5px 0px",
+          borderRadius: "6px",
+          border: "1px solid #ccc",
+          fontSize: "12px",
+          fontFamily: "Arial, sans-serif",
+          textAlign: "center",
+          maxWidth: "190px",
+          boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+          right: "-1065px",
+          top: "-30px",
+          position: "relative",
+        }}
+      >
+        Stuck? Try the <i>Two Hat Riddle</i> ➜{/* Arrow pointing to dropdown menu */}
       </div>
 
       {/* State indicator with success rate */}
