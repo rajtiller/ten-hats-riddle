@@ -761,15 +761,6 @@ const Explanation: React.FC<ExplanationProps> = ({
                     </div>
                   </div>
                 </div>
-                <p
-                  style={{ marginTop: "10px", fontSize: "14px", color: "#666" }}
-                >
-                  <em>
-                    When Person 9 shifts their strategy to also cover Case 4, it
-                    creates an overlap (dark red intersection) and leaves Case 9
-                    uncovered (white area).
-                  </em>
-                </p>
               </div>
 
               <div

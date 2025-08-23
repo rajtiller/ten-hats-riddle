@@ -299,7 +299,7 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
             style={{
               position: "absolute",
               top: "calc(100% + 15px)",
-              left: "calc(835px - 000px)",
+              left: "calc(835px - 000px)", // Position tooltip below the question mark at 835px
               backgroundColor: "white",
               border: "2px solid #007bff",
               borderRadius: "8px",
@@ -313,40 +313,12 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
               lineHeight: "1.5",
             }}
           >
-            <h3 style={{ margin: "0 0 15px 0", color: "#007bff" }}>
-              Ten Hats Riddle
-            </h3>
-            <p style={{ margin: "0 0 15px 0" }}>
-              Ten people stand in a circle, each wearing a hat with a random
-              number from 0-9. Each person can see everyone else's hat but not
-              their own.
-            </p>
-            <p style={{ margin: "0 0 15px 0" }}>
-              <strong>Goal:</strong> All players must simultaneously guess their
-              own hat number, with at least one person guessing correctly.
-            </p>
-            <p style={{ margin: "0 0 15px 0" }}>
-              <strong>Your task:</strong> Find a formula that person{" "}
-              <span
-                style={{
-                  fontFamily: "monospace",
-                  backgroundColor: "#f0f0f0",
-                  padding: "2px 4px",
-                  borderRadius: "3px",
-                }}
-              >
-                i
-              </span>{" "}
-              can use to determine their guess based on what they see.
-            </p>
-            <p style={{ margin: "0", fontSize: "12px", fontStyle: "italic" }}>
-              Use the buttons below to build your formula, then test it!
-            </p>
+            {/* Arrow pointing up to the question mark */}
             <div
               style={{
                 position: "absolute",
                 bottom: "100%",
-                left: "07px",
+                left: "07px", // Center the arrow above the tooltip, aligned with question mark
                 width: "0",
                 height: "0",
                 borderLeft: "10px solid transparent",
@@ -354,6 +326,66 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
                 borderBottom: "10px solid #007bff",
               }}
             />
+
+            <h3
+              style={{
+                margin: "0 0 15px 0",
+                color: "#007bff",
+                fontSize: "18px",
+                fontWeight: "bold",
+              }}
+            >
+              The Ten Hats Riddle
+            </h3>
+
+            <div style={{ marginBottom: "15px" }}>
+              <strong>The Setup:</strong> Ten people will randomly be assigned a
+              hat numbered 0-9 (repeats allowed). Each person can see everyone
+              else's hat but not their own.
+            </div>
+
+            <div style={{ marginBottom: "15px" }}>
+              <strong>The Goal:</strong> All people will simultaneously guess
+              their own hat number. At least one person must be correct.
+            </div>
+
+            <div style={{ marginBottom: "15px" }}>
+              <strong>Variables you can use:</strong>
+              <div
+                style={{
+                  backgroundColor: "#f8f9fa",
+                  padding: "10px",
+                  borderRadius: "4px",
+                  marginTop: "8px",
+                  fontFamily: "monospace",
+                  fontSize: "13px",
+                }}
+              >
+                • <strong>i</strong> - your own index (0-9)
+                                <br />• <strong>0-9</strong> - literal numbers
+
+                <br />• <strong>all</strong> - sum of all visible hat numbers
+                <br />• <strong>l[n]</strong> - person n positions to your left
+                <br />• <strong>r[n]</strong> - person n positions to your right
+                <br />• <strong>+, -, ×</strong> - mathematical operators
+                <br />• <strong>( )</strong> - parentheses for grouping
+              </div>
+            </div>
+
+            <div
+              style={{
+                color: "#28a745",
+                fontWeight: "bold",
+                fontSize: "13px",
+                backgroundColor: "#e8f5e8",
+                padding: "8px",
+                borderRadius: "4px",
+                border: "1px solid #28a745",
+              }}
+            >
+              There are 10^10 combinations!
+              <br /> Can you find a strategy that work for all of them? 🧠
+            </div>
           </div>
         )}
       </div>
