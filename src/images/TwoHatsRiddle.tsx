@@ -30,6 +30,7 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
     useState<PersonHighlight | null>(null);
   const [currentFormula, setCurrentFormula] = useState<string>("");
   const [showExplanation, setShowExplanation] = useState(false); // Add this state
+  const [showHoverExplanation, setShowHoverExplanation] = useState(false); // New state for hover explanation
 
   // Hat colors for two hats riddle - only black and white
   const availableHatColors = [
@@ -393,7 +394,7 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
         overflow: "hidden",
       }}
     >
-      {/* Title */}
+      {/* Title with explanation button */}
       <div
         style={{
           fontSize: "24px",
@@ -406,9 +407,139 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          position: "relative",
         }}
       >
+        {/* Question mark button on the left */}
+        <button
+          onMouseEnter={() => setShowHoverExplanation(true)}
+          onMouseLeave={() => setShowHoverExplanation(false)}
+          style={{
+            position: "absolute",
+            left: "835px",
+            top: "50%",
+            transform: "translateY(-50%)",
+            width: "28px",
+            height: "28px",
+            borderRadius: "50%",
+            backgroundColor: "transparent", // Changed from "#007bff" to transparent
+            color: "#007bff", // Changed from "white" to blue
+            cursor: "pointer",
+            fontSize: "16px",
+            fontWeight: "bold",
+            fontFamily: "monospace",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transition: "all 0.2s",
+            zIndex: 1001,
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.backgroundColor = "#007bff"; // Blue background on hover
+            e.currentTarget.style.color = "white"; // White text on hover
+            e.currentTarget.style.transform = "translateY(-50%) scale(1.1)";
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.backgroundColor = "transparent"; // Back to transparent
+            e.currentTarget.style.color = "#007bff"; // Back to blue text
+            e.currentTarget.style.transform = "translateY(-50%) scale(1)";
+          }}
+          title="Hover to learn about the Two Hats Riddle"
+        >
+          ?
+        </button>
         Two Hats Riddle
+        {/* Hover Explanation Tooltip */}
+        {showHoverExplanation && (
+          <div
+            style={{
+              position: "absolute",
+              top: "calc(100% + 15px)",
+              left: "calc(835px - 000px)", // Position tooltip below the question mark at 835px
+              backgroundColor: "white",
+              border: "2px solid #007bff",
+              borderRadius: "8px",
+              padding: "20px",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+              zIndex: 1000,
+              width: "400px",
+              fontFamily: "Arial, sans-serif",
+              fontSize: "14px",
+              color: "#333",
+              lineHeight: "1.5",
+            }}
+          >
+            {/* Arrow pointing up to the question mark */}
+            <div
+              style={{
+                position: "absolute",
+                bottom: "100%",
+                left: "07px", // Center the arrow above the tooltip, aligned with question mark
+                width: "0",
+                height: "0",
+                borderLeft: "10px solid transparent",
+                borderRight: "10px solid transparent",
+                borderBottom: "10px solid #007bff",
+              }}
+            />
+
+            <h3
+              style={{
+                margin: "0 0 15px 0",
+                color: "#007bff",
+                fontSize: "18px",
+                fontWeight: "bold",
+              }}
+            >
+              The Two Hats Riddle
+            </h3>
+
+            <div style={{ marginBottom: "15px" }}>
+              <strong>The Setup:</strong> Two people will randomly be assigned a hat that's
+              either black (0) or white (1). Each person can see the other's hat
+              but not their own.
+            </div>
+
+            <div style={{ marginBottom: "15px" }}>
+              <strong>The Goal:</strong> Both people must simultaneously guess
+              their own hat color. At least one person must guess their own hat correctly.
+            </div>
+
+            <div style={{ marginBottom: "15px" }}>
+              <strong>Variables you can use:</strong>
+              <div
+                style={{
+                  backgroundColor: "#f8f9fa",
+                  padding: "10px",
+                  borderRadius: "4px",
+                  marginTop: "8px",
+                  fontFamily: "monospace",
+                  fontSize: "13px",
+                }}
+              >
+                • <strong>i</strong> - your own index (0 or 1)
+                <br />• <strong>other</strong> - the other person's hat color
+                <br />• <strong>0, 1</strong> - literal numbers
+                <br />• <strong>+, -, ×</strong> - mathematical operators
+                <br />• <strong>( )</strong> - parentheses for grouping
+              </div>
+            </div>
+
+            <div
+              style={{
+                color: "#28a745",
+                fontWeight: "bold",
+                fontSize: "13px",
+                backgroundColor: "#e8f5e8",
+                padding: "8px",
+                borderRadius: "4px",
+                border: "1px solid #28a745",
+              }}
+            >
+              There's only four combinations!<br/> Should be easy, right? 😉
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Hat Color Legend */}
@@ -513,35 +644,40 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
                 </h3>
 
                 <div style={{ marginBottom: "15px" }}>
-                  <strong>Key Insight:</strong> The two hats will either have the same or different numbers.
+                  <strong>Key Insight:</strong> The two hats will either have
+                  the same or different numbers.
                 </div>
 
                 <div style={{ marginBottom: "15px" }}>
-                  <strong>The Strategy:</strong> One person guesses the hat they see. One person guesses the opposite of the hat they see.
+                  <strong>The Strategy:</strong> One person guesses the hat they
+                  see. One person guesses the opposite of the hat they see.
                 </div>
 
                 <div style={{ marginBottom: "15px" }}>
-                  <strong>Putting It Into Practice:</strong>{" "}<strong
-                                style={{
-                                  fontFamily: "monospace",
-                                  backgroundColor: "#f8f9fa",
-                                  padding: "2px 4px",
-                                  border: "1px solid #ddd",
-                                  borderRadius: "3px",
-                                }}
-                              >
-                                i + other
-                              </strong> / <strong
-                                            style={{
-                                              fontFamily: "monospace",
-                                              backgroundColor: "#f8f9fa",
-                                              padding: "2px 4px",
-                                              border: "1px solid #ddd",
-                                              borderRadius: "3px",
-                                            }}
-                                          >
-                                            i - other
-                                          </strong>
+                  <strong>Putting It Into Practice:</strong>{" "}
+                  <strong
+                    style={{
+                      fontFamily: "monospace",
+                      backgroundColor: "#f8f9fa",
+                      padding: "2px 4px",
+                      border: "1px solid #ddd",
+                      borderRadius: "3px",
+                    }}
+                  >
+                    i + other
+                  </strong>{" "}
+                  /{" "}
+                  <strong
+                    style={{
+                      fontFamily: "monospace",
+                      backgroundColor: "#f8f9fa",
+                      padding: "2px 4px",
+                      border: "1px solid #ddd",
+                      borderRadius: "3px",
+                    }}
+                  >
+                    i - other
+                  </strong>
                   <div
                     style={{
                       backgroundColor: "#f8f9fa",
@@ -553,8 +689,8 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
                     }}
                   >
                     → Person 0 guesses both hats have the same number{"   "}
-                    <br /><br />
-                    → Person 1 guesses the hats have different numbers
+                    <br />
+                    <br />→ Person 1 guesses the hats have different numbers
                   </div>
                 </div>
 
