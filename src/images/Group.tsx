@@ -82,11 +82,14 @@ export class Group {
         return personIndex === currentPersonIndex;
       case "all":
         return personIndex !== currentPersonIndex;
-      case "hat":
-        return personIndex !== currentPersonIndex;
       case "other":
         // For two hats riddle, "other" means the other person
         return this.numberOfPeople === 2 && personIndex !== currentPersonIndex;
+      case "left":
+        return ((personIndex - currentPersonIndex) % this.numberOfPeople === highlight.position)
+
+      case "right":
+        return ((-personIndex + currentPersonIndex+10) % this.numberOfPeople === highlight.position)
       default:
         return false;
     }
