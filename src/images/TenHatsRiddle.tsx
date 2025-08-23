@@ -259,25 +259,26 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
         Ten Hats Riddle
       </div>
 
+      {/* Helpful information div */}
       <div
         style={{
           backgroundColor: "white",
           color: "black",
-          padding: "8px 8x", // Reduced from "8px 32px"
+          padding: "8px 0px", // Reduced from "8px 32px"
           margin: "5px 0 5px 0px",
           borderRadius: "6px",
           border: "1px solid #ccc",
-          fontSize: "14px",
+          fontSize: "12px",
           fontFamily: "Arial, sans-serif",
           textAlign: "center",
-          maxWidth: "240px",
+          maxWidth: "190px",
           boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-          right: "175px",
-          top: "14px",
-          position: "absolute",
+          right: "-1065px",
+          top: "-30px",
+          position: "relative",
         }}
       >
-        <b>Stuck?</b> Try the <i>Two Hat Riddle</i>{" "} →
+        Stuck? Try the <i>Two Hat Riddle</i> ➜{/* Arrow pointing to dropdown menu */}
       </div>
 
       {/* State indicator with success rate */}
@@ -300,7 +301,7 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
         {appState === "input"
           ? ""
           : appState === "results" && testResult?.isCorrect
-          ? "Example Shown Above"
+          ? "✅ Correct Formula - Example Shown"
           : appState === "results" && !testResult?.isCorrect
           ? "❌ Counter-Example Found"
           : ""}
