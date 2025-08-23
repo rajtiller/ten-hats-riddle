@@ -1,0 +1,6 @@
+add links from ten hat page to explanaiton page
+add misc info on explanation: could be a game to find a formula that passes certain counter example but not others
+unsolved problem: find the minimum set of counter examples required to disprove all incorrect formulas
+add explanatino button for two hats riddle
+make sure default page is setup page, not ten hats riddle
+make everything supported for mobile

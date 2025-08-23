@@ -1,31 +1,21 @@
 import React from "react";
 
-interface ButtonGridProps {
+interface TwoHatsButtonGridProps {
   onButtonClick: (value: string) => void;
-  waitingForBracketNumber?: boolean;
-  disabled?: boolean; // New prop to disable all buttons
+  disabled?: boolean;
 }
 
-const ButtonGrid: React.FC<ButtonGridProps> = ({
+const TwoHatsButtonGrid: React.FC<TwoHatsButtonGridProps> = ({
   onButtonClick,
-  waitingForBracketNumber = false,
-  disabled = false, // Default to enabled
+  disabled = false,
 }) => {
   const buttons = [
-    ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "del"],
-    ["i", "r[", "l[", "all", "(", ")", "+", "-", "x"],
+    ["0", "1", "(", ")", "del"],
+    ["i", "other", "+", "-", "×"], // Removed ÷ as requested
   ];
 
-  const isButtonEnabled = (buttonValue: string): boolean => {
-    if (disabled) return false; // Disable all buttons when disabled prop is true
-    if (!waitingForBracketNumber) return true;
-
-    // When waiting for bracket number, only allow 1-9 and del (not 0)
-    return /^[1-9]$/.test(buttonValue) || buttonValue === "del";
-  };
-
   const getButtonStyle = (buttonValue: string) => {
-    const isEnabled = isButtonEnabled(buttonValue);
+    const isEnabled = !disabled;
 
     return {
       padding: "6px 4px",
@@ -57,7 +47,7 @@ const ButtonGrid: React.FC<ButtonGridProps> = ({
           }}
         >
           {row.map((buttonValue) => {
-            const isEnabled = isButtonEnabled(buttonValue);
+            const isEnabled = !disabled;
 
             return (
               <button
@@ -86,4 +76,4 @@ const ButtonGrid: React.FC<ButtonGridProps> = ({
   );
 };
 
-export default ButtonGrid;
+export default TwoHatsButtonGrid;

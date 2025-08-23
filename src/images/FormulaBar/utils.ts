@@ -66,22 +66,19 @@ export const insertTextAtPosition = (
   insertText: string
 ): { newText: string; newPosition: number } => {
   const newText = text.slice(0, position) + insertText + text.slice(position);
-  return {
-    newText,
-    newPosition: position + insertText.length,
-  };
+  const newPosition = position + insertText.length;
+  return { newText, newPosition };
 };
 
 export const deleteAtPosition = (
   text: string,
   position: number
 ): { newText: string; newPosition: number } => {
-  if (position > 0) {
-    const newText = text.slice(0, position - 1) + text.slice(position);
-    return {
-      newText,
-      newPosition: position - 1,
-    };
+  if (position <= 0) {
+    return { newText: text, newPosition: position };
   }
-  return { newText: text, newPosition: position };
+
+  const newText = text.slice(0, position - 1) + text.slice(position);
+  const newPosition = position - 1;
+  return { newText, newPosition };
 };

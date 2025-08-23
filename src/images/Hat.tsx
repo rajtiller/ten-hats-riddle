@@ -1,0 +1,295 @@
+import { type JSX } from "react";
+
+export const hatColorToNumber: { [color: string]: number } = {
+  "#000000": 0,
+  "#ffffff": 1, // Changed from teal to white
+  "#ff0000": 2,
+  "#ffa500": 3,
+  "#008000": 4,
+  "#0000ff": 5,
+  "#8b00ff": 6,
+  "#ff00ff": 7,
+  "#d2b48c": 8,
+  "#8b4513": 9,
+};
+
+export interface Hat {
+  color: string;
+  type: "cap" | "beanie" | "fedora" | "cowboy" | "none";
+}
+
+export class HatClass implements Hat {
+  color: string;
+  type: "cap" | "beanie" | "fedora" | "cowboy" | "none";
+
+  constructor(
+    color: string = "#ff0000",
+    type: "cap" | "beanie" | "fedora" | "cowboy" | "none" = "cap"
+  ) {
+    this.color = color;
+    this.type = type;
+  }
+
+  private createRainbowGradient(id: string): JSX.Element {
+    const allColors = [
+      "#000000", // Black
+      "#ffffff", // White (changed from teal)
+      "#ff0000", // Red
+      "#ffa500", // Orange
+      "#008000", // Green
+      "#0000ff", // Blue
+      "#8b00ff", // Violet
+      "#ff00ff", // Magenta
+      "#d2b48c", // Tan
+      "#8b4513", // Brown
+    ];
+
+    return (
+      <defs>
+        <linearGradient id={id} x1="0%" y1="0%" x2="100%" y2="0%">
+          {allColors.map((color, index) => (
+            <stop
+              key={index}
+              offset={`${(index / (allColors.length - 1)) * 100}%`}
+              stopColor={color}
+            />
+          ))}
+        </linearGradient>
+      </defs>
+    );
+  }
+
+  private createHalfBlackWhiteGradient(id: string): JSX.Element {
+    return (
+      <defs>
+        <linearGradient id={id} x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="50%" stopColor="#000000" />
+          <stop offset="50%" stopColor="#ffffff" />
+        </linearGradient>
+      </defs>
+    );
+  }
+
+  render(
+    x: number,
+    y: number,
+    angle: number = 0,
+    isCurrentPerson: boolean = false,
+    isOnPerson: boolean = true,
+    sizeScale: number = 1.0,
+    leftPosition?: number,
+    rightPosition?: number,
+    isLeftSide?: boolean,
+    showOtherLabel?: boolean
+  ): JSX.Element {
+    if (this.type === "none") return <></>;
+
+    const transform = `translate(${x}, ${y}) rotate(${angle}) scale(${sizeScale})`;
+    const hatNumber = hatColorToNumber[this.color];
+    const isRainbow = this.color === "rainbow";
+    const isHalfBlackWhite = this.color === "half-black-white";
+    const isWhite = this.color === "#ffffff";
+    const gradientId = `gradient-${Math.random().toString(36).substring(2, 9)}`;
+
+    // Determine what text to display
+    let displayText = "";
+
+    if (isCurrentPerson && hatNumber === undefined && !isHalfBlackWhite) {
+      // Current person always shows "???" regardless of hat color
+      displayText = "???";
+    } else if (isRainbow) {
+      // Rainbow hats show position labels
+      if (
+        isLeftSide !== false &&
+        leftPosition !== undefined &&
+        leftPosition > 0
+      ) {
+        displayText = `l[${leftPosition}]`;
+      } else if (
+        isLeftSide === false &&
+        rightPosition !== undefined &&
+        rightPosition > 0
+      ) {
+        displayText = `r[${rightPosition}]`;
+      }
+    } else if (isHalfBlackWhite) {
+      // Half black/white hats show "other" label
+      displayText = "other";
+    } else if (showOtherLabel && !isCurrentPerson) {
+      // Show "other" label on non-current person's hat when requested
+      displayText = "other";
+    } else if (isWhite) {
+      // White hats always show "1"
+      displayText = "1";
+    } else if (!isRainbow && !isHalfBlackWhite && hatNumber !== undefined) {
+      // Other colored hats show their number (including 0)
+      displayText = hatNumber.toString();
+    }
+
+    const renderHatText = (yPos: number) =>
+      displayText ? (
+        <>
+          <text
+            x="0"
+            y={yPos}
+            textAnchor="middle"
+            fontSize={displayText.length > 2 ? "12" : "18"} // Adjusted font sizes
+            fontFamily="monospace"
+            fontWeight="900"
+            fill="white"
+            stroke="white"
+            strokeWidth="2.5"
+          >
+            {displayText}
+          </text>
+          <text
+            x="0"
+            y={yPos}
+            textAnchor="middle"
+            fontSize={displayText.length > 2 ? "12" : "18"} // Adjusted font sizes
+            fontFamily="monospace"
+            fontWeight="900"
+            fill="black"
+            stroke="black"
+            strokeWidth="0.4"
+          >
+            {displayText}
+          </text>
+        </>
+      ) : null;
+
+    let fillColor = this.color;
+    if (isRainbow) {
+      fillColor = `url(#${gradientId})`;
+    } else if (isHalfBlackWhite) {
+      fillColor = `url(#${gradientId})`;
+    }
+
+    // Apply small lift offset only for hats on people, not legend hats
+    const liftOffset = isOnPerson ? -5 : 0;
+
+    switch (this.type) {
+      case "cap":
+        return (
+          <g transform={transform}>
+            {isRainbow && this.createRainbowGradient(gradientId)}
+            {isHalfBlackWhite && this.createHalfBlackWhiteGradient(gradientId)}
+            <ellipse
+              cx="0"
+              cy={-22 + liftOffset}
+              rx="25"
+              ry="17"
+              fill={fillColor}
+              stroke="#000"
+              strokeWidth="1.4"
+            />
+            <ellipse
+              cx="0"
+              cy={-17 + liftOffset}
+              rx="31"
+              ry="7"
+              fill={fillColor}
+              stroke="#000"
+              strokeWidth="1.4"
+            />
+            {renderHatText(-20 + liftOffset)}
+          </g>
+        );
+      case "beanie":
+        return (
+          <g transform={transform}>
+            {isRainbow && this.createRainbowGradient(gradientId)}
+            {isHalfBlackWhite && this.createHalfBlackWhiteGradient(gradientId)}
+            <ellipse
+              cx="0"
+              cy={-22 + liftOffset}
+              rx="25"
+              ry="17"
+              fill={fillColor}
+              stroke="#000"
+              strokeWidth="1.4"
+            />
+            <rect
+              x="-25"
+              y={-8 + liftOffset}
+              width="50"
+              height="7"
+              fill={fillColor}
+              stroke="#000"
+              strokeWidth="1.4"
+            />
+            {renderHatText(-15 + liftOffset)}
+          </g>
+        );
+      case "fedora":
+        return (
+          <g transform={transform}>
+            {isRainbow && this.createRainbowGradient(gradientId)}
+            {isHalfBlackWhite && this.createHalfBlackWhiteGradient(gradientId)}
+            <ellipse
+              cx="0"
+              cy={-17 + liftOffset}
+              rx="36"
+              ry="8"
+              fill={fillColor}
+              stroke="#000"
+              strokeWidth="1.4"
+            />
+            <ellipse
+              cx="0"
+              cy={-28 + liftOffset}
+              rx="22"
+              ry="14"
+              fill={fillColor}
+              stroke="#000"
+              strokeWidth="1.4"
+            />
+            <rect
+              x="-22"
+              y={-22 + liftOffset}
+              width="45"
+              height="3"
+              fill="#333"
+            />
+            {renderHatText(-21 + liftOffset)}
+          </g>
+        );
+      case "cowboy":
+        return (
+          <g transform={transform}>
+            {isRainbow && this.createRainbowGradient(gradientId)}
+            {isHalfBlackWhite && this.createHalfBlackWhiteGradient(gradientId)}
+            <ellipse
+              cx="0"
+              cy={-14 + liftOffset}
+              rx="42"
+              ry="11"
+              fill={fillColor}
+              stroke="#000"
+              strokeWidth="1.4"
+            />
+            <ellipse
+              cx="0"
+              cy={-31 + liftOffset}
+              rx="20"
+              ry="17"
+              fill={fillColor}
+              stroke="#000"
+              strokeWidth="1.4"
+            />
+            <line
+              x1="0"
+              y1={-39 + liftOffset}
+              x2="0"
+              y2={-22 + liftOffset}
+              stroke="#000"
+              strokeWidth="1.4"
+            />
+            {renderHatText(-25 + liftOffset)}
+          </g>
+        );
+      default:
+        return <></>;
+    }
+  }
+}

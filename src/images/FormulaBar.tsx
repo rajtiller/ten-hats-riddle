@@ -97,8 +97,8 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
         insertAtCursor(" ÷ ");
         break;
       default:
-        // Numbers 0-9
-        if (/^[0-9]$/.test(value)) {
+        // Numbers 1-9 (removed 0)
+        if (/^[1-9]$/.test(value)) {
           insertAtCursor(value);
         }
         break;
@@ -170,7 +170,6 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
             index === matchingBracket ||
             index === beforeMatchingBracket;
 
-          const beforeCursor = index < cursorPosition;
           const atCursor = index === cursorPosition;
 
           return (
@@ -216,8 +215,8 @@ const FormulaBar: React.FC<FormulaBarProps> = ({
   };
 
   const buttons = [
-    ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
-    ["(", ")", "]", "r[", "l[", "p[", "mod", "i", "+", "-", "x", "÷", "del"],
+    ["i", "1", "2", "3", "4", "5", "6", "7", "8", "9", "del"],
+    ["(", ")", "r[", "l[", "p[", "]", "+", "-", "x", "÷", "mod"],
   ];
 
   return (
