@@ -6,7 +6,7 @@ import Explanation from "./images/Explanation";
 
 function App() {
   const [selectedPage, setSelectedPage] = useState(2);
-  const [explanationFormula, setExplanationFormula] = useState<string>("");
+  const [_, setExplanationFormula] = useState<string>("");
   const [shouldAutoScroll, setShouldAutoScroll] = useState(false);
 
   const handlePageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

@@ -170,15 +170,8 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
   // Convert PersonHighlight to the format expected by Group component
   const getGroupPersonHighlight = () => {
     if (!personHighlight || appState !== "input") return null;
-
-    if (personHighlight.type === "current") {
-      return { personIndex: currentPersonIndex, type: "current" as const };
-    } else if (personHighlight.type === "other") {
-      const otherPersonIndex = currentPersonIndex === 0 ? 1 : 0;
-      return { personIndex: otherPersonIndex, type: "hat" as const };
-    }
-
-    return null;
+    
+    return personHighlight;
   };
 
   const SuccessMessage: React.FC = () => (
