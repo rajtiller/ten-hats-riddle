@@ -531,16 +531,18 @@ const Explanation: React.FC<ExplanationProps> = ({
                 (mod 10)
               </p>
 
-              <h2 style={{ color: "#007bff", marginTop: "15px" }}>Misc</h2>
+              <h2 style={{ color: "#007bff", marginTop: "30px" }}>Misc</h2>
               <p>
-                1. The nature of the problem guarantees any correct solution will have <b>exactly</b> one person
-                guess their hat correctly each round. As visualized below, each person can only guess their
-                hat correctly 10% of the time. This is just enough to perfectly cover 100% of cases. Any overlaps 
-                (situations where multiple people guess correctly) would leave some spots uncovered 
-                (no one guesses correctly).
+                The nature of the problem guarantees any correct solution will
+                have <b>exactly</b> one person guess their hat correctly each
+                round. As visualized below, each person can only guess their hat
+                correctly <b>10%</b> of the time. This is <b>just enough</b> to
+                perfectly cover <b>100%</b> of cases. Any overlaps (situations
+                where multiple people guess correctly) would leave some spots
+                uncovered (no one guesses correctly).
               </p>
 
-<div style={{ margin: "20px 0" }}>
+              <div style={{ margin: "20px 0" }}>
                 <p style={{ marginBottom: "10px" }}>
                   <strong>Perfect Play:</strong>
                 </p>
@@ -565,8 +567,12 @@ const Explanation: React.FC<ExplanationProps> = ({
                       <div
                         key={personIndex}
                         style={{
-                          borderRight: personIndex % 5 === 4 ? "none" : "1px solid #007bff",
-                          borderBottom: personIndex < 5 ? "1px solid #007bff" : "none",
+                          borderRight:
+                            personIndex % 5 === 4
+                              ? "none"
+                              : "1px solid #007bff",
+                          borderBottom:
+                            personIndex < 5 ? "1px solid #007bff" : "none",
                           padding: "8px 4px",
                           textAlign: "center",
                           backgroundColor: "#d18888ff",
@@ -589,8 +595,182 @@ const Explanation: React.FC<ExplanationProps> = ({
                 </div>
               </div>
 
+              <div style={{ margin: "20px 0" }}>
+                <p style={{ marginBottom: "10px" }}>
+                  <strong>Suboptimal Strategy (failure):</strong>
+                </p>
+                <div
+                  style={{
+                    border: "2px solid #dc3545",
+                    maxWidth: "500px",
+                    margin: "0 auto",
+                    overflow: "hidden",
+                    position: "relative",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(5, 1fr)",
+                      gridTemplateRows: "repeat(2, 1fr)",
+                      width: "100%",
+                      height: "120px",
+                    }}
+                  >
+                    {/* Render all boxes except 4 and 9 normally (light red) */}
+                    {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((personIndex) => (
+                      <div
+                        key={personIndex}
+                        style={{
+                          borderRight:
+                            personIndex % 5 === 4
+                              ? "none"
+                              : "1px solid #dc3545",
+                          borderBottom:
+                            personIndex < 5 ? "1px solid #dc3545" : "none",
+                          padding: "8px 4px",
+                          textAlign: "center",
+                          backgroundColor: "#d18888ff",
+                          fontFamily: "monospace",
+                          fontSize: "10px",
+                          fontWeight: "bold",
+                          color: "#ffffffff",
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <div style={{ fontSize: "9px", marginTop: "2px" }}>
+                          Person {personIndex} correct (10%)
+                        </div>
+                      </div>
+                    ))}
 
-              
+                    {/* Empty space for box 4 - will be covered by overlays */}
+                    <div style={{ backgroundColor: "transparent" }}></div>
+
+                    {/* Empty space for box 9 - will be covered by overlays */}
+                    <div style={{ backgroundColor: "transparent" }}></div>
+                  </div>
+
+                  {/* Person 4's box (normal position - top 50% of last column) */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: "80%", // 4th column (0-indexed: 4 * 20% = 80%)
+                      top: "0%", // Top row
+                      width: "20%",
+                      height: "25%", // 25% of total height (50% of one row)
+                      backgroundColor: "#d18888ff", // Light red
+                      borderRight: "1px solid #dc3545",
+                      borderBottom: "1px solid #dc3545",
+                      fontFamily: "monospace",
+                      fontSize: "8px",
+                      fontWeight: "bold",
+                      color: "#ffffffff",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      zIndex: 1,
+                    }}
+                  >
+                    <div style={{ fontSize: "10px", lineHeight: "1.1" }}>
+                      Person 4 (5%)
+                    </div>
+                  </div>
+
+                  {/* Intersection area (darker red - middle 25% of last column) */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: "80%", // Same x position
+                      top: "25%", // Start of intersection
+                      width: "20%",
+                      height: "25%", // 25% of total height
+                      backgroundColor: "#8b0000", // Dark red for intersection
+                      borderRight: "1px solid #dc3545",
+                      borderBottom: "1px solid #dc3545",
+                      fontFamily: "monospace",
+                      fontSize: "6px",
+                      fontWeight: "bold",
+                      color: "#ffffffff",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      zIndex: 3,
+                    }}
+                  >
+                    <div style={{ fontSize: "10px", lineHeight: "1.1" }}>
+                      Person 4 & 9 (5%)
+                    </div>
+                  </div>
+
+                  {/* Person 9's box (bottom 25% of last column) */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: "80%", // Same x position as Person 4
+                      top: "50%", // Bottom portion
+                      width: "20%",
+                      height: "25%", // 25% of total height
+                      backgroundColor: "#d18888ff", // Light red
+                      borderRight: "1px solid #dc3545",
+                      borderBottom: "1px solid #dc3545",
+                      fontFamily: "monospace",
+                      fontSize: "8px",
+                      fontWeight: "bold",
+                      color: "#ffffffff",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      zIndex: 2,
+                    }}
+                  >
+                    <div style={{ fontSize: "10px", lineHeight: "1.1" }}>
+                      Person 9
+                    </div>
+                  </div>
+
+                  {/* Uncovered area (white - bottom 25% of last column) */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: "80%", // Same x position
+                      top: "75%", // Bottom 25%
+                      width: "20%",
+                      height: "25%", // 25% of total height
+                      backgroundColor: "white", // White for uncovered
+                      borderRight: "1px solid #dc3545",
+                      fontFamily: "monospace",
+                      fontSize: "6px",
+                      fontWeight: "bold",
+                      color: "#dc3545",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      zIndex: 1,
+                    }}
+                  >
+                    <div style={{ fontSize: "10px", lineHeight: "1.1" }}>
+                      Uncovered
+                    </div>
+                  </div>
+                </div>
+                <p
+                  style={{ marginTop: "10px", fontSize: "14px", color: "#666" }}
+                >
+                  <em>
+                    When Person 9 shifts their strategy to also cover Case 4, it
+                    creates an overlap (dark red intersection) and leaves Case 9
+                    uncovered (white area).
+                  </em>
+                </p>
+              </div>
 
               <div
                 style={{

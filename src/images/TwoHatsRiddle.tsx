@@ -492,8 +492,7 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
 
             <div style={{ marginBottom: "15px" }}>
               <strong>The Goal:</strong> Both people must simultaneously guess
-              their own hat color. At least one person must guess their own hat
-              correctly.
+              their own hat color. At least one person must be correct.
             </div>
 
             <div style={{ marginBottom: "15px" }}>
