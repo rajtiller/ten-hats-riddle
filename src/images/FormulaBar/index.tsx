@@ -3,8 +3,8 @@ import { type FormulaBarProps } from "./types";
 import { insertTextAtPosition } from "./utils";
 import { useKeyboardControls } from "./useKeyboardControls";
 import { validateFormula } from "./validation";
-import { handleDelete } from "./deleteHandlers";
-import { handleButtonClick } from "./buttonHandlers";
+import { handleDelete, type DeleteContext } from "./deleteHandlers";
+import { handleButtonClick, handleButtonClickEnhanced } from "./buttonHandlers";
 import { testFormula } from "./testFunction";
 import FormulaDisplay, { type PersonHighlight } from "./FormulaDisplay";
 import ButtonGrid from "./ButtonGrid";
@@ -31,6 +31,31 @@ const FormulaBar: React.FC<
   const [waitingForBracketNumber, setWaitingForBracketNumber] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  // Function to count symbols (excluding parentheses and spaces)
+  const countSymbols = (text: string): number => {
+    // Remove parentheses and spaces, then count remaining characters
+    return text.replace(/[() ]/g, "").length;
+  };
+
+  // Enhanced validation that includes symbol count
+  const validateFormulaWithSymbolLimit = (formula: string) => {
+    const baseValidation = validateFormula(formula);
+    const symbolCount = countSymbols(formula);
+
+    if (symbolCount > 10) {
+      return {
+        isValid: false,
+        error: `Formula has ${symbolCount} symbols but maximum is 10 (excluding parentheses and spaces)`,
+        isSymbolLimitExceeded: true,
+      };
+    }
+
+    return {
+      ...baseValidation,
+      isSymbolLimitExceeded: false,
+    };
+  };
+
   // Update formula when initialFormula changes
   useEffect(() => {
     if (initialFormula !== undefined) {
@@ -52,8 +77,154 @@ const FormulaBar: React.FC<
     if (errorMessage) setErrorMessage("");
   };
 
+  // Enhanced delete handler matching TwoHatsFormulaBar
+  const handleDeleteEnhanced = (context: DeleteContext) => {
+    const {
+      formula,
+      cursorPosition,
+      setFormula,
+      setCursorPosition,
+      setWaitingForBracketNumber,
+      setErrorMessage,
+      errorMessage,
+    } = context;
+
+    if (cursorPosition <= 0) return;
+
+    const charAtCursor = formula[cursorPosition - 1];
+
+    // Check if cursor is at the end of "all" and delete the entire word
+    if (
+      cursorPosition >= 3 &&
+      formula.substring(cursorPosition - 3, cursorPosition) === "all"
+    ) {
+      const charBeforeAll =
+        cursorPosition > 3 ? formula[cursorPosition - 4] : "";
+      if (!/[a-zA-Z]/.test(charBeforeAll)) {
+        let newFormula =
+          formula.slice(0, cursorPosition - 3) + formula.slice(cursorPosition);
+        newFormula = newFormula.trimEnd();
+        setFormula(newFormula);
+        setCursorPosition(Math.min(cursorPosition - 3, newFormula.length));
+        setWaitingForBracketNumber(false);
+        if (errorMessage) setErrorMessage("");
+        return;
+      }
+    }
+
+    // Check for multi-character tokens like "l[1]", "r[2]", etc.
+    const patterns = [
+      { regex: /l\[\d*\]?$/, minLength: 2 }, // l[, l[1], l[1], etc.
+      { regex: /r\[\d*\]?$/, minLength: 2 }, // r[, r[1], r[1], etc.
+    ];
+
+    for (const pattern of patterns) {
+      const beforeCursor = formula.substring(0, cursorPosition);
+      const match = beforeCursor.match(pattern.regex);
+      if (match && match[0].length >= pattern.minLength) {
+        let newFormula =
+          formula.slice(0, cursorPosition - match[0].length) +
+          formula.slice(cursorPosition);
+        newFormula = newFormula.trimEnd();
+        setFormula(newFormula);
+        setCursorPosition(
+          Math.min(cursorPosition - match[0].length, newFormula.length)
+        );
+        setWaitingForBracketNumber(false);
+        if (errorMessage) setErrorMessage("");
+        return;
+      }
+    }
+
+    // Enhanced delete behavior for space + preceding item
+    if (charAtCursor === " ") {
+      let deleteStart = cursorPosition - 1; // Start at the space
+
+      // Skip any additional spaces
+      while (deleteStart > 0 && formula[deleteStart - 1] === " ") {
+        deleteStart--;
+      }
+
+      // Now find the start of the non-space item before the space(s)
+      if (deleteStart > 0) {
+        const charBeforeSpaces = formula[deleteStart - 1];
+
+        // Handle "all" word
+        if (
+          deleteStart >= 3 &&
+          formula.substring(deleteStart - 3, deleteStart) === "all"
+        ) {
+          const charBeforeAll = deleteStart > 3 ? formula[deleteStart - 4] : "";
+          if (!/[a-zA-Z]/.test(charBeforeAll)) {
+            deleteStart -= 3; // Delete "all"
+          } else {
+            deleteStart -= 1; // Just delete one character
+          }
+        }
+        // Handle bracket expressions like l[1], r[2]
+        else if (charBeforeSpaces === "]") {
+          // Look backwards to find the opening bracket
+          let bracketStart = deleteStart - 2;
+          while (bracketStart >= 0 && formula[bracketStart] !== "[") {
+            bracketStart--;
+          }
+          if (bracketStart >= 1 && /[lr]/.test(formula[bracketStart - 1])) {
+            deleteStart = bracketStart - 1; // Delete entire l[x] or r[x]
+          } else {
+            deleteStart -= 1; // Just delete one character
+          }
+        }
+        // Handle single character items (numbers, operators, parentheses, 'i')
+        else if (/[0-9+\-×()i]/.test(charBeforeSpaces)) {
+          deleteStart -= 1; // Delete one character
+        }
+        // Default: delete one character
+        else {
+          deleteStart -= 1;
+        }
+      }
+
+      // Delete from deleteStart to cursorPosition (inclusive of space(s))
+      let newFormula =
+        formula.slice(0, deleteStart) + formula.slice(cursorPosition);
+      newFormula = newFormula.trimEnd();
+      setFormula(newFormula);
+      setCursorPosition(Math.min(deleteStart, newFormula.length));
+      setWaitingForBracketNumber(false);
+      if (errorMessage) setErrorMessage("");
+      return;
+    }
+
+    // Handle 'i' variable deletion
+    if (charAtCursor === "i") {
+      const charBeforeI = cursorPosition > 1 ? formula[cursorPosition - 2] : "";
+      const charAfterI =
+        cursorPosition < formula.length ? formula[cursorPosition] : "";
+
+      if (!/[a-zA-Z]/.test(charBeforeI) && !/[a-zA-Z]/.test(charAfterI)) {
+        let newFormula =
+          formula.slice(0, cursorPosition - 1) + formula.slice(cursorPosition);
+        newFormula = newFormula.trimEnd();
+        setFormula(newFormula);
+        setCursorPosition(Math.min(cursorPosition - 1, newFormula.length));
+        setWaitingForBracketNumber(false);
+        if (errorMessage) setErrorMessage("");
+        return;
+      }
+    }
+
+    // Default delete behavior - single character
+    let newFormula =
+      formula.slice(0, cursorPosition - 1) + formula.slice(cursorPosition);
+    newFormula = newFormula.trimEnd();
+    setFormula(newFormula);
+    setCursorPosition(Math.min(cursorPosition - 1, newFormula.length));
+    setWaitingForBracketNumber(false);
+    if (errorMessage) setErrorMessage("");
+  };
+
   const handleTest = () => {
-    const validation = validateFormula(formula);
+    const validation = validateFormulaWithSymbolLimit(formula);
 
     if (!validation.isValid) {
       setErrorMessage(validation.error);
@@ -86,18 +257,18 @@ const FormulaBar: React.FC<
     setCursorPosition,
     cursorPosition,
     setWaitingForBracketNumber,
-    handleDelete: () => handleDelete(deleteContext),
+    handleDelete: () => handleDeleteEnhanced(deleteContext),
   };
 
   useKeyboardControls({
     cursorPosition,
     formula,
     setCursorPosition,
-    onDelete: () => handleDelete(deleteContext),
-    disabled: showAsReadOnly, // Disable keyboard controls when read-only
+    onDelete: () => handleDeleteEnhanced(deleteContext),
+    disabled: showAsReadOnly,
   });
 
-  const validation = validateFormula(formula);
+  const validation = validateFormulaWithSymbolLimit(formula);
   const displayError = validation.error && !errorMessage.startsWith("✅");
 
   return (
@@ -106,12 +277,12 @@ const FormulaBar: React.FC<
         width,
         height: height + (errorMessage ? 30 : 0),
         border: "2px solid #333",
-        padding: "5px",
+        padding: "8px", // Increased padding to match TwoHats
         backgroundColor: "#f5f5f5",
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
-        gap: "2px",
+        gap: "8px", // Increased gap to match TwoHats
         position: "relative",
       }}
     >
@@ -124,14 +295,14 @@ const FormulaBar: React.FC<
         <div
           style={{
             position: "absolute",
-            top: "-32px", // Changed from "-35px" to be flush
-            left: "-2px", // Align with border of container below
-            right: "-2px", // Align with border of container below
-            width: "auto", // Let left/right positioning determine width
+            top: "-32px",
+            left: "-2px",
+            right: "-2px",
+            width: "auto",
             backgroundColor: "#ffebee",
             color: "#d32f2f",
-            border: "2px solid #d32f2f", // Match border width of container below
-            borderRadius: "0px", // Remove border radius to be flush
+            border: "2px solid #d32f2f",
+            borderRadius: "0px",
             padding: "6px 8px",
             fontSize: "12px",
             fontFamily: "monospace",
@@ -139,7 +310,7 @@ const FormulaBar: React.FC<
             textAlign: "center",
             zIndex: 10,
             boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-            boxSizing: "border-box", // Include border in width calculation
+            boxSizing: "border-box",
           }}
         >
           ⚠️ {validation.error}
@@ -246,10 +417,14 @@ const FormulaBar: React.FC<
       <div style={{ flex: "1 1 auto" }}>
         <ButtonGrid
           onButtonClick={(value) =>
-            handleButtonClick(value, buttonContext, waitingForBracketNumber)
+            handleButtonClickEnhanced(
+              value,
+              buttonContext,
+              waitingForBracketNumber
+            )
           }
           waitingForBracketNumber={waitingForBracketNumber}
-          disabled={showAsReadOnly} // Disable all buttons when in read-only mode
+          disabled={showAsReadOnly}
         />
       </div>
     </div>
