@@ -533,32 +533,64 @@ const Explanation: React.FC<ExplanationProps> = ({
 
               <h2 style={{ color: "#007bff", marginTop: "15px" }}>Misc</h2>
               <p>
-                This guarantees there's no situation in which two or more people
-                guess their own hat color correctly, as the sumHats mod 10
-                cannot be both 0 and 1.
+                1. The nature of the problem guarantees any correct solution will have <b>exactly</b> one person
+                guess their hat correctly each round. As visualized below, each person can only guess their
+                hat correctly 10% of the time. This is just enough to perfectly cover 100% of cases. Any overlaps 
+                (situations where multiple people guess correctly) would leave some spots uncovered 
+                (no one guesses correctly).
               </p>
 
-              <p style={{ marginTop: "20px" }}>
-                All calculations are done modulo 10, so the final guess is
-                always a single digit (0-9).
-              </p>
+<div style={{ margin: "20px 0" }}>
+                <p style={{ marginBottom: "10px" }}>
+                  <strong>Perfect Play:</strong>
+                </p>
+                <div
+                  style={{
+                    border: "2px solid #007bff",
+                    maxWidth: "500px",
+                    margin: "0 auto",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(5, 1fr)",
+                      gridTemplateRows: "repeat(2, 1fr)",
+                      width: "100%",
+                      height: "120px",
+                    }}
+                  >
+                    {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((personIndex) => (
+                      <div
+                        key={personIndex}
+                        style={{
+                          borderRight: personIndex % 5 === 4 ? "none" : "1px solid #007bff",
+                          borderBottom: personIndex < 5 ? "1px solid #007bff" : "none",
+                          padding: "8px 4px",
+                          textAlign: "center",
+                          backgroundColor: "#d18888ff",
+                          fontFamily: "monospace",
+                          fontSize: "10px",
+                          fontWeight: "bold",
+                          color: "#ffffffff",
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <div style={{ fontSize: "9px", marginTop: "2px" }}>
+                          Person {personIndex} correct (10%)
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
 
-              <h2 style={{ color: "#007bff", marginTop: "30px" }}>
-                Try More Examples
-              </h2>
-              <p>Some other formulas that work include:</p>
-              <ul
-                style={{
-                  fontFamily: "monospace",
-                  backgroundColor: "#f8f9fa",
-                  padding: "15px",
-                }}
-              >
-                <li>i + all</li>
-                <li>i + l[1] + l[2] + l[3] + l[4]</li>
-                <li>all - r[1] - r[2]</li>
-                <li>i × 3 + all</li>
-              </ul>
+
+              
 
               <div
                 style={{
@@ -600,7 +632,7 @@ const Explanation: React.FC<ExplanationProps> = ({
                     fontSize: "18px",
                     fontFamily: "monospace",
                     fontWeight: "bold",
-                    backgroundColor: "#6c757d",
+                    backgroundColor: "#9a18c6ff",
                     color: "white",
                     border: "none",
                     borderRadius: "8px",
@@ -608,10 +640,10 @@ const Explanation: React.FC<ExplanationProps> = ({
                     transition: "background-color 0.2s",
                   }}
                   onMouseOver={(e) => {
-                    e.currentTarget.style.backgroundColor = "#5a6268";
+                    e.currentTarget.style.backgroundColor = "#70158eff";
                   }}
                   onMouseOut={(e) => {
-                    e.currentTarget.style.backgroundColor = "#6c757d";
+                    e.currentTarget.style.backgroundColor = "#9a18c6ff";
                   }}
                 >
                   Try Two Hats Riddle
