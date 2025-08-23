@@ -198,6 +198,13 @@ const tokenizeFormula = (cleanFormula: string): Token[] => {
 };
 
 const validateTokens = (tokens: Token[]): ValidationResult => {
+    if (tokens.length > 12) {
+    return {
+      isValid: false,
+      error:
+        "Formula is too long'",
+    };
+  }
   // Rule 1: Must start and end with a number or variable
   if (tokens.length === 0) {
     return { isValid: false, error: "Formula cannot be empty" };
