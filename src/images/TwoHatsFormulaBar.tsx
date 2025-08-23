@@ -198,10 +198,10 @@ const tokenizeFormula = (cleanFormula: string): Token[] => {
 };
 
 const validateTokens = (tokens: Token[]): ValidationResult => {
-  if (tokens.length > 12) {
+  if (tokens.length > 11) {
     return {
       isValid: false,
-       error: `Token count of [${tokens.length}] exceeds limit of 12`,
+      error: `Token count of [${tokens.length}] exceeds limit of 11`,
     };
   }
   // Rule 1: Must start and end with a number or variable
@@ -622,9 +622,6 @@ const handleButtonClick = (value: string, context: ButtonContext) => {
       break;
     case "-":
       insertAtCursor(" - ");
-      break;
-    case "×":
-      insertAtCursor(" × ");
       break;
     default:
       if (["0", "1"].includes(value)) {

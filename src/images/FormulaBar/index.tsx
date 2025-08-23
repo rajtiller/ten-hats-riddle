@@ -396,7 +396,8 @@ const FormulaBar: React.FC<
       case "-":
         insertAtCursor(" - ");
         break;
-      case "×":
+      case "×": // Changed from "×" to match ButtonGrid
+      case "x": // Also handle "x" for backward compatibility
         insertAtCursor(" × ");
         break;
       default:

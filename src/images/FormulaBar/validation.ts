@@ -73,11 +73,11 @@ export const validateFormula = (formula: string): ValidationResult => {
 
   // Enhanced tokenization to handle multi-digit numbers
   const tokens = tokenizeFormula(cleanFormula);
-  if (tokens.length > 12) {
+  if (tokens.length > 11) {
     return {
       isValid: false,
       error:
-        `Token count of [${tokens.length}] exceeds limit of 12`,
+        `Token count of [${tokens.length}] exceeds limit of 11`,
     };
   }
   return validateTokens(tokens);

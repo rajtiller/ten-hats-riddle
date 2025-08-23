@@ -1,6 +1,4 @@
 multiple bytton doens't seem to be working
-add misc info on explanation: could be a game to find a formula that passes certain counter example but not others
+add misc info on explanation: any correct formula never has two people correct ever
 unsolved problem: find the minimum set of counter examples required to disprove all incorrect formulas, what incorrect formula has the higest success rate
-add explanatino button for two hats riddle
-make sure default page is setup page, not ten hats riddle
 make everything supported for mobile

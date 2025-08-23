@@ -118,7 +118,8 @@ export const handleButtonClickEnhanced = (
     case "-":
       insertAtCursor(" - ");
       break;
-    case "x":
+    case "×": // Changed from "x" to "×"
+    case "x": // Also handle "x" for backward compatibility
       insertAtCursor(" × ");
       break;
     default:

@@ -9,15 +9,15 @@ interface ButtonGridProps {
 const ButtonGrid: React.FC<ButtonGridProps> = ({
   onButtonClick,
   waitingForBracketNumber = false,
-  disabled = false, // Default to enabled
+  disabled = false,
 }) => {
   const buttons = [
     ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "del"],
-    ["i", "r[", "l[", "all", "(", ")", "+", "-", "x"],
+    ["i", "r[", "l[", "all", "(", ")", "+", "-", "×"], // Changed from "x" to "×"
   ];
 
   const isButtonEnabled = (buttonValue: string): boolean => {
-    if (disabled) return false; // Disable all buttons when disabled prop is true
+    if (disabled) return false;
     if (!waitingForBracketNumber) return true;
 
     // When waiting for bracket number, only allow 1-9 and del (not 0)
