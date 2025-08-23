@@ -272,7 +272,7 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
         {appState === "input"
           ? ""
           : appState === "results" && testResult?.isCorrect
-          ? "✅ Correct Formula - Example Shown"
+          ? "Example Shown Above"
           : appState === "results" && !testResult?.isCorrect
           ? "❌ Counter-Example Found"
           : ""}

@@ -3,7 +3,6 @@ add spacing between everything in the formula bar
 make the displayed hats on the left actually be hats, like in the tne hat version
 make sure the ten hat version isn't changed
 add links from ten hat page to explanaiton page
-randomize order in which hat combinations are checked for 2 hat problem
 add description to correct version of two hat problem explaining that one person guesses same, one person guesses diff
 add misc info on explanation: could be a game to find a formula that passes certain counter example but not others
 unsolved problem: find the minimum set of counter examples required to disprove all incorrect formulas

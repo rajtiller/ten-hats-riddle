@@ -108,7 +108,7 @@ export class Group {
 
     if (this.numberOfPeople === 2) {
       // Special layout for 2 people - vertical arrangement with more space
-      const spacing = 150 * sizeScale; // Increased spacing
+      const spacing = 175 * sizeScale; // Increased from 150 to 200
 
       for (let i = 0; i < 2; i++) {
         const x = 0; // Both centered horizontally

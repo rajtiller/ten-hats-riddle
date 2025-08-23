@@ -29,6 +29,7 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
   const [personHighlight, setPersonHighlight] =
     useState<PersonHighlight | null>(null);
   const [currentFormula, setCurrentFormula] = useState<string>("");
+  const [showExplanation, setShowExplanation] = useState(false); // Add this state
 
   // Hat colors for two hats riddle - only black and white
   const availableHatColors = [
@@ -99,7 +100,6 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
     }
     return guesses;
   };
-
 
   const handleTestResult = (result: number[], formula: string) => {
     setCurrentFormula(formula);
@@ -418,12 +418,12 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
       <div
         style={{
           position: "absolute",
-          top: "625px",
+          top: "605px", // Changed from "625px" to move it higher
           left: "0",
           right: "0",
           fontSize: "16px",
           fontFamily: "monospace",
-          color: testResult?.isCorrect ? "#28a745" : "#e41010ff",
+          color: testResult?.isCorrect ? "#ffffffff" : "#e41010ff",
           textAlign: "center",
           width: "100%",
           display: "flex",
@@ -436,16 +436,139 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
         ) : appState === "results" && testResult?.isCorrect ? (
           <div
             style={{
-              cursor: "pointer",
-              padding: "5px 10px",
-              borderRadius: "5px",
-              backgroundColor: "rgba(40, 167, 69, 0.1)",
-              border: "1px solid #28a745",
               position: "relative",
+              display: "inline-block",
             }}
-            title="Click to learn why this formula works for all cases"
           >
-            ✅ Why Does This Work?
+            <div
+              style={{
+                padding: "12px 24px", // Reduced vertical padding slightly
+                fontSize: "16px",
+                fontFamily: "monospace",
+                fontWeight: "bold",
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                cursor: "pointer",
+                transition: "background-color 0.2s",
+              }}
+              onMouseEnter={() => setShowExplanation(true)}
+              onMouseLeave={() => setShowExplanation(false)}
+              onMouseOver={(e) => {
+                e.currentTarget.style.backgroundColor = "#0056b3";
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.backgroundColor = "#007bff";
+              }}
+            >
+              Why Does This Work?
+            </div>
+
+            {/* Explanation Tooltip */}
+            {showExplanation && (
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: "calc(100% + 15px)",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  backgroundColor: "white",
+                  border: "2px solid #007bff",
+                  borderRadius: "8px",
+                  padding: "20px",
+                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+                  zIndex: 1000,
+                  width: "500px",
+                  fontFamily: "Arial, sans-serif",
+                  fontSize: "14px",
+                  color: "#333",
+                  lineHeight: "1.5",
+                }}
+              >
+                {/* Arrow pointing down */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "100%",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    width: "0",
+                    height: "0",
+                    borderLeft: "10px solid transparent",
+                    borderRight: "10px solid transparent",
+                    borderTop: "10px solid #007bff",
+                  }}
+                />
+
+                <h3
+                  style={{
+                    margin: "0 0 15px 0",
+                    color: "#007bff",
+                    fontSize: "18px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  How the Two Hats Riddle Works
+                </h3>
+
+                <div style={{ marginBottom: "15px" }}>
+                  <strong>Key Insight:</strong> The two hats will either have the same or different numbers.
+                </div>
+
+                <div style={{ marginBottom: "15px" }}>
+                  <strong>The Strategy:</strong> One person guesses the hat they see. One person guesses the opposite of the hat they see.
+                </div>
+
+                <div style={{ marginBottom: "15px" }}>
+                  <strong>Putting It Into Practice:</strong>{" "}<strong
+                                style={{
+                                  fontFamily: "monospace",
+                                  backgroundColor: "#f8f9fa",
+                                  padding: "2px 4px",
+                                  border: "1px solid #ddd",
+                                  borderRadius: "3px",
+                                }}
+                              >
+                                i + other
+                              </strong> / <strong
+                                            style={{
+                                              fontFamily: "monospace",
+                                              backgroundColor: "#f8f9fa",
+                                              padding: "2px 4px",
+                                              border: "1px solid #ddd",
+                                              borderRadius: "3px",
+                                            }}
+                                          >
+                                            i - other
+                                          </strong>
+                  <div
+                    style={{
+                      backgroundColor: "#f8f9fa",
+                      padding: "10px",
+                      borderRadius: "4px",
+                      marginTop: "8px",
+                      fontFamily: "monospace",
+                      fontSize: "13px",
+                    }}
+                  >
+                    → Person 0 guesses both hats have the same number{"   "}
+                    <br /><br />
+                    → Person 1 guesses the hats have different numbers
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    color: "#28a745",
+                    fontWeight: "bold",
+                    fontSize: "13px",
+                  }}
+                >
+                  🎯 This works for ALL possible hat combinations!
+                </div>
+              </div>
+            )}
           </div>
         ) : appState === "results" && !testResult?.isCorrect ? (
           "❌ Counter-Example Found"
