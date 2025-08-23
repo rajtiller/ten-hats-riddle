@@ -4,7 +4,10 @@ import { insertTextAtPosition } from "./utils";
 import { useKeyboardControls } from "./useKeyboardControls";
 import { validateFormula } from "./validation";
 import { handleDelete, type DeleteContext } from "./deleteHandlers";
-import { handleButtonClick, handleButtonClickEnhanced } from "./buttonHandlers";
+import {
+  handleButtonClickEnhanced,
+  type ButtonContext,
+} from "./buttonHandlers";
 import { testFormula } from "./testFunction";
 import FormulaDisplay, { type PersonHighlight } from "./FormulaDisplay";
 import ButtonGrid from "./ButtonGrid";
@@ -33,27 +36,9 @@ const FormulaBar: React.FC<
 
   // Function to count symbols (excluding parentheses and spaces)
   const countSymbols = (text: string): number => {
-    // Remove parentheses and spaces, then count remaining characters
-    return text.replace(/[() ]/g, "").length;
-  };
-
-  // Enhanced validation that includes symbol count
-  const validateFormulaWithSymbolLimit = (formula: string) => {
-    const baseValidation = validateFormula(formula);
-    const symbolCount = countSymbols(formula);
-
-    if (symbolCount > 10) {
-      return {
-        isValid: false,
-        error: `Formula has ${symbolCount} symbols but maximum is 10 (excluding parentheses and spaces)`,
-        isSymbolLimitExceeded: true,
-      };
-    }
-
-    return {
-      ...baseValidation,
-      isSymbolLimitExceeded: false,
-    };
+    // First replace "all" with a single character to count it as 1 symbol
+    // Then remove parentheses and spaces, then count remaining characters
+    return text.replace(/all/g, "a").replace(/[() ]/g, "").length;
   };
 
   // Update formula when initialFormula changes
@@ -149,7 +134,7 @@ const FormulaBar: React.FC<
       if (deleteStart > 0) {
         const charBeforeSpaces = formula[deleteStart - 1];
 
-        // Handle "all" word
+        // Handle "all" word - check if we're at the end of "all"
         if (
           deleteStart >= 3 &&
           formula.substring(deleteStart - 3, deleteStart) === "all"
@@ -213,6 +198,72 @@ const FormulaBar: React.FC<
       }
     }
 
+    // Handle characters that are part of "all" - improved logic
+    if (charAtCursor === "l") {
+      // Check if this 'l' is part of "all"
+      if (
+        cursorPosition >= 3 &&
+        formula.substring(cursorPosition - 3, cursorPosition) === "al"
+      ) {
+        const charBeforeAl =
+          cursorPosition > 3 ? formula[cursorPosition - 4] : "";
+        if (!/[a-zA-Z]/.test(charBeforeAl)) {
+          // This 'l' is part of "all", delete the entire word
+          let newFormula =
+            formula.slice(0, cursorPosition - 3) +
+            formula.slice(cursorPosition);
+          newFormula = newFormula.trimEnd();
+          setFormula(newFormula);
+          setCursorPosition(Math.min(cursorPosition - 3, newFormula.length));
+          setWaitingForBracketNumber(false);
+          if (errorMessage) setErrorMessage("");
+          return;
+        }
+      }
+    }
+
+    // Handle characters that are part of "all" - 'l' in middle
+    if (charAtCursor === "l" && cursorPosition >= 2) {
+      // Check if this 'l' is the second 'l' in "all"
+      if (formula.substring(cursorPosition - 2, cursorPosition + 1) === "all") {
+        const charBeforeAll =
+          cursorPosition > 2 ? formula[cursorPosition - 3] : "";
+        if (!/[a-zA-Z]/.test(charBeforeAll)) {
+          // This 'l' is part of "all", delete the entire word
+          let newFormula =
+            formula.slice(0, cursorPosition - 2) +
+            formula.slice(cursorPosition + 1);
+          newFormula = newFormula.trimEnd();
+          setFormula(newFormula);
+          setCursorPosition(Math.min(cursorPosition - 2, newFormula.length));
+          setWaitingForBracketNumber(false);
+          if (errorMessage) setErrorMessage("");
+          return;
+        }
+      }
+    }
+
+    // Handle 'a' that might be part of "all"
+    if (charAtCursor === "a" && cursorPosition < formula.length - 1) {
+      // Check if this 'a' is the start of "all"
+      if (formula.substring(cursorPosition - 1, cursorPosition + 2) === "all") {
+        const charBeforeA =
+          cursorPosition > 1 ? formula[cursorPosition - 2] : "";
+        if (!/[a-zA-Z]/.test(charBeforeA)) {
+          // This 'a' is part of "all", delete the entire word
+          let newFormula =
+            formula.slice(0, cursorPosition - 1) +
+            formula.slice(cursorPosition + 2);
+          newFormula = newFormula.trimEnd();
+          setFormula(newFormula);
+          setCursorPosition(Math.min(cursorPosition - 1, newFormula.length));
+          setWaitingForBracketNumber(false);
+          if (errorMessage) setErrorMessage("");
+          return;
+        }
+      }
+    }
+
     // Default delete behavior - single character
     let newFormula =
       formula.slice(0, cursorPosition - 1) + formula.slice(cursorPosition);
@@ -224,7 +275,7 @@ const FormulaBar: React.FC<
   };
 
   const handleTest = () => {
-    const validation = validateFormulaWithSymbolLimit(formula);
+    const validation = validateFormula(formula);
 
     if (!validation.isValid) {
       setErrorMessage(validation.error);
@@ -268,7 +319,7 @@ const FormulaBar: React.FC<
     disabled: showAsReadOnly,
   });
 
-  const validation = validateFormulaWithSymbolLimit(formula);
+  const validation = validateFormula(formula);
   const displayError = validation.error && !errorMessage.startsWith("✅");
 
   return (
@@ -277,12 +328,12 @@ const FormulaBar: React.FC<
         width,
         height: height + (errorMessage ? 30 : 0),
         border: "2px solid #333",
-        padding: "8px", // Increased padding to match TwoHats
+        padding: "8px",
         backgroundColor: "#f5f5f5",
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
-        gap: "8px", // Increased gap to match TwoHats
+        gap: "8px",
         position: "relative",
       }}
     >

@@ -198,11 +198,10 @@ const tokenizeFormula = (cleanFormula: string): Token[] => {
 };
 
 const validateTokens = (tokens: Token[]): ValidationResult => {
-    if (tokens.length > 12) {
+  if (tokens.length > 12) {
     return {
       isValid: false,
-      error:
-        "Formula is too long'",
+       error: `Token count of [${tokens.length}] exceeds limit of 12`,
     };
   }
   // Rule 1: Must start and end with a number or variable
@@ -400,10 +399,7 @@ const handleDelete = (context: DeleteContext) => {
     if (!/[a-zA-Z]/.test(charBeforeOther)) {
       let newFormula =
         formula.slice(0, cursorPosition - 5) + formula.slice(cursorPosition);
-
-      // Remove trailing spaces
       newFormula = newFormula.trimEnd();
-
       setFormula(newFormula);
       setCursorPosition(Math.min(cursorPosition - 5, newFormula.length));
       if (errorMessage) setErrorMessage("");
@@ -413,7 +409,6 @@ const handleDelete = (context: DeleteContext) => {
 
   // Enhanced delete behavior for space + preceding item
   if (charAtCursor === " ") {
-    // Look backwards to find the last non-space character
     let deleteStart = cursorPosition - 1; // Start at the space
 
     // Skip any additional spaces
@@ -450,10 +445,7 @@ const handleDelete = (context: DeleteContext) => {
     // Delete from deleteStart to cursorPosition (inclusive of space(s))
     let newFormula =
       formula.slice(0, deleteStart) + formula.slice(cursorPosition);
-
-    // Remove trailing spaces
     newFormula = newFormula.trimEnd();
-
     setFormula(newFormula);
     setCursorPosition(Math.min(deleteStart, newFormula.length));
     if (errorMessage) setErrorMessage("");
@@ -469,10 +461,7 @@ const handleDelete = (context: DeleteContext) => {
     if (!/[a-zA-Z]/.test(charBeforeI) && !/[a-zA-Z]/.test(charAfterI)) {
       let newFormula =
         formula.slice(0, cursorPosition - 1) + formula.slice(cursorPosition);
-
-      // Remove trailing spaces
       newFormula = newFormula.trimEnd();
-
       setFormula(newFormula);
       setCursorPosition(Math.min(cursorPosition - 1, newFormula.length));
       if (errorMessage) setErrorMessage("");
@@ -480,13 +469,127 @@ const handleDelete = (context: DeleteContext) => {
     }
   }
 
+  // Handle characters that are part of "other" - improved logic
+  if (charAtCursor === "r") {
+    // Check if this 'r' is the last character of "other"
+    if (
+      cursorPosition >= 5 &&
+      formula.substring(cursorPosition - 5, cursorPosition) === "othe"
+    ) {
+      const charBeforeOther =
+        cursorPosition > 5 ? formula[cursorPosition - 6] : "";
+      if (!/[a-zA-Z]/.test(charBeforeOther)) {
+        // This 'r' is part of "other", delete the entire word
+        let newFormula =
+          formula.slice(0, cursorPosition - 5) + formula.slice(cursorPosition);
+        newFormula = newFormula.trimEnd();
+        setFormula(newFormula);
+        setCursorPosition(Math.min(cursorPosition - 5, newFormula.length));
+        if (errorMessage) setErrorMessage("");
+        return;
+      }
+    }
+  }
+
+  // Handle 'e' that might be part of "other"
+  if (charAtCursor === "e") {
+    // Check if this 'e' is part of "other"
+    if (
+      cursorPosition >= 4 &&
+      cursorPosition <= formula.length - 1 &&
+      formula.substring(cursorPosition - 4, cursorPosition + 1) === "other"
+    ) {
+      const charBeforeOther =
+        cursorPosition > 4 ? formula[cursorPosition - 5] : "";
+      if (!/[a-zA-Z]/.test(charBeforeOther)) {
+        // This 'e' is part of "other", delete the entire word
+        let newFormula =
+          formula.slice(0, cursorPosition - 4) +
+          formula.slice(cursorPosition + 1);
+        newFormula = newFormula.trimEnd();
+        setFormula(newFormula);
+        setCursorPosition(Math.min(cursorPosition - 4, newFormula.length));
+        if (errorMessage) setErrorMessage("");
+        return;
+      }
+    }
+  }
+
+  // Handle 'h' that might be part of "other"
+  if (charAtCursor === "h") {
+    // Check if this 'h' is part of "other"
+    if (
+      cursorPosition >= 3 &&
+      cursorPosition <= formula.length - 2 &&
+      formula.substring(cursorPosition - 3, cursorPosition + 2) === "other"
+    ) {
+      const charBeforeOther =
+        cursorPosition > 3 ? formula[cursorPosition - 4] : "";
+      if (!/[a-zA-Z]/.test(charBeforeOther)) {
+        // This 'h' is part of "other", delete the entire word
+        let newFormula =
+          formula.slice(0, cursorPosition - 3) +
+          formula.slice(cursorPosition + 2);
+        newFormula = newFormula.trimEnd();
+        setFormula(newFormula);
+        setCursorPosition(Math.min(cursorPosition - 3, newFormula.length));
+        if (errorMessage) setErrorMessage("");
+        return;
+      }
+    }
+  }
+
+  // Handle 't' that might be part of "other"
+  if (charAtCursor === "t") {
+    // Check if this 't' is part of "other"
+    if (
+      cursorPosition >= 2 &&
+      cursorPosition <= formula.length - 3 &&
+      formula.substring(cursorPosition - 2, cursorPosition + 3) === "other"
+    ) {
+      const charBeforeOther =
+        cursorPosition > 2 ? formula[cursorPosition - 3] : "";
+      if (!/[a-zA-Z]/.test(charBeforeOther)) {
+        // This 't' is part of "other", delete the entire word
+        let newFormula =
+          formula.slice(0, cursorPosition - 2) +
+          formula.slice(cursorPosition + 3);
+        newFormula = newFormula.trimEnd();
+        setFormula(newFormula);
+        setCursorPosition(Math.min(cursorPosition - 2, newFormula.length));
+        if (errorMessage) setErrorMessage("");
+        return;
+      }
+    }
+  }
+
+  // Handle 'o' that might be part of "other"
+  if (charAtCursor === "o") {
+    // Check if this 'o' is the start of "other"
+    if (
+      cursorPosition <= formula.length - 4 &&
+      formula.substring(cursorPosition - 1, cursorPosition + 4) === "other"
+    ) {
+      const charBeforeOther =
+        cursorPosition > 1 ? formula[cursorPosition - 2] : "";
+      if (!/[a-zA-Z]/.test(charBeforeOther)) {
+        // This 'o' is part of "other", delete the entire word
+        let newFormula =
+          formula.slice(0, cursorPosition - 1) +
+          formula.slice(cursorPosition + 4);
+        newFormula = newFormula.trimEnd();
+        setFormula(newFormula);
+        setCursorPosition(Math.min(cursorPosition - 1, newFormula.length));
+        if (errorMessage) setErrorMessage("");
+        return;
+      }
+    }
+  }
+
   // Default delete behavior - single character
   let newFormula =
     formula.slice(0, cursorPosition - 1) + formula.slice(cursorPosition);
-
-  // Remove trailing spaces
   newFormula = newFormula.trimEnd();
-
   setFormula(newFormula);
   setCursorPosition(Math.min(cursorPosition - 1, newFormula.length));
   if (errorMessage) setErrorMessage("");
@@ -509,7 +612,7 @@ const handleButtonClick = (value: string, context: ButtonContext) => {
       insertAtCursor(value);
       break;
     case "other":
-      insertAtCursor("other");
+      insertAtCursor(" other ");
       break;
     case "del":
       handleDelete();

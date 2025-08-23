@@ -77,7 +77,7 @@ export const validateFormula = (formula: string): ValidationResult => {
     return {
       isValid: false,
       error:
-        "Formula is too long'",
+        `Token count of [${tokens.length}] exceeds limit of 12`,
     };
   }
   return validateTokens(tokens);
