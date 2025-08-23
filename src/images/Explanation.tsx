@@ -796,6 +796,16 @@ const Explanation: React.FC<ExplanationProps> = ({
                 </p>
               </div>
 
+              <h2 style={{ color: "#007bff", marginTop: "30px" }}>
+                Unsolved Problems
+              </h2>
+              <p style={{ marginBottom: "20px" }}>
+                To disprove a formula, you don't need to check all 10^10 hat distributions. In fact, most formulas can be disproved with just a few well-chosen counter-examples. What is the fewest number of counter-examples necssary to disprove any incorrect formula?
+              </p>
+              <p style={{ marginBottom: "20px" }}>
+                Among all incorrect formulas, which one has the highest success rate? ()
+              </p>
+
               <div
                 style={{
                   textAlign: "center",

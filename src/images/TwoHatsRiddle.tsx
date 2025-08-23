@@ -657,7 +657,7 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
                   >
                     i + other
                   </strong>{" "}
-                  /{" "}
+                  or{" "}
                   <strong
                     style={{
                       fontFamily: "monospace",

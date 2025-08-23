@@ -1,4 +1,4 @@
-unsolved problem: find the minimum set of counter examples required to disprove all incorrect formulas, what incorrect formula has the higest success rate
+fix spacing in formula bar, especially when it comes to literals
 add links to social media?
 add link to my youtube video for a video explantion
 make everything supported for mobile
