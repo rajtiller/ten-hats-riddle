@@ -416,14 +416,15 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
           onMouseLeave={() => setShowHoverExplanation(false)}
           style={{
             position: "absolute",
-            left: "835px",
-            top: "50%",
+            left: "815px",
+            top: "30%",
             transform: "translateY(-50%)",
             width: "28px",
             height: "28px",
             borderRadius: "50%",
-            backgroundColor: "transparent", // Changed from "#007bff" to transparent
-            color: "#007bff", // Changed from "white" to blue
+            backgroundColor: "transparent",
+            color: "#007bff",
+            border: "none", // Add this line to remove the border
             cursor: "pointer",
             fontSize: "16px",
             fontWeight: "bold",
@@ -435,13 +436,9 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
             zIndex: 1001,
           }}
           onMouseOver={(e) => {
-            e.currentTarget.style.backgroundColor = "#007bff"; // Blue background on hover
-            e.currentTarget.style.color = "white"; // White text on hover
-            e.currentTarget.style.transform = "translateY(-50%) scale(1.1)";
+            e.currentTarget.style.transform = "translateY(-50%) scale(1.3)";
           }}
           onMouseOut={(e) => {
-            e.currentTarget.style.backgroundColor = "transparent"; // Back to transparent
-            e.currentTarget.style.color = "#007bff"; // Back to blue text
             e.currentTarget.style.transform = "translateY(-50%) scale(1)";
           }}
           title="Hover to learn about the Two Hats Riddle"
@@ -495,14 +492,15 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
             </h3>
 
             <div style={{ marginBottom: "15px" }}>
-              <strong>The Setup:</strong> Two people will randomly be assigned a hat that's
-              either black (0) or white (1). Each person can see the other's hat
-              but not their own.
+              <strong>The Setup:</strong> Two people will randomly be assigned a
+              hat that's either black (0) or white (1). Each person can see the
+              other's hat but not their own.
             </div>
 
             <div style={{ marginBottom: "15px" }}>
               <strong>The Goal:</strong> Both people must simultaneously guess
-              their own hat color. At least one person must guess their own hat correctly.
+              their own hat color. At least one person must guess their own hat
+              correctly.
             </div>
 
             <div style={{ marginBottom: "15px" }}>
@@ -536,7 +534,8 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
                 border: "1px solid #28a745",
               }}
             >
-              There's only four combinations!<br/> Should be easy, right? 😉
+              There's only four combinations!
+              <br /> Should be easy, right? 😉
             </div>
           </div>
         )}

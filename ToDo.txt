@@ -1,5 +1,3 @@
-make 'Formula Cannot Be Empty' div flush with formula bar
-make '?' for two hat problem in the top right of the 'Two Hat Riddle' div
 find out why Group.tsx and TwoHatsRiddle.tsx have errors
 add misc info on explanation: could be a game to find a formula that passes certain counter example but not others
 unsolved problem: find the minimum set of counter examples required to disprove all incorrect formulas
