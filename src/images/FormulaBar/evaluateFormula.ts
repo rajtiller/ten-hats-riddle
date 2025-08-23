@@ -123,68 +123,95 @@ export const calculatePersonGuess = (
     throw new Error("personIndex must be between 0 and 9");
   }
 
-  // Extract the 9 visible hat colors (excluding the person making the guess)
-  const visibleHatColors = allHatColors.filter(
-    (_, index) => index !== personIndex
-  );
-
-  // Process formula to replace variables
-  let processedFormula = formula.trim();
-
-  // Replace 'x' with '*' for multiplication
-  processedFormula = processedFormula.replace(/×/g, "*");
-
-  // Replace 'i' with the person's NUMBER (their index), not their hat color
-  processedFormula = processedFormula.replace(/\bi\b/g, personIndex.toString());
-
-  // Replace 'all' with sum of all visible hat colors
-  const allSum = visibleHatColors.reduce((sum, color) => sum + color, 0);
-  processedFormula = processedFormula.replace(/\ball\b/g, allSum.toString());
-
-  // Replace l[n] patterns - these represent people to the left of the current person
-  processedFormula = processedFormula.replace(
-    /l\[(\d+)\]/g,
-    (_, position) => {
-      const pos = parseInt(position);
-      if (pos < 1 || pos > 9) {
-        throw new Error(`Invalid left position: ${pos}. Must be 1-9`);
-      }
-
-      // Calculate which person this refers to relative to personIndex
-      const targetPersonIndex = (personIndex + pos) % 10;
-      return allHatColors[targetPersonIndex].toString();
-    }
-  );
-
-  // Replace r[n] patterns - these represent people to the right of the current person
-  processedFormula = processedFormula.replace(
-    /r\[(\d+)\]/g,
-    (_, position) => {
-      const pos = parseInt(position);
-      if (pos < 1 || pos > 9) {
-        throw new Error(`Invalid right position: ${pos}. Must be 1-9`);
-      }
-
-      // Calculate which person this refers to relative to personIndex
-      const targetPersonIndex = (personIndex - pos + 10) % 10;
-      return allHatColors[targetPersonIndex].toString();
-    }
-  );
-
   try {
+    // Extract the 9 visible hat colors (excluding the person making the guess)
+    const visibleHatColors = allHatColors.filter(
+      (_, index) => index !== personIndex
+    );
+
+    // Process formula to replace variables
+    let processedFormula = formula.trim();
+
+    // Replace 'x' with '*' for multiplication
+    processedFormula = processedFormula.replace(/×/g, "*");
+
+    // Replace 'i' with the person's NUMBER (their index), not their hat color
+    processedFormula = processedFormula.replace(
+      /\bi\b/g,
+      personIndex.toString()
+    );
+
+    // Replace 'all' with sum of all visible hat colors
+    const allSum = visibleHatColors.reduce((sum, color) => sum + color, 0);
+    processedFormula = processedFormula.replace(/\ball\b/g, allSum.toString());
+
+    // Replace l[n] patterns - these represent people to the left of the current person
+    processedFormula = processedFormula.replace(
+      /l\[(\d+)\]/g,
+      (_, position) => {
+        const pos = parseInt(position);
+        if (pos < 1 || pos > 9) {
+          console.warn(`Invalid left position: ${pos}. Must be 1-9`);
+          return "0"; // Return 0 instead of throwing error
+        }
+
+        // Calculate which person this refers to relative to personIndex
+        // l[1] means 1 position to the left (counter-clockwise)
+        const targetPersonIndex = (personIndex + pos) % 10;
+
+        if (targetPersonIndex >= 0 && targetPersonIndex < allHatColors.length) {
+          return allHatColors[targetPersonIndex].toString();
+        } else {
+          console.warn(
+            `Target person index ${targetPersonIndex} out of bounds`
+          );
+          return "0";
+        }
+      }
+    );
+
+    // Replace r[n] patterns - these represent people to the right of the current person
+    processedFormula = processedFormula.replace(
+      /r\[(\d+)\]/g,
+      (_, position) => {
+        const pos = parseInt(position);
+        if (pos < 1 || pos > 9) {
+          console.warn(`Invalid right position: ${pos}. Must be 1-9`);
+          return "0"; // Return 0 instead of throwing error
+        }
+
+        // Calculate which person this refers to relative to personIndex
+        // r[1] means 1 position to the right (clockwise)
+        const targetPersonIndex = (personIndex - pos + 10) % 10;
+
+        if (targetPersonIndex >= 0 && targetPersonIndex < allHatColors.length) {
+          return allHatColors[targetPersonIndex].toString();
+        } else {
+          console.warn(
+            `Target person index ${targetPersonIndex} out of bounds`
+          );
+          return "0";
+        }
+      }
+    );
+
+    // Evaluate the processed formula
     const result = new Function(`"use strict"; return (${processedFormula})`)();
 
     if (Number.isFinite(result)) {
       const modResult = ((result % 10) + 10) % 10;
       return Math.floor(modResult);
+    } else {
+      console.warn(
+        `Formula evaluation resulted in non-finite number: ${result}`
+      );
+      return 0; // Return 0 instead of -1 for guess bubbles to show
     }
   } catch (error) {
-    console.error(`Error evaluating formula for person ${personIndex}:`, error);
-    return -1;
+    console.warn(`Error evaluating formula for person ${personIndex}:`, error);
+    // Return 0 instead of -1 so guess bubbles still show up
+    return 0;
   }
-
-  // If evaluation failed, return -1 to indicate error
-  return -1;
 };
 
 // Original helper function preserved for compatibility

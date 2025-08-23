@@ -1,6 +1,4 @@
-make sure if del is hit while in the middle of r[?] that that whole toek is deleted, and that all buttons are enabled again
-for formula bar on both two and ten, make it so tokens are inheretly grouped together. I.e. delting or using arrows automatically skips over spaces and goes to the end of a token always.
-make sure guess bubbles work when i, r[?], l[?], and all are used
+multiple bytton doens't seem to be working
 add misc info on explanation: could be a game to find a formula that passes certain counter example but not others
 unsolved problem: find the minimum set of counter examples required to disprove all incorrect formulas, what incorrect formula has the higest success rate
 add explanatino button for two hats riddle
