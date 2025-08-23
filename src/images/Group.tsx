@@ -379,7 +379,7 @@ const TooltipComponent: React.FC<TooltipComponentProps> = ({ tooltipData }) => {
     calculatedValue: number;
     finalResult: number;
   } | null => {
-    const { formula, hatColors, personNumber, guess } = tooltipData;
+    const { formula, hatColors, personNumber, } = tooltipData;
 
     if (!formula || !hatColors) return null;
 
