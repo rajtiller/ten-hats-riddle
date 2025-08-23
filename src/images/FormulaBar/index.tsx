@@ -78,6 +78,49 @@ const FormulaBar: React.FC<
 
     const charAtCursor = formula[cursorPosition - 1];
 
+    // Handle deletion when waiting for bracket number
+    if (waitingForBracketNumber) {
+      // Check if we're deleting an empty bracket construct like "r[]" or "l[]"
+      if (charAtCursor === "]" && cursorPosition >= 3) {
+        const bracketConstruct = formula.substring(
+          cursorPosition - 3,
+          cursorPosition + 1
+        );
+        if (bracketConstruct === "r[]" || bracketConstruct === "l[]") {
+          // Delete the entire bracket construct
+          let newFormula =
+            formula.slice(0, cursorPosition - 3) +
+            formula.slice(cursorPosition + 1);
+          newFormula = newFormula.trimEnd();
+          setFormula(newFormula);
+          setCursorPosition(Math.min(cursorPosition - 3, newFormula.length));
+          setWaitingForBracketNumber(false);
+          if (errorMessage) setErrorMessage("");
+          return;
+        }
+      }
+
+      // Handle deletion of bracket opening when cursor is between brackets
+      if (charAtCursor === "[" && cursorPosition >= 2) {
+        const typeChar = formula[cursorPosition - 2];
+        if (
+          (typeChar === "r" || typeChar === "l") &&
+          formula[cursorPosition] === "]"
+        ) {
+          // Delete the entire bracket construct
+          let newFormula =
+            formula.slice(0, cursorPosition - 2) +
+            formula.slice(cursorPosition + 1);
+          newFormula = newFormula.trimEnd();
+          setFormula(newFormula);
+          setCursorPosition(Math.min(cursorPosition - 2, newFormula.length));
+          setWaitingForBracketNumber(false);
+          if (errorMessage) setErrorMessage("");
+          return;
+        }
+      }
+    }
+
     // Check if cursor is at the end of "all" and delete the entire word
     if (
       cursorPosition >= 3 &&
@@ -309,7 +352,13 @@ const FormulaBar: React.FC<
 
     if (waitingForBracketNumber) {
       if (/^[1-9]$/.test(value)) {
-        insertAtCursor(value + "]");
+        // Insert the number before the closing bracket
+        const newFormula =
+          formula.slice(0, cursorPosition) +
+          value +
+          formula.slice(cursorPosition);
+        setFormula(newFormula);
+        setCursorPosition(cursorPosition + 2); // Move cursor to after the closing bracket
         setWaitingForBracketNumber(false);
       } else if (value === "del") {
         handleDelete();
@@ -324,15 +373,19 @@ const FormulaBar: React.FC<
         insertAtCursor(value);
         break;
       case "l[":
-        insertAtCursor("l[");
+        // Insert complete bracket construct with cursor between brackets
+        insertAtCursor("l[]");
+        setCursorPosition(cursorPosition + 2); // Position cursor between brackets
         setWaitingForBracketNumber(true);
         break;
       case "r[":
-        insertAtCursor("r[");
+        // Insert complete bracket construct with cursor between brackets
+        insertAtCursor("r[]");
+        setCursorPosition(cursorPosition + 2); // Position cursor between brackets
         setWaitingForBracketNumber(true);
         break;
       case "all":
-        insertAtCursor(" all "); // Changed from "all" to " all "
+        insertAtCursor(" all ");
         break;
       case "del":
         handleDelete();
