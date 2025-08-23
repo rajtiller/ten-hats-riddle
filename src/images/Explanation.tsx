@@ -93,7 +93,7 @@ const Explanation: React.FC<ExplanationProps> = ({
           <p>
             Ten people are standing in a circle, each wearing a hat with a
             random number from 0-9 (repeats allowed). Each person can see
-            everyone else's hat but not their own. After ten minutes (for
+            everyone else's hat but not their own. After some time (for
             observation and calculation), all players must simultaneously guess
             their own hat number. The goal is for at least one of them to guess
             their own hat number correctly. Each person has been given a unique
