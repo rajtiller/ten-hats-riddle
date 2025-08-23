@@ -244,7 +244,7 @@ const validateTokens = (tokens: Token[]): ValidationResult => {
     ) {
       return {
         isValid: false,
-        error: `Missing operator between '${current.value}' and '${next.value}' - variables must be separated from numbers and other variables by operators`,
+        error: `Missing operator between '${current.value}' and '${next.value}'`,
       };
     }
 
@@ -252,7 +252,7 @@ const validateTokens = (tokens: Token[]): ValidationResult => {
     if (current.type === "number" && next.type === "variable") {
       return {
         isValid: false,
-        error: `Missing operator between '${current.value}' and '${next.value}' - numbers and variables must be separated by operators`,
+        error: `Missing operator between '${current.value}' and '${next.value}'`,
       };
     }
   }
