@@ -637,46 +637,33 @@ const Explanation: React.FC<ExplanationProps> = ({
                   success rate? After some quick tests, the best I found was{" "}
                   <code
                     style={{
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#fddf68ff",
                       padding: "2px 6px",
                       borderRadius: "3px",
                       fontFamily: "monospace",
                       fontSize: "14px",
-                      border: "1px solid #dee2e6",
+                      border: "1px solid #ddd",
                     }}
                   >
                     i + all
                   </code>{" "}
                   which achieved ~67% success rate. Most formulas achieve a ~65%
-                  success rate (
-                  <code
-                    style={{
-                      backgroundColor: "#f8f9fa",
-                      padding: "2px 6px",
-                      borderRadius: "3px",
-                      fontFamily: "monospace",
-                      fontSize: "14px",
-                      border: "1px solid #dee2e6",
-                    }}
-                  >
-                    1-0.9^10
-                  </code>
-                  ), which is the same as guessing randomly.
+                 success rate, which is the same as guessing randomly (1-0.9^10).
                   <br />
                   <br />
                   Likewise, the worst algorithm is unknown, though it is proven
                   to be {">"}0%. The worst I could find is{" "}
                   <code
                     style={{
-                      backgroundColor: "#f8f9fa",
+                      backgroundColor: "#fddf68ff",
                       padding: "2px 6px",
                       borderRadius: "3px",
                       fontFamily: "monospace",
                       fontSize: "14px",
-                      border: "1px solid #dee2e6",
+                      border: "1px solid #ddd",
                     }}
                   >
-                    all * all
+                    all × all
                   </code>{" "}
                   which achieves a success rate of ~29%.
                 </p>
