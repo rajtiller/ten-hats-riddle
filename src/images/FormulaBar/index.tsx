@@ -58,8 +58,84 @@ const FormulaBar: React.FC<
       text
     );
     setFormula(newText);
-    setCursorPosition(newPosition);
+
+    // Determine cursor position based on the last non-space character in the inserted text
+    const trimmedText = text.trimEnd();
+    const lastChar = trimmedText[trimmedText.length - 1];
+
+    // Position cursor after space for operators and ')', otherwise at end of token
+    if (["+", "-", "×", ")"].includes(lastChar)) {
+      // Keep cursor after the trailing space for operators and closing parenthesis
+      setCursorPosition(newPosition);
+    } else {
+      // Position cursor at end of token (before any trailing space) for variables, numbers, and opening parenthesis
+      const tokenEndPosition = cursorPosition + trimmedText.length;
+      setCursorPosition(tokenEndPosition);
+    }
+
     if (errorMessage) setErrorMessage("");
+  };
+
+  // Helper function to check if we need a space before the current token
+  const needsSpaceBefore = (
+    currentPos: number,
+    tokenType: "variable" | "operator" | "number" | "parenthesis"
+  ): boolean => {
+    if (currentPos === 0) return false;
+
+    const charBefore = formula[currentPos - 1];
+
+    // Never add space after opening parenthesis or before closing parenthesis
+    if (
+      charBefore === "(" ||
+      (tokenType === "parenthesis" && formula[currentPos] === ")")
+    ) {
+      return false;
+    }
+
+    // Add space before variables and operators (except after opening parenthesis)
+    if (tokenType === "variable" || tokenType === "operator") {
+      return charBefore !== " " && charBefore !== "(";
+    }
+
+    // Numbers only need space if following a variable or closing parenthesis
+    if (tokenType === "number") {
+      return /[a-zA-Z\)]/.test(charBefore) && charBefore !== " ";
+    }
+
+    return false;
+  };
+
+  // Helper function to check if we need a space after the current token
+  const needsSpaceAfter = (
+    currentPos: number,
+    tokenLength: number,
+    tokenType: "variable" | "operator" | "number" | "parenthesis"
+  ): boolean => {
+    const nextPos = currentPos + tokenLength;
+    if (nextPos >= formula.length) return false;
+
+    const charAfter = formula[nextPos];
+
+    // Never add space before closing parenthesis or after opening parenthesis
+    if (
+      charAfter === ")" ||
+      (tokenType === "parenthesis" && formula[currentPos] === "(")
+    ) {
+      return false;
+    }
+
+    // Add space after variables and numbers (except before closing parenthesis)
+    if (tokenType === "variable" || tokenType === "number") {
+      return charAfter !== " " && charAfter !== ")";
+    }
+
+    // Operators always get space after (except before closing parenthesis)
+    if (tokenType === "operator") {
+      return charAfter !== " ";
+    }
+
+    return false;
   };
 
   // Enhanced delete handler matching TwoHatsFormulaBar
@@ -368,125 +444,97 @@ const FormulaBar: React.FC<
 
     switch (value) {
       case "(":
-        // Check if we need a space before opening parenthesis
-        const charBefore =
-          cursorPosition > 0 ? formula[cursorPosition - 1] : "";
-        if (/[0-9]/.test(charBefore)) {
-          insertAtCursor(" (");
-        } else {
-          insertAtCursor("(");
-        }
+        const spaceBeforeParen = needsSpaceBefore(cursorPosition, "parenthesis")
+          ? " "
+          : "";
+        insertAtCursor(spaceBeforeParen + "(");
         break;
       case ")":
-        // Check if we need to remove space before closing parenthesis
-        if (cursorPosition > 0 && formula[cursorPosition - 1] === " ") {
-          // Remove the space before inserting the closing parenthesis
-          const newFormula =
-            formula.slice(0, cursorPosition - 1) +
-            ")" +
-            formula.slice(cursorPosition);
-          setFormula(newFormula);
-          setCursorPosition(cursorPosition); // Position stays the same after removing space and adding )
-        } else {
-          insertAtCursor(")");
-        }
+        insertAtCursor(")");
         break;
       case "i":
-        // Check what comes before and after cursor position for proper spacing
-        const charBeforeX =
-          cursorPosition > 0 ? formula[cursorPosition - 1] : "";
-        const charAfter =
-          cursorPosition < formula.length ? formula[cursorPosition] : "";
-
-        if (charBeforeX === "(") {
-          // If preceded by opening parenthesis, don't add leading space
-          if (charAfter === ")") {
-            insertAtCursor("i");
-          } else {
-            insertAtCursor("i ");
-          }
-        } else if (charAfter === ")") {
-          insertAtCursor(" i");
-        } else {
-          insertAtCursor(" i ");
-        }
+        const spaceBeforeI = needsSpaceBefore(cursorPosition, "variable")
+          ? " "
+          : "";
+        const spaceAfterI = needsSpaceAfter(
+          cursorPosition,
+          spaceBeforeI.length + 1,
+          "variable"
+        )
+          ? " "
+          : "";
+        insertAtCursor(spaceBeforeI + "i" + spaceAfterI);
         break;
       case "l[":
-        // Insert complete bracket construct with cursor between brackets
-        const charBeforeL =
-          cursorPosition > 0 ? formula[cursorPosition - 1] : "";
-        const charAfterL =
-          cursorPosition < formula.length ? formula[cursorPosition] : "";
-
-        if (charBeforeL === "(") {
-          // If preceded by opening parenthesis, don't add leading space
-          insertAtCursor("l[] ");
-          setCursorPosition(cursorPosition + 2); // Position cursor between brackets
-        } else if (charAfterL === ")") {
-          insertAtCursor(" l[]");
-          setCursorPosition(cursorPosition + 3); // Position cursor between brackets
-        } else {
-          insertAtCursor(" l[] ");
-          setCursorPosition(cursorPosition + 3); // Position cursor between brackets
-        }
+        const spaceBeforeL = needsSpaceBefore(cursorPosition, "variable")
+          ? " "
+          : "";
+        const spaceAfterL = needsSpaceAfter(
+          cursorPosition,
+          spaceBeforeL.length + 3,
+          "variable"
+        )
+          ? " "
+          : "";
+        insertAtCursor(spaceBeforeL + "l[]" + spaceAfterL);
+        setCursorPosition(cursorPosition + spaceBeforeL.length + 2); // Position cursor between brackets
         setWaitingForBracketNumber(true);
         break;
       case "r[":
-        // Insert complete bracket construct with cursor between brackets
-        const charBeforeR =
-          cursorPosition > 0 ? formula[cursorPosition - 1] : "";
-        const charAfterR =
-          cursorPosition < formula.length ? formula[cursorPosition] : "";
-
-        if (charBeforeR === "(") {
-          // If preceded by opening parenthesis, don't add leading space
-          insertAtCursor("r[] ");
-          setCursorPosition(cursorPosition + 2); // Position cursor between brackets
-        } else if (charAfterR === ")") {
-          insertAtCursor(" r[]");
-          setCursorPosition(cursorPosition + 3); // Position cursor between brackets
-        } else {
-          insertAtCursor(" r[] ");
-          setCursorPosition(cursorPosition + 3); // Position cursor between brackets
-        }
+        const spaceBeforeR = needsSpaceBefore(cursorPosition, "variable")
+          ? " "
+          : "";
+        const spaceAfterR = needsSpaceAfter(
+          cursorPosition,
+          spaceBeforeR.length + 3,
+          "variable"
+        )
+          ? " "
+          : "";
+        insertAtCursor(spaceBeforeR + "r[]" + spaceAfterR);
+        setCursorPosition(cursorPosition + spaceBeforeR.length + 2); // Position cursor between brackets
         setWaitingForBracketNumber(true);
         break;
       case "all":
-        // Check what comes before and after cursor position for proper spacing
-        const charBeforeAll =
-          cursorPosition > 0 ? formula[cursorPosition - 1] : "";
-        const charAfterAll =
-          cursorPosition < formula.length ? formula[cursorPosition] : "";
-
-        if (charBeforeAll === "(") {
-          // If preceded by opening parenthesis, don't add leading space
-          if (charAfterAll === ")") {
-            insertAtCursor("all");
-          } else {
-            insertAtCursor("all ");
-          }
-        } else if (charAfterAll === ")") {
-          insertAtCursor(" all");
-        } else {
-          insertAtCursor(" all ");
-        }
+        const spaceBeforeAll = needsSpaceBefore(cursorPosition, "variable")
+          ? " "
+          : "";
+        const spaceAfterAll = needsSpaceAfter(
+          cursorPosition,
+          spaceBeforeAll.length + 3,
+          "variable"
+        )
+          ? " "
+          : "";
+        insertAtCursor(spaceBeforeAll + "all" + spaceAfterAll);
         break;
       case "del":
         handleDelete();
         break;
       case "+":
-        insertAtCursor(" + ");
-        break;
       case "-":
-        insertAtCursor(" - ");
-        break;
-      case "×": // Changed from "×" to match ButtonGrid
-      case "x": // Also handle "x" for backward compatibility
-        insertAtCursor(" × ");
+      case "×":
+      case "x":
+        const spaceBefore = needsSpaceBefore(cursorPosition, "operator")
+          ? " "
+          : "";
+        const operatorChar = value === "x" ? "×" : value;
+        // Always add space after operators, regardless of what follows
+        insertAtCursor(spaceBefore + operatorChar + " ");
         break;
       default:
         if (/^[0-9]$/.test(value)) {
-          insertAtCursor(value);
+          const spaceBeforeNum = needsSpaceBefore(cursorPosition, "number")
+            ? " "
+            : "";
+          const spaceAfterNum = needsSpaceAfter(
+            cursorPosition,
+            spaceBeforeNum.length + 1,
+            "number"
+          )
+            ? " "
+            : "";
+          insertAtCursor(spaceBeforeNum + value + spaceAfterNum);
         }
         break;
     }
