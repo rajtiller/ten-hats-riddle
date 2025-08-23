@@ -1,4 +1,4 @@
-fix spacing in formula bar, especially when it comes to literals
+fix spacing in formula bar, especially when it comes to literals (add automatic spaces to all literalts, i, r[?], l[?], like how it is for all and other)
 add links to social media?
 add link to my youtube video for a video explantion
 make everything supported for mobile

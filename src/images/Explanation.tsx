@@ -89,56 +89,66 @@ const Explanation: React.FC<ExplanationProps> = ({
             color: "#333",
           }}
         >
-          <h2 style={{ color: "#007bff", marginTop: "-10px" }}>The Problem</h2>
-          <p>
-            Ten people are standing in a circle, each wearing a hat with a
-            random number from 0-9 (repeats allowed). Each person can see
-            everyone else's hat but not their own. After some time (for
-            observation and calculation), all players must simultaneously guess
-            their own hat number. The goal is for at least one of them to guess
-            their own hat number correctly. Each person has been given a unique
-            index,{" "}
-            <strong
-              style={{
-                fontFamily: "monospace",
-                backgroundColor: "#f8f9fa",
-                padding: "2px 4px",
-                border: "1px solid #ddd",
-                borderRadius: "3px",
-              }}
-            >
-              i
-            </strong>
-            , from 0-9 ahead of time. What should person{" "}
-            <strong
-              style={{
-                fontFamily: "monospace",
-                backgroundColor: "#f8f9fa",
-                padding: "2px 4px",
-                border: "1px solid #ddd",
-                borderRadius: "3px",
-              }}
-            >
-              i
-            </strong>{" "}
-            's guess be?
-          </p>
           <div
             style={{
-              margin: "20px 0",
-              paddingTop: "0px",
+              border: "2px solid #007bff",
+              backgroundColor: "#f0f8ff",
+              borderRadius: "8px",
+              padding: "20px",
+              marginBottom: "30px",
             }}
           >
-            <img
-              src="/images/ten-hats-example.png"
-              alt="Ten people in a circle wearing colorful numbered hats, showing a counter-example where the formula fails"
+            <h2 style={{ color: "#007bff", marginTop: "0" }}>The Problem</h2>
+            <p>
+              Ten people are standing in a circle, each wearing a hat with a
+              random number from 0-9 (repeats allowed). Each person can see
+              everyone else's hat but not their own. After some time (for
+              observation and calculation), all players must simultaneously
+              guess their own hat number. The goal is for at least one of them
+              to guess their own hat number correctly. Each person has been
+              given a unique index,{" "}
+              <strong
+                style={{
+                  fontFamily: "monospace",
+                  backgroundColor: "#f8f9fa",
+                  padding: "2px 4px",
+                  border: "1px solid #ddd",
+                  borderRadius: "3px",
+                }}
+              >
+                i
+              </strong>
+              , from 0-9 ahead of time. What should person{" "}
+              <strong
+                style={{
+                  fontFamily: "monospace",
+                  backgroundColor: "#f8f9fa",
+                  padding: "2px 4px",
+                  border: "1px solid #ddd",
+                  borderRadius: "3px",
+                }}
+              >
+                i
+              </strong>{" "}
+              's guess be?
+            </p>
+            <div
               style={{
-                maxWidth: "100%",
-                height: "auto",
-                border: "2px solid #333",
-                borderRadius: "8px",
+                margin: "20px 0",
+                paddingTop: "0px",
               }}
-            />
+            >
+              <img
+                src="/images/ten-hats-example.png"
+                alt="Ten people in a circle wearing colorful numbered hats, showing a counter-example where the formula fails"
+                style={{
+                  maxWidth: "100%",
+                  height: "auto",
+                  border: "2px solid #333",
+                  borderRadius: "8px",
+                }}
+              />
+            </div>
           </div>
           {/* Action Buttons */}
           <div
