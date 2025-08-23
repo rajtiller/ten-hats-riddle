@@ -124,7 +124,7 @@ const FormulaBar: React.FC<
         <div
           style={{
             position: "absolute",
-            top: "-36px", // Changed from "-35px" to be flush
+            top: "-32px", // Changed from "-35px" to be flush
             left: "-2px", // Align with border of container below
             right: "-2px", // Align with border of container below
             width: "auto", // Let left/right positioning determine width

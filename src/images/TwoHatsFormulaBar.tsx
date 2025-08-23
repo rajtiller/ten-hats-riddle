@@ -356,8 +356,8 @@ const testTwoHatsFormula = (formula: string): number[] => {
 
   // No counter-example found - formula is correct
   // Return a valid example with special marker
-  let ret = allCombinations[Math.floor(Math.random()*4)];
-  return [...ret,-1]; // -1 indicates correct formula
+  let ret = allCombinations[Math.floor(Math.random() * 4)];
+  return [...ret, -1]; // -1 indicates correct formula
 };
 
 interface DeleteContext {
@@ -625,13 +625,14 @@ const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
         <div
           style={{
             position: "absolute",
-            top: "-35px",
-            left: "0",
-            right: "0",
+            top: "-32px", // Changed from "-35px" to be flush
+            left: "-2px", // Align with border of container below
+            right: "-2px", // Align with border of container below
+            width: "auto", // Let left/right positioning determine width
             backgroundColor: "#ffebee",
             color: "#d32f2f",
-            border: "1px solid #d32f2f",
-            borderRadius: "3px",
+            border: "2px solid #d32f2f", // Match border width of container below
+            borderRadius: "0px", // Remove border radius to be flush
             padding: "6px 8px",
             fontSize: "12px",
             fontFamily: "monospace",
@@ -639,6 +640,7 @@ const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
             textAlign: "center",
             zIndex: 10,
             boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+            boxSizing: "border-box", // Include border in width calculation
           }}
         >
           ⚠️ {validation.error}
