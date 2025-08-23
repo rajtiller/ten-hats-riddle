@@ -5,7 +5,7 @@ interface UseKeyboardControlsProps {
   formula: string;
   setCursorPosition: (position: number) => void;
   onDelete: () => void;
-  disabled?: boolean; // New prop to disable keyboard controls
+  disabled?: boolean;
 }
 
 export const useKeyboardControls = ({
@@ -13,20 +13,17 @@ export const useKeyboardControls = ({
   formula,
   setCursorPosition,
   onDelete,
-  disabled = false, // Default to enabled
+  disabled = false,
 }: UseKeyboardControlsProps) => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (disabled) return; // Don't handle keyboard events when disabled
+      if (disabled) return;
 
       switch (event.key) {
         case "ArrowLeft":
-          event.preventDefault();
-          setCursorPosition(Math.max(cursorPosition - 1, 0));
-          break;
         case "ArrowRight":
+          // Disable arrow keys completely - prevent default but don't move cursor
           event.preventDefault();
-          setCursorPosition(Math.min(cursorPosition + 1, formula.length));
           break;
         case "Delete":
         case "Backspace":
