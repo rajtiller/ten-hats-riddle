@@ -134,7 +134,7 @@ const validateParenthesesContent = (content: string): ValidationResult => {
     return {
       isValid: false,
       error:
-        "Parentheses must contain numbers, variables (i, other), or nested expressions",
+        "Parentheses must contain numbers or variables (i, other)",
     };
   }
 

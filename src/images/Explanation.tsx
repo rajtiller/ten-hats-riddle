@@ -510,7 +510,17 @@ const Explanation: React.FC<ExplanationProps> = ({
                   </strong>{" "}
                   correctly.
                   <br />
-                  <br /> There are ten possibilities for k and ten people, so
+                  <br /> There are ten possibilities for <strong
+                    style={{
+                      fontFamily: "monospace",
+                      backgroundColor: "#92e28eff",
+                      padding: "2px 4px",
+                      border: "1px solid #ddd",
+                      borderRadius: "3px",
+                    }}
+                  >
+                    k
+                  </strong>{" "} and ten people, so
                   have each person guess a different value.
                   <br />
                   <br /> For simplicity, let person{" "}

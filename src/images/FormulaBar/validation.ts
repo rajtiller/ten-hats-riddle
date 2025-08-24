@@ -158,7 +158,7 @@ const validateParenthesesContent = (content: string): ValidationResult => {
     return {
       isValid: false,
       error:
-        "Parentheses must contain numbers, variables (i, all, r[?], l[?]), or nested expressions",
+        "Parentheses must contain numbers, variables (i, all, r[?], l[?])",
     };
   }
 
