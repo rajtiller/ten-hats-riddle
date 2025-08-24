@@ -1,5 +1,4 @@
-recolor 'SOlution' to be more green, 'Misc' to be purple, unsolved rpoblems to be blue and yellow respeticvly, also swap the blues of optimal incorrect formula and the setup
-make credit its own section at the bottom
+'+ (' then del causes issues
 replace ^ with superscript
 make percentage thigns in code or bold or smt
 add links to social media? LinkedIn?
