@@ -157,7 +157,7 @@ const Explanation: React.FC<ExplanationProps> = ({
             <p style={{ marginBottom: "0", color: "#333" }}>
               For a in-depth explanation of this puzzle, check out{" "}
               <a
-                href="https://www.youtube.com/watch?v=YOUR_VIDEO_ID"
+                href="https://www.youtube.com/watch?v=6hVPNONm7xw"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
