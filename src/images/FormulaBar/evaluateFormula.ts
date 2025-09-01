@@ -110,7 +110,7 @@ export const evaluateFormula = (
 };
 
 // Helper function that calculates what a specific person would guess
-export const calculatePersonGuess = (
+export const calculatePersonGuess = ( 
   allHatColors: number[], // Array of 10 hat colors
   formula: string,
   personIndex: number // Which person is making the guess (0-9)
