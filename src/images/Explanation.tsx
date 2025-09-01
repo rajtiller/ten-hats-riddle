@@ -12,7 +12,7 @@ const Explanation: React.FC<ExplanationProps> = ({
   const [showSolution, setShowSolution] = useState(false);
   const solutionRef = useRef<HTMLHeadingElement>(null);
 
-  const handleSeeSlution = () => {
+  const handleSeeSolution = () => {
     if (!showSolution) {
       // Show solution first
       setShowSolution(true);
@@ -214,7 +214,7 @@ const Explanation: React.FC<ExplanationProps> = ({
             </button>
 
             <button
-              onClick={handleSeeSlution}
+              onClick={handleSeeSolution}
               style={{
                 padding: "15px 30px",
                 fontSize: "18px",
