@@ -132,7 +132,7 @@ export class Person {
             cy={labelY - 3 * this.sizeScale}
             r={17 * this.sizeScale}
             fill="none"
-            stroke="#ffeb3b"
+            stroke="#3bffe5ff"
             strokeWidth={3 * this.sizeScale}
             opacity="0.8"
             style={{
@@ -172,7 +172,7 @@ export class Person {
           cy={this.y - 21 * this.sizeScale}
           r={35 * this.sizeScale}
           fill="none"
-          stroke="#ffeb3b"
+          stroke="#3bffe5ff"
           strokeWidth={4 * this.sizeScale}
           opacity="0.8"
           style={{

@@ -68,3 +68,64 @@ export const handleButtonClick = (
       break;
   }
 };
+
+export const handleButtonClickEnhanced = (
+  value: string,
+  context: ButtonContext,
+  waitingForBracketNumber: boolean
+) => {
+  const {
+    insertAtCursor,
+    // setCursorPosition,
+    // cursorPosition,
+    setWaitingForBracketNumber,
+    handleDelete,
+  } = context;
+
+  if (waitingForBracketNumber) {
+    if (/^[1-9]$/.test(value)) {
+      insertAtCursor(value + "]");
+      setWaitingForBracketNumber(false);
+    } else if (value === "del") {
+      handleDelete();
+    }
+    return;
+  }
+
+  switch (value) {
+    case "(":
+    case ")":
+    case "i":
+      insertAtCursor(value);
+      break;
+    case "l[":
+      insertAtCursor("l[");
+      setWaitingForBracketNumber(true);
+      break;
+    case "r[":
+      insertAtCursor("r[");
+      setWaitingForBracketNumber(true);
+      break;
+    case "all":
+      insertAtCursor("all");
+      break;
+    case "del":
+      handleDelete();
+      break;
+    case "+":
+      insertAtCursor(" + ");
+      break;
+    case "-":
+      insertAtCursor(" - ");
+      break;
+    case "×": // Changed from "x" to "×"
+    case "x": // Also handle "x" for backward compatibility
+      insertAtCursor(" × ");
+      break;
+    default:
+      if (/^[0-9]$/.test(value)) {
+        insertAtCursor(value);
+      }
+      break;
+  }
+};

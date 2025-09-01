@@ -82,11 +82,20 @@ export class Group {
         return personIndex === currentPersonIndex;
       case "all":
         return personIndex !== currentPersonIndex;
-      case "hat":
-        return personIndex !== currentPersonIndex;
       case "other":
         // For two hats riddle, "other" means the other person
         return this.numberOfPeople === 2 && personIndex !== currentPersonIndex;
+      case "left":
+        return (
+          (personIndex - currentPersonIndex) % this.numberOfPeople ===
+          highlight.position
+        );
+
+      case "right":
+        return (
+          (-personIndex + currentPersonIndex + 10) % this.numberOfPeople ===
+          highlight.position
+        );
       default:
         return false;
     }
@@ -376,30 +385,88 @@ const TooltipComponent: React.FC<TooltipComponentProps> = ({ tooltipData }) => {
     calculatedValue: number;
     finalResult: number;
   } | null => {
-    const { formula, hatColors, personNumber, guess } = tooltipData;
+    const { formula, hatColors, personNumber } = tooltipData;
 
     if (!formula || !hatColors) return null;
 
     try {
       let substitutedFormula = formula;
 
+      // Replace 'i' with person number
       substitutedFormula = substitutedFormula.replace(
         /\bi\b/g,
         personNumber.toString()
       );
 
-      // For two hats riddle, "other" refers to the other person's hat
+      // Handle different riddle types
       if (hatColors.length === 2) {
+        // Two hats riddle - handle "other"
         const otherPersonIndex = personNumber === 0 ? 1 : 0;
         substitutedFormula = substitutedFormula.replace(
           /\bother\b/g,
           hatColors[otherPersonIndex].toString()
         );
+      } else if (hatColors.length === 10) {
+        // Ten hats riddle - handle "all", "l[n]", "r[n]"
+
+        // Calculate visible hat colors (excluding current person)
+        const visibleHatColors = hatColors.filter(
+          (_, index) => index !== personNumber
+        );
+        const allSum = visibleHatColors.reduce((sum, color) => sum + color, 0);
+
+        // Replace 'all' with sum of visible hat colors
+        substitutedFormula = substitutedFormula.replace(
+          /\ball\b/g,
+          allSum.toString()
+        );
+
+        // Replace l[n] patterns
+        substitutedFormula = substitutedFormula.replace(
+          /l\[(\d+)\]/g,
+          (_, position) => {
+            const pos = parseInt(position);
+            if (pos < 1 || pos > 9) return "0";
+
+            // Calculate which person this refers to relative to personNumber
+            const targetPersonIndex = (personNumber + pos) % 10;
+
+            if (
+              targetPersonIndex >= 0 &&
+              targetPersonIndex < hatColors.length
+            ) {
+              return hatColors[targetPersonIndex].toString();
+            }
+            return "0";
+          }
+        );
+
+        // Replace r[n] patterns
+        substitutedFormula = substitutedFormula.replace(
+          /r\[(\d+)\]/g,
+          (_, position) => {
+            const pos = parseInt(position);
+            if (pos < 1 || pos > 9) return "0";
+
+            // Calculate which person this refers to relative to personNumber
+            const targetPersonIndex = (personNumber - pos + 10) % 10;
+
+            if (
+              targetPersonIndex >= 0 &&
+              targetPersonIndex < hatColors.length
+            ) {
+              return hatColors[targetPersonIndex].toString();
+            }
+            return "0";
+          }
+        );
       }
 
+      // Create animated formula
       let animatedFormula = formula;
 
       if (animationToggle) {
+        // Apply same substitutions for animation
         animatedFormula = animatedFormula.replace(
           /\bi\b/g,
           personNumber.toString()
@@ -411,15 +478,63 @@ const TooltipComponent: React.FC<TooltipComponentProps> = ({ tooltipData }) => {
             /\bother\b/g,
             hatColors[otherPersonIndex].toString()
           );
+        } else if (hatColors.length === 10) {
+          const visibleHatColors = hatColors.filter(
+            (_, index) => index !== personNumber
+          );
+          const allSum = visibleHatColors.reduce(
+            (sum, color) => sum + color,
+            0
+          );
+
+          animatedFormula = animatedFormula.replace(
+            /\ball\b/g,
+            allSum.toString()
+          );
+
+          animatedFormula = animatedFormula.replace(
+            /l\[(\d+)\]/g,
+            (_, position) => {
+              const pos = parseInt(position);
+              if (pos < 1 || pos > 9) return "0";
+              const targetPersonIndex = (personNumber + pos) % 10;
+              if (
+                targetPersonIndex >= 0 &&
+                targetPersonIndex < hatColors.length
+              ) {
+                return hatColors[targetPersonIndex].toString();
+              }
+              return "0";
+            }
+          );
+
+          animatedFormula = animatedFormula.replace(
+            /r\[(\d+)\]/g,
+            (_, position) => {
+              const pos = parseInt(position);
+              if (pos < 1 || pos > 9) return "0";
+              const targetPersonIndex = (personNumber - pos + 10) % 10;
+              if (
+                targetPersonIndex >= 0 &&
+                targetPersonIndex < hatColors.length
+              ) {
+                return hatColors[targetPersonIndex].toString();
+              }
+              return "0";
+            }
+          );
         }
       }
 
+      // Evaluate the processed formula
       const processedFormula = substitutedFormula.replace(/[×]/g, "*");
-
       const calculatedValue = new Function(
         `"use strict"; return (${processedFormula})`
       )();
-      const finalResult = ((calculatedValue % 2) + 2) % 2; // mod 2 for two hats
+
+      // Apply correct modulo based on riddle type
+      const modValue = hatColors.length === 2 ? 2 : 10;
+      const finalResult = ((calculatedValue % modValue) + modValue) % modValue;
 
       return {
         animatedFormula,
@@ -437,6 +552,9 @@ const TooltipComponent: React.FC<TooltipComponentProps> = ({ tooltipData }) => {
   if (!calculation) return null;
 
   const { x, y, personNumber } = tooltipData;
+
+  // Determine modulo text based on riddle type
+  const modText = tooltipData.hatColors?.length === 2 ? "mod 2" : "mod 10";
 
   return (
     <g>
@@ -494,7 +612,7 @@ const TooltipComponent: React.FC<TooltipComponentProps> = ({ tooltipData }) => {
         fontFamily="monospace"
         fill="#FFA500"
       >
-        {calculation.calculatedValue} mod 2 = {calculation.finalResult}
+        {calculation.calculatedValue} {modText} = {calculation.finalResult}
       </text>
     </g>
   );

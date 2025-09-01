@@ -57,58 +57,57 @@ const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
   const detectPersonReference = (position: number): PersonHighlight | null => {
     if (position === 0) return null;
 
-    // Check what's immediately to the left of cursor
-    const char = formula[position - 1];
+    // Get the portion of formula up to cursor position
+    const beforeCursor = formula.substring(0, position);
 
-    // console.log(`Cursor at ${position}, char to left: "${char}"`);
-
-    // Check for 'i' - current person
-    if (char === "i") {
-      // Make sure it's not part of a longer word
-      const prevChar = position > 1 ? formula[position - 2] : "";
-      if (!/[a-zA-Z]/.test(prevChar)) {
-        // console.log("Detected current person (i)");
-        return { type: "current" };
+    // Check for 'i' - current person (standalone)
+    if (/\bi\b/.test(beforeCursor)) {
+      const iMatches = [...beforeCursor.matchAll(/\bi\b/g)];
+      if (iMatches.length > 0) {
+        const lastMatch = iMatches[iMatches.length - 1];
+        const matchEnd = lastMatch.index! + lastMatch[0].length;
+        // Check if cursor is within reasonable distance of the match
+        if (position - matchEnd <= 2) {
+          return { type: "current" };
+        }
       }
     }
 
     // Check for 'all' - all other people
-    if (position >= 3 && formula.substring(position - 3, position) === "all") {
-      const prevChar = position > 3 ? formula[position - 4] : "";
-      if (!/[a-zA-Z]/.test(prevChar)) {
-        // console.log("Detected all people (all)");
-        return { type: "all" };
+    if (/\ball\b/.test(beforeCursor)) {
+      const allMatches = [...beforeCursor.matchAll(/\ball\b/g)];
+      if (allMatches.length > 0) {
+        const lastMatch = allMatches[allMatches.length - 1];
+        const matchEnd = lastMatch.index! + lastMatch[0].length;
+        // Check if cursor is within reasonable distance of the match
+        if (position - matchEnd <= 2) {
+          return { type: "all" };
+        }
       }
     }
 
-    // Check for closing bracket - could be l[n] or r[n]
-    if (char === "]") {
-      // console.log("Found closing bracket, checking for l[n] or r[n]");
-      // Look backwards to find the opening bracket and type
-      let bracketStart = position - 2;
-      let numberStr = "";
-
-      // Collect the number inside brackets
-      while (bracketStart >= 0 && formula[bracketStart] !== "[") {
-        if (/[0-9]/.test(formula[bracketStart])) {
-          numberStr = formula[bracketStart] + numberStr;
+    // Check for l[n] patterns
+    const lMatches = [...beforeCursor.matchAll(/l\[(\d+)\]/g)];
+    if (lMatches.length > 0) {
+      const lastMatch = lMatches[lMatches.length - 1];
+      const matchEnd = lastMatch.index! + lastMatch[0].length;
+      if (position - matchEnd <= 2) {
+        const positionNum = parseInt(lastMatch[1]);
+        if (positionNum >= 1 && positionNum <= 9) {
+          return { type: "left", position: positionNum };
         }
-        bracketStart--;
       }
+    }
 
-      // Check if we found a valid bracket with l or r before it
-      if (bracketStart > 0 && formula[bracketStart] === "[") {
-        const typeChar = formula[bracketStart - 1];
-        // console.log(`Found bracket pattern: ${typeChar}[${numberStr}]`);
-        if (typeChar === "l" || typeChar === "r") {
-          const position = parseInt(numberStr);
-          if (!isNaN(position) && position >= 1 && position <= 9) {
-            // console.log(`Detected ${typeChar}[${position}]`);
-            return {
-              type: typeChar === "l" ? "left" : "right",
-              position,
-            };
-          }
+    // Check for r[n] patterns
+    const rMatches = [...beforeCursor.matchAll(/r\[(\d+)\]/g)];
+    if (rMatches.length > 0) {
+      const lastMatch = rMatches[rMatches.length - 1];
+      const matchEnd = lastMatch.index! + lastMatch[0].length;
+      if (position - matchEnd <= 2) {
+        const positionNum = parseInt(lastMatch[1]);
+        if (positionNum >= 1 && positionNum <= 9) {
+          return { type: "right", position: positionNum };
         }
       }
     }
@@ -119,7 +118,6 @@ const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
   // Detect current highlight and notify parent
   React.useEffect(() => {
     const highlight = detectPersonReference(cursorPosition);
-    // console.log("Highlight detected:", highlight);
     if (onHighlightChange) {
       onHighlightChange(highlight);
     }

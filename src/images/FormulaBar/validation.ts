@@ -73,6 +73,13 @@ export const validateFormula = (formula: string): ValidationResult => {
 
   // Enhanced tokenization to handle multi-digit numbers
   const tokens = tokenizeFormula(cleanFormula);
+  if (tokens.length > 11) {
+    return {
+      isValid: false,
+      error:
+        `Token count of [${tokens.length}] exceeds limit of 11`,
+    };
+  }
   return validateTokens(tokens);
 };
 
@@ -151,7 +158,7 @@ const validateParenthesesContent = (content: string): ValidationResult => {
     return {
       isValid: false,
       error:
-        "Parentheses must contain numbers, variables (i, all, r[?], l[?]), or nested expressions",
+        "Parentheses must contain numbers, variables (i, all, r[?], l[?])",
     };
   }
 
@@ -276,7 +283,7 @@ const validateTokens = (tokens: Token[]): ValidationResult => {
     ) {
       return {
         isValid: false,
-        error: `Missing operator between '${current.value}' and '${next.value}' - variables must be separated from numbers and other variables by operators`,
+        error: `Missing operator between '${current.value}' and '${next.value}'`,
       };
     }
 
@@ -284,7 +291,7 @@ const validateTokens = (tokens: Token[]): ValidationResult => {
     if (current.type === "number" && next.type === "variable") {
       return {
         isValid: false,
-        error: `Missing operator between '${current.value}' and '${next.value}' - numbers and variables must be separated by operators`,
+        error: `Missing operator between '${current.value}' and '${next.value}'`,
       };
     }
   }

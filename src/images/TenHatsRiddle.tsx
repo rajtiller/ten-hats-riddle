@@ -31,6 +31,7 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
   const [personHighlight, setPersonHighlight] =
     useState<PersonHighlight | null>(null);
   const [currentFormula, setCurrentFormula] = useState<string>("");
+  const [showHoverExplanation, setShowHoverExplanation] = useState(false);
 
   // Hat colors - all valid colors (updated with white instead of teal)
   const availableHatColors = [
@@ -134,12 +135,6 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
     setPersonHighlight(null);
   };
 
-  const handleExplanationClick = () => {
-    if (onShowExplanation) {
-      onShowExplanation(); // No formula - goes to explanation part
-    }
-  };
-
   const handleSeeExplanation = () => {
     if (onShowExplanation) {
       onShowExplanation(currentFormula); // With formula - goes to solution part
@@ -222,7 +217,7 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
           e.currentTarget.style.backgroundColor = "#007bff";
         }}
       >
-        See Solution
+        See Solution (+ More)
       </button>
     </div>
   );
@@ -256,7 +251,137 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
           position: "relative",
         }}
       >
+        {/* Question mark button on the left */}
+        <button
+          onMouseEnter={() => setShowHoverExplanation(true)}
+          onMouseLeave={() => setShowHoverExplanation(false)}
+          style={{
+            position: "absolute",
+            left: "815px",
+            top: "30%",
+            transform: "translateY(-50%)",
+            width: "28px",
+            height: "28px",
+            borderRadius: "50%",
+            backgroundColor: "transparent",
+            color: "#007bff",
+            border: "none",
+            cursor: "pointer",
+            fontSize: "16px",
+            fontWeight: "bold",
+            fontFamily: "monospace",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            transition: "all 0.2s",
+            zIndex: 1001,
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.transform = "translateY(-50%) scale(1.3)";
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.transform = "translateY(-50%) scale(1)";
+          }}
+          title="Hover to learn about the Ten Hats Riddle"
+        >
+          ?
+        </button>
         Ten Hats Riddle
+        {/* Hover Explanation Tooltip */}
+        {showHoverExplanation && (
+          <div
+            style={{
+              position: "absolute",
+              top: "calc(100% + 15px)",
+              left: "calc(835px - 000px)", // Position tooltip below the question mark at 835px
+              backgroundColor: "white",
+              border: "2px solid #007bff",
+              borderRadius: "8px",
+              padding: "20px",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+              zIndex: 1000,
+              width: "400px",
+              fontFamily: "Arial, sans-serif",
+              fontSize: "14px",
+              color: "#333",
+              lineHeight: "1.5",
+            }}
+          >
+            {/* Arrow pointing up to the question mark */}
+            <div
+              style={{
+                position: "absolute",
+                bottom: "100%",
+                left: "07px", // Center the arrow above the tooltip, aligned with question mark
+                width: "0",
+                height: "0",
+                borderLeft: "10px solid transparent",
+                borderRight: "10px solid transparent",
+                borderBottom: "10px solid #007bff",
+              }}
+            />
+
+            <h3
+              style={{
+                margin: "0 0 15px 0",
+                color: "#007bff",
+                fontSize: "18px",
+                fontWeight: "bold",
+              }}
+            >
+              The Ten Hats Riddle
+            </h3>
+
+            <div style={{ marginBottom: "15px" }}>
+              <strong>The Setup:</strong> Ten people will randomly be assigned a
+              hat numbered 0-9 (repeats allowed). Each person can see everyone
+              else's hat but not their own.
+            </div>
+
+            <div style={{ marginBottom: "15px" }}>
+              <strong>The Goal:</strong> All people will simultaneously guess
+              their own hat number. At least one person must be correct.
+            </div>
+
+            <div style={{ marginBottom: "15px" }}>
+              <strong>Variables you can use:</strong>
+              <div
+                style={{
+                  backgroundColor: "#f8f9fa",
+                  padding: "10px",
+                  borderRadius: "4px",
+                  marginTop: "8px",
+                  fontFamily: "monospace",
+                  fontSize: "13px",
+                }}
+              >
+                • <strong>i</strong> - your own index (0-9)
+                                <br />• <strong>0-9</strong> - literal numbers
+
+                <br />• <strong>all</strong> - sum of all visible hat numbers
+                <br />• <strong>l[n]</strong> - person n positions to your left
+                <br />• <strong>r[n]</strong> - person n positions to your right
+                <br />• <strong>+, -, ×</strong> - mathematical operators
+                <br />• <strong>( )</strong> - parentheses for grouping
+              </div>
+            </div>
+
+            <div
+              style={{
+                color: "#28a745",
+                fontWeight: "bold",
+                fontSize: "13px",
+                backgroundColor: "#e8f5e8",
+                padding: "8px",
+                borderRadius: "4px",
+                border: "1px solid #28a745",
+              }}
+            >
+              There are 10^10 combinations!
+              <br /> Can you find a strategy that work for all of them? 🧠
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Helpful information div */}
@@ -264,21 +389,22 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
         style={{
           backgroundColor: "white",
           color: "black",
-          padding: "8px 0px", // Reduced from "8px 32px"
+          padding: "8px 8px", // Reduced from "8px 32px"
           margin: "5px 0 5px 0px",
           borderRadius: "6px",
           border: "1px solid #ccc",
           fontSize: "12px",
           fontFamily: "Arial, sans-serif",
           textAlign: "center",
-          maxWidth: "190px",
+          maxWidth: "200px",
           boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-          right: "-1065px",
-          top: "-30px",
-          position: "relative",
+          right: "175px",
+          top: "14px",
+          position: "absolute",
         }}
       >
-        Stuck? Try the <i>Two Hat Riddle</i> ➜{/* Arrow pointing to dropdown menu */}
+        Stuck? Try the <i>Two Hat Riddle</i> ➜
+        {/* Arrow pointing to dropdown menu */}
       </div>
 
       {/* State indicator with success rate */}
@@ -301,7 +427,7 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
         {appState === "input"
           ? ""
           : appState === "results" && testResult?.isCorrect
-          ? "Example Shown Above"
+          ? "✅ Correct Formula - Example Shown"
           : appState === "results" && !testResult?.isCorrect
           ? "❌ Counter-Example Found"
           : ""}

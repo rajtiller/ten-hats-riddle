@@ -14,7 +14,7 @@ const TwoHatsButtonGrid: React.FC<TwoHatsButtonGridProps> = ({
     ["i", "other", "+", "-", "×"], // Removed ÷ as requested
   ];
 
-  const getButtonStyle = (buttonValue: string) => {
+  const getButtonStyle = (_: string) => {
     const isEnabled = !disabled;
 
     return {

@@ -5,8 +5,8 @@ import TwoHatsRiddle from "./images/TwoHatsRiddle";
 import Explanation from "./images/Explanation";
 
 function App() {
-  const [selectedPage, setSelectedPage] = useState(0);
-  const [explanationFormula, setExplanationFormula] = useState<string>("");
+  const [selectedPage, setSelectedPage] = useState(2);
+  const [_, setExplanationFormula] = useState<string>("");
   const [shouldAutoScroll, setShouldAutoScroll] = useState(false);
 
   const handlePageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

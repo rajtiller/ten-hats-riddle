@@ -20,24 +20,34 @@ const TwoHatsFormulaDisplay: React.FC<TwoHatsFormulaDisplayProps> = ({
   const detectPersonReference = (position: number): PersonHighlight | null => {
     if (position === 0) return null;
 
-    const char = formula[position - 1];
+    // Get the portion of formula up to cursor position
+    const beforeCursor = formula.substring(0, position);
 
-    // Check for 'i' - current person
-    if (char === "i") {
-      const prevChar = position > 1 ? formula[position - 2] : "";
-      if (!/[a-zA-Z]/.test(prevChar)) {
-        return { type: "current" };
+    // Check for 'i' - current person (standalone)
+    if (/\bi\b/.test(beforeCursor)) {
+      const iMatches = [...beforeCursor.matchAll(/\bi\b/g)];
+      if (iMatches.length > 0) {
+        const lastMatch = iMatches[iMatches.length - 1];
+        const matchEnd = lastMatch.index! + lastMatch[0].length;
+        // Check if cursor is within reasonable distance of the match
+        if (position - matchEnd <= 2) {
+          // Allow for trailing spaces
+          return { type: "current" };
+        }
       }
     }
 
     // Check for 'other' - other person
-    if (
-      position >= 5 &&
-      formula.substring(position - 5, position) === "other"
-    ) {
-      const prevChar = position > 5 ? formula[position - 6] : "";
-      if (!/[a-zA-Z]/.test(prevChar)) {
-        return { type: "other" };
+    if (/\bother\b/.test(beforeCursor)) {
+      const otherMatches = [...beforeCursor.matchAll(/\bother\b/g)];
+      if (otherMatches.length > 0) {
+        const lastMatch = otherMatches[otherMatches.length - 1];
+        const matchEnd = lastMatch.index! + lastMatch[0].length;
+        // Check if cursor is within reasonable distance of the match
+        if (position - matchEnd <= 2) {
+          // Allow for trailing spaces
+          return { type: "other" };
+        }
       }
     }
 

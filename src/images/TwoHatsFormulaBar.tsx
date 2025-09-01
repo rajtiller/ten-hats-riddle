@@ -134,7 +134,7 @@ const validateParenthesesContent = (content: string): ValidationResult => {
     return {
       isValid: false,
       error:
-        "Parentheses must contain numbers, variables (i, other), or nested expressions",
+        "Parentheses must contain numbers or variables (i, other)",
     };
   }
 
@@ -198,6 +198,12 @@ const tokenizeFormula = (cleanFormula: string): Token[] => {
 };
 
 const validateTokens = (tokens: Token[]): ValidationResult => {
+  if (tokens.length > 11) {
+    return {
+      isValid: false,
+      error: `Token count of [${tokens.length}] exceeds limit of 11`,
+    };
+  }
   // Rule 1: Must start and end with a number or variable
   if (tokens.length === 0) {
     return { isValid: false, error: "Formula cannot be empty" };
@@ -244,7 +250,7 @@ const validateTokens = (tokens: Token[]): ValidationResult => {
     ) {
       return {
         isValid: false,
-        error: `Missing operator between '${current.value}' and '${next.value}' - variables must be separated from numbers and other variables by operators`,
+        error: `Missing operator between '${current.value}' and '${next.value}'`,
       };
     }
 
@@ -252,7 +258,7 @@ const validateTokens = (tokens: Token[]): ValidationResult => {
     if (current.type === "number" && next.type === "variable") {
       return {
         isValid: false,
-        error: `Missing operator between '${current.value}' and '${next.value}' - numbers and variables must be separated by operators`,
+        error: `Missing operator between '${current.value}' and '${next.value}'`,
       };
     }
   }
@@ -356,8 +362,8 @@ const testTwoHatsFormula = (formula: string): number[] => {
 
   // No counter-example found - formula is correct
   // Return a valid example with special marker
-  let ret = allCombinations[Math.floor(Math.random()*4)];
-  return [...ret,-1]; // -1 indicates correct formula
+  let ret = allCombinations[Math.floor(Math.random() * 4)];
+  return [...ret, -1]; // -1 indicates correct formula
 };
 
 interface DeleteContext {
@@ -393,10 +399,7 @@ const handleDelete = (context: DeleteContext) => {
     if (!/[a-zA-Z]/.test(charBeforeOther)) {
       let newFormula =
         formula.slice(0, cursorPosition - 5) + formula.slice(cursorPosition);
-
-      // Remove trailing spaces
       newFormula = newFormula.trimEnd();
-
       setFormula(newFormula);
       setCursorPosition(Math.min(cursorPosition - 5, newFormula.length));
       if (errorMessage) setErrorMessage("");
@@ -406,7 +409,6 @@ const handleDelete = (context: DeleteContext) => {
 
   // Enhanced delete behavior for space + preceding item
   if (charAtCursor === " ") {
-    // Look backwards to find the last non-space character
     let deleteStart = cursorPosition - 1; // Start at the space
 
     // Skip any additional spaces
@@ -443,10 +445,7 @@ const handleDelete = (context: DeleteContext) => {
     // Delete from deleteStart to cursorPosition (inclusive of space(s))
     let newFormula =
       formula.slice(0, deleteStart) + formula.slice(cursorPosition);
-
-    // Remove trailing spaces
     newFormula = newFormula.trimEnd();
-
     setFormula(newFormula);
     setCursorPosition(Math.min(deleteStart, newFormula.length));
     if (errorMessage) setErrorMessage("");
@@ -462,10 +461,7 @@ const handleDelete = (context: DeleteContext) => {
     if (!/[a-zA-Z]/.test(charBeforeI) && !/[a-zA-Z]/.test(charAfterI)) {
       let newFormula =
         formula.slice(0, cursorPosition - 1) + formula.slice(cursorPosition);
-
-      // Remove trailing spaces
       newFormula = newFormula.trimEnd();
-
       setFormula(newFormula);
       setCursorPosition(Math.min(cursorPosition - 1, newFormula.length));
       if (errorMessage) setErrorMessage("");
@@ -473,13 +469,127 @@ const handleDelete = (context: DeleteContext) => {
     }
   }
 
+  // Handle characters that are part of "other" - improved logic
+  if (charAtCursor === "r") {
+    // Check if this 'r' is the last character of "other"
+    if (
+      cursorPosition >= 5 &&
+      formula.substring(cursorPosition - 5, cursorPosition) === "othe"
+    ) {
+      const charBeforeOther =
+        cursorPosition > 5 ? formula[cursorPosition - 6] : "";
+      if (!/[a-zA-Z]/.test(charBeforeOther)) {
+        // This 'r' is part of "other", delete the entire word
+        let newFormula =
+          formula.slice(0, cursorPosition - 5) + formula.slice(cursorPosition);
+        newFormula = newFormula.trimEnd();
+        setFormula(newFormula);
+        setCursorPosition(Math.min(cursorPosition - 5, newFormula.length));
+        if (errorMessage) setErrorMessage("");
+        return;
+      }
+    }
+  }
+
+  // Handle 'e' that might be part of "other"
+  if (charAtCursor === "e") {
+    // Check if this 'e' is part of "other"
+    if (
+      cursorPosition >= 4 &&
+      cursorPosition <= formula.length - 1 &&
+      formula.substring(cursorPosition - 4, cursorPosition + 1) === "other"
+    ) {
+      const charBeforeOther =
+        cursorPosition > 4 ? formula[cursorPosition - 5] : "";
+      if (!/[a-zA-Z]/.test(charBeforeOther)) {
+        // This 'e' is part of "other", delete the entire word
+        let newFormula =
+          formula.slice(0, cursorPosition - 4) +
+          formula.slice(cursorPosition + 1);
+        newFormula = newFormula.trimEnd();
+        setFormula(newFormula);
+        setCursorPosition(Math.min(cursorPosition - 4, newFormula.length));
+        if (errorMessage) setErrorMessage("");
+        return;
+      }
+    }
+  }
+
+  // Handle 'h' that might be part of "other"
+  if (charAtCursor === "h") {
+    // Check if this 'h' is part of "other"
+    if (
+      cursorPosition >= 3 &&
+      cursorPosition <= formula.length - 2 &&
+      formula.substring(cursorPosition - 3, cursorPosition + 2) === "other"
+    ) {
+      const charBeforeOther =
+        cursorPosition > 3 ? formula[cursorPosition - 4] : "";
+      if (!/[a-zA-Z]/.test(charBeforeOther)) {
+        // This 'h' is part of "other", delete the entire word
+        let newFormula =
+          formula.slice(0, cursorPosition - 3) +
+          formula.slice(cursorPosition + 2);
+        newFormula = newFormula.trimEnd();
+        setFormula(newFormula);
+        setCursorPosition(Math.min(cursorPosition - 3, newFormula.length));
+        if (errorMessage) setErrorMessage("");
+        return;
+      }
+    }
+  }
+
+  // Handle 't' that might be part of "other"
+  if (charAtCursor === "t") {
+    // Check if this 't' is part of "other"
+    if (
+      cursorPosition >= 2 &&
+      cursorPosition <= formula.length - 3 &&
+      formula.substring(cursorPosition - 2, cursorPosition + 3) === "other"
+    ) {
+      const charBeforeOther =
+        cursorPosition > 2 ? formula[cursorPosition - 3] : "";
+      if (!/[a-zA-Z]/.test(charBeforeOther)) {
+        // This 't' is part of "other", delete the entire word
+        let newFormula =
+          formula.slice(0, cursorPosition - 2) +
+          formula.slice(cursorPosition + 3);
+        newFormula = newFormula.trimEnd();
+        setFormula(newFormula);
+        setCursorPosition(Math.min(cursorPosition - 2, newFormula.length));
+        if (errorMessage) setErrorMessage("");
+        return;
+      }
+    }
+  }
+
+  // Handle 'o' that might be part of "other"
+  if (charAtCursor === "o") {
+    // Check if this 'o' is the start of "other"
+    if (
+      cursorPosition <= formula.length - 4 &&
+      formula.substring(cursorPosition - 1, cursorPosition + 4) === "other"
+    ) {
+      const charBeforeOther =
+        cursorPosition > 1 ? formula[cursorPosition - 2] : "";
+      if (!/[a-zA-Z]/.test(charBeforeOther)) {
+        // This 'o' is part of "other", delete the entire word
+        let newFormula =
+          formula.slice(0, cursorPosition - 1) +
+          formula.slice(cursorPosition + 4);
+        newFormula = newFormula.trimEnd();
+        setFormula(newFormula);
+        setCursorPosition(Math.min(cursorPosition - 1, newFormula.length));
+        if (errorMessage) setErrorMessage("");
+        return;
+      }
+    }
+  }
+
   // Default delete behavior - single character
   let newFormula =
     formula.slice(0, cursorPosition - 1) + formula.slice(cursorPosition);
-
-  // Remove trailing spaces
   newFormula = newFormula.trimEnd();
-
   setFormula(newFormula);
   setCursorPosition(Math.min(cursorPosition - 1, newFormula.length));
   if (errorMessage) setErrorMessage("");
@@ -489,40 +599,10 @@ interface ButtonContext {
   insertAtCursor: (text: string) => void;
   setCursorPosition: (position: number) => void;
   cursorPosition: number;
+  formula: string;
+  setFormula: (formula: string) => void;
   handleDelete: () => void;
 }
-
-const handleButtonClick = (value: string, context: ButtonContext) => {
-  const { insertAtCursor, handleDelete } = context;
-
-  switch (value) {
-    case "(":
-    case ")":
-    case "i":
-      insertAtCursor(value);
-      break;
-    case "other":
-      insertAtCursor("other");
-      break;
-    case "del":
-      handleDelete();
-      break;
-    case "+":
-      insertAtCursor(" + ");
-      break;
-    case "-":
-      insertAtCursor(" - ");
-      break;
-    case "×":
-      insertAtCursor(" × ");
-      break;
-    default:
-      if (["0", "1"].includes(value)) {
-        insertAtCursor(value);
-      }
-      break;
-  }
-};
 
 const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
   width = 600,
@@ -553,8 +633,155 @@ const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
       text
     );
     setFormula(newText);
-    setCursorPosition(newPosition);
+
+    // Determine cursor position based on the last non-space character in the inserted text
+    const trimmedText = text.trimEnd();
+    const lastChar = trimmedText[trimmedText.length - 1];
+
+    // Position cursor after space for operators and ')', otherwise at end of token
+    if (["+", "-", "×", ")"].includes(lastChar)) {
+      // Keep cursor after the trailing space for operators and closing parenthesis
+      setCursorPosition(newPosition);
+    } else {
+      // Position cursor at end of token (before any trailing space) for variables, numbers, and opening parenthesis
+      const tokenEndPosition = cursorPosition + trimmedText.length;
+      setCursorPosition(tokenEndPosition);
+    }
+
     if (errorMessage) setErrorMessage("");
+  };
+
+  // Helper function to check if we need a space before the current token
+  const needsSpaceBefore = (
+    currentPos: number,
+    tokenType: "variable" | "operator" | "number" | "parenthesis"
+  ): boolean => {
+    if (currentPos === 0) return false;
+
+    const charBefore = formula[currentPos - 1];
+
+    // Never add space after opening parenthesis or before closing parenthesis
+    if (
+      charBefore === "(" ||
+      (tokenType === "parenthesis" && formula[currentPos] === ")")
+    ) {
+      return false;
+    }
+
+    // Add space before variables and operators (except after opening parenthesis)
+    if (tokenType === "variable" || tokenType === "operator") {
+      return charBefore !== " " && charBefore !== "(";
+    }
+
+    // Numbers only need space if following a variable or closing parenthesis
+    if (tokenType === "number") {
+      return /[a-zA-Z\)]/.test(charBefore) && charBefore !== " ";
+    }
+
+    return false;
+  };
+
+  // Helper function to check if we need a space after the current token
+  const needsSpaceAfter = (
+    currentPos: number,
+    tokenLength: number,
+    tokenType: "variable" | "operator" | "number" | "parenthesis"
+  ): boolean => {
+    const nextPos = currentPos + tokenLength;
+    if (nextPos >= formula.length) return false;
+
+    const charAfter = formula[nextPos];
+
+    // Never add space before closing parenthesis or after opening parenthesis
+    if (
+      charAfter === ")" ||
+      (tokenType === "parenthesis" && formula[currentPos] === "(")
+    ) {
+      return false;
+    }
+
+    // Add space after variables and numbers (except before closing parenthesis)
+    if (tokenType === "variable" || tokenType === "number") {
+      return charAfter !== " " && charAfter !== ")";
+    }
+
+    // Operators always get space after (except before closing parenthesis)
+    if (tokenType === "operator") {
+      return charAfter !== " ";
+    }
+
+    return false;
+  };
+
+  const handleButtonClick = (value: string, context: ButtonContext) => {
+    const { insertAtCursor, handleDelete } = context;
+
+    switch (value) {
+      case "(":
+        const spaceBeforeParen = needsSpaceBefore(cursorPosition, "parenthesis")
+          ? " "
+          : "";
+        insertAtCursor(spaceBeforeParen + "(");
+        break;
+      case ")":
+        insertAtCursor(")");
+        break;
+      case "i":
+        const spaceBeforeI = needsSpaceBefore(cursorPosition, "variable")
+          ? " "
+          : "";
+        const spaceAfterI = needsSpaceAfter(
+          cursorPosition,
+          spaceBeforeI.length + 1,
+          "variable"
+        )
+          ? " "
+          : "";
+        insertAtCursor(spaceBeforeI + "i" + spaceAfterI);
+        break;
+      case "other":
+        const spaceBeforeOther = needsSpaceBefore(cursorPosition, "variable")
+          ? " "
+          : "";
+        const spaceAfterOther = needsSpaceAfter(
+          cursorPosition,
+          spaceBeforeOther.length + 5,
+          "variable"
+        )
+          ? " "
+          : "";
+        insertAtCursor(spaceBeforeOther + "other" + spaceAfterOther);
+        break;
+      case "del":
+        handleDelete();
+        break;
+      case "+":
+      case "-":
+      case "×":
+      case "x":
+        const spaceBefore = needsSpaceBefore(cursorPosition, "operator")
+          ? " "
+          : "";
+        const operatorChar = value === "x" ? "×" : value;
+        // Always add space after operators, regardless of what follows
+        insertAtCursor(spaceBefore + operatorChar + " ");
+        break;
+      default:
+        if (["0", "1"].includes(value)) {
+          const spaceBeforeNum = needsSpaceBefore(cursorPosition, "number")
+            ? " "
+            : "";
+          const spaceAfterNum = needsSpaceAfter(
+            cursorPosition,
+            spaceBeforeNum.length + 1,
+            "number"
+          )
+            ? " "
+            : "";
+          insertAtCursor(spaceBeforeNum + value + spaceAfterNum);
+        }
+        break;
+    }
   };
 
   const handleTest = () => {
@@ -587,6 +814,8 @@ const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
     insertAtCursor,
     setCursorPosition,
     cursorPosition,
+    formula,
+    setFormula,
     handleDelete: () => handleDelete(deleteContext),
   };
 
@@ -625,13 +854,14 @@ const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
         <div
           style={{
             position: "absolute",
-            top: "-35px",
-            left: "0",
-            right: "0",
+            top: "-32px", // Changed from "-35px" to be flush
+            left: "-2px", // Align with border of container below
+            right: "-2px", // Align with border of container below
+            width: "auto", // Let left/right positioning determine width
             backgroundColor: "#ffebee",
             color: "#d32f2f",
-            border: "1px solid #d32f2f",
-            borderRadius: "3px",
+            border: "2px solid #d32f2f", // Match border width of container below
+            borderRadius: "0px", // Remove border radius to be flush
             padding: "6px 8px",
             fontSize: "12px",
             fontFamily: "monospace",
@@ -639,6 +869,7 @@ const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
             textAlign: "center",
             zIndex: 10,
             boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+            boxSizing: "border-box", // Include border in width calculation
           }}
         >
           ⚠️ {validation.error}

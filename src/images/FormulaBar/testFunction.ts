@@ -3,16 +3,19 @@ import { calculatePersonGuess } from "./evaluateFormula";
 export const testFormula = (formula: string): number[] => {
   const startTime = Date.now();
   const testDuration = 1000; // 1 second in milliseconds
-
+  if (!hasCorrectGuess(formula, [0,1,0,1,0,1,0,1,0,1])) {
+      return [0,1,0,1,0,1,0,1,0,1];
+    } 
   while (Date.now() - startTime < testDuration) {
     // Generate random hat configuration
     const guess = generateRandomHats();
 
     // check if anyone guesses their hat color correctly
     if (!hasCorrectGuess(formula, guess)) {
-      return guess; // Found a counter-example
-    }
+      return guess;
+    } 
   }
+
 
   // No counter-example found - formula appears correct
   // Return a random valid configuration with a special marker
