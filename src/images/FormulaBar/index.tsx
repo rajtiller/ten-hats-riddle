@@ -3,9 +3,8 @@ import { type FormulaBarProps } from "./types";
 import { insertTextAtPosition } from "./utils";
 import { useKeyboardControls } from "./useKeyboardControls";
 import { validateFormula } from "./validation";
-import { handleDelete, type DeleteContext } from "./deleteHandlers";
+import { type DeleteContext } from "./deleteHandlers";
 import {
-  handleButtonClickEnhanced,
   type ButtonContext,
 } from "./buttonHandlers";
 import { testFormula } from "./testFunction";
@@ -33,13 +32,6 @@ const FormulaBar: React.FC<
   const [cursorPosition, setCursorPosition] = useState(0);
   const [waitingForBracketNumber, setWaitingForBracketNumber] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
-  // Function to count symbols (excluding parentheses and spaces)
-  const countSymbols = (text: string): number => {
-    // First replace "all" with a single character to count it as 1 symbol
-    // Then remove parentheses and spaces, then count remaining characters
-    return text.replace(/all/g, "a").replace(/[() ]/g, "").length;
-  };
 
   // Update formula when initialFormula changes
   useEffect(() => {

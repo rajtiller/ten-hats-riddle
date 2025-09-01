@@ -76,8 +76,8 @@ export const handleButtonClickEnhanced = (
 ) => {
   const {
     insertAtCursor,
-    setCursorPosition,
-    cursorPosition,
+    // setCursorPosition,
+    // cursorPosition,
     setWaitingForBracketNumber,
     handleDelete,
   } = context;

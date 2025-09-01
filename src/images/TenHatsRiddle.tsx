@@ -135,12 +135,6 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
     setPersonHighlight(null);
   };
 
-  const handleExplanationClick = () => {
-    if (onShowExplanation) {
-      onShowExplanation(); // No formula - goes to explanation part
-    }
-  };
-
   const handleSeeExplanation = () => {
     if (onShowExplanation) {
       onShowExplanation(currentFormula); // With formula - goes to solution part

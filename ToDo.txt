@@ -1,4 +1,6 @@
 '+ (' then del causes issues
+make testFormula test a set of pre-set array first
+implement the buttons formulaBar
 replace ^ with superscript
 make percentage thigns in code or bold or smt
 add links to social media? LinkedIn?

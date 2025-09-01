@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { validateFormula } from "./FormulaBar/validation";
-import { testFormula, evaluateTestResult } from "./FormulaBar/testFunction";
+import { testFormula } from "./FormulaBar/testFunction";
 
 interface TestButtonProps {
   formula: string;
@@ -29,7 +29,6 @@ const TestButton: React.FC<TestButtonProps> = ({ formula, onTestResult }) => {
     try {
       // Use the centralized test function
       const result = testFormula(formula);
-      const evaluation = evaluateTestResult(result);
 
       setTestResult(result);
 
