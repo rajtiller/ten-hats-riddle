@@ -179,49 +179,57 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
       style={{
         width: 600,
         height: 120,
-        border: "2px solid #c3e6cb",
-        padding: "5px",
-        backgroundColor: "#d4edda",
+        border: "none",
+        padding: "12px",
+        background: "rgba(16, 185, 129, 0.15)",
+        backdropFilter: "blur(10px)",
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        gap: "10px",
+        gap: "12px",
+        borderRadius: "16px",
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)",
       }}
     >
       <div
         style={{
           fontSize: "18px",
-          fontWeight: "bold",
-          color: "#155724",
-          fontFamily: "monospace",
+          fontWeight: "600",
+          color: "#065f46",
+          fontFamily: "'Inter', sans-serif",
           textAlign: "center",
         }}
       >
         ✅ You got it! Your formula works for all cases.
       </div>
 
-      <div style={{ display: "flex", gap: "15px" }}>
+      <div style={{ display: "flex", gap: "12px" }}>
         <button
           onClick={handleGuessAgain}
           style={{
             padding: "10px 20px",
             fontSize: "14px",
-            fontFamily: "monospace",
-            fontWeight: "bold",
+            fontFamily: "'Inter', sans-serif",
+            fontWeight: "600",
             backgroundColor: "#dc3545",
             color: "white",
             border: "none",
-            borderRadius: "6px",
+            borderRadius: "8px",
             cursor: "pointer",
-            transition: "background-color 0.2s",
+            transition: "all 0.2s ease",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
           }}
           onMouseOver={(e) => {
             e.currentTarget.style.backgroundColor = "#c82333";
+            e.currentTarget.style.transform = "translateY(-1px)";
+            e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.2)";
           }}
           onMouseOut={(e) => {
             e.currentTarget.style.backgroundColor = "#dc3545";
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "0 2px 8px rgba(0, 0, 0, 0.15)";
           }}
         >
           Try Again
@@ -232,20 +240,25 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
           style={{
             padding: "10px 20px",
             fontSize: "14px",
-            fontFamily: "monospace",
-            fontWeight: "bold",
-            backgroundColor: "#28a745",
+            fontFamily: "'Inter', sans-serif",
+            fontWeight: "600",
+            backgroundColor: "#10b981",
             color: "white",
             border: "none",
-            borderRadius: "6px",
+            borderRadius: "8px",
             cursor: "pointer",
-            transition: "background-color 0.2s",
+            transition: "all 0.2s ease",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
           }}
           onMouseOver={(e) => {
-            e.currentTarget.style.backgroundColor = "#218838";
+            e.currentTarget.style.backgroundColor = "#059669";
+            e.currentTarget.style.transform = "translateY(-1px)";
+            e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.2)";
           }}
           onMouseOut={(e) => {
-            e.currentTarget.style.backgroundColor = "#28a745";
+            e.currentTarget.style.backgroundColor = "#10b981";
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "0 2px 8px rgba(0, 0, 0, 0.15)";
           }}
         >
           Try Ten Hats Riddle

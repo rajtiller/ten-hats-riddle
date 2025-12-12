@@ -44,23 +44,26 @@ const HatLegend: React.FC<HatLegendProps> = () => {
         left: "20px",
         top: "50%",
         transform: "translateY(-50%)",
-        backgroundColor: "#f5f5f5",
-        border: "2px solid #333",
-        borderRadius: "8px",
-        padding: "15px",
+        background: "rgba(255, 255, 255, 0.95)",
+        backdropFilter: "blur(10px)",
+        border: "none",
+        borderRadius: "16px",
+        padding: "20px",
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)",
         minWidth: "150px",
         zIndex: 10,
       }}
     >
       <h3
         style={{
-          margin: "0 0 15px 0",
-          fontSize: "16px",
-          fontFamily: "monospace",
+          margin: "0 0 16px 0",
+          fontSize: "17px",
+          fontFamily: "'Inter', sans-serif",
+          fontWeight: "700",
           textAlign: "center",
-          borderBottom: "1px solid #666",
-          paddingBottom: "8px",
-          color: "#999",
+          borderBottom: "2px solid #e2e8f0",
+          paddingBottom: "10px",
+          color: "#2d3748",
         }}
       >
         Hat Colors

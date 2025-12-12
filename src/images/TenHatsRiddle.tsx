@@ -173,23 +173,26 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
       style={{
         width: 600,
         height: 120,
-        border: "2px solid #c3e6cb",
-        padding: "5px",
-        backgroundColor: "#d4edda",
+        border: "none",
+        padding: "12px",
+        background: "rgba(16, 185, 129, 0.15)",
+        backdropFilter: "blur(10px)",
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        gap: "10px",
+        gap: "12px",
+        borderRadius: "16px",
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)",
       }}
     >
       <div
         style={{
           fontSize: "18px",
-          fontWeight: "bold",
-          color: "#155724",
-          fontFamily: "monospace",
+          fontWeight: "600",
+          color: "#065f46",
+          fontFamily: "'Inter', sans-serif",
           textAlign: "center",
         }}
       >
@@ -199,25 +202,30 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
       <button
         onClick={handleSeeExplanation}
         style={{
-          padding: "12px 24px",
-          fontSize: "16px",
-          fontFamily: "monospace",
-          fontWeight: "bold",
-          backgroundColor: "#007bff",
+          padding: "10px 20px",
+          fontSize: "15px",
+          fontFamily: "'Inter', sans-serif",
+          fontWeight: "600",
+          backgroundColor: "#3b82f6",
           color: "white",
           border: "none",
-          borderRadius: "6px",
+          borderRadius: "8px",
           cursor: "pointer",
-          transition: "background-color 0.2s",
+          transition: "all 0.2s ease",
+          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
         }}
         onMouseOver={(e) => {
-          e.currentTarget.style.backgroundColor = "#0056b3";
+          e.currentTarget.style.backgroundColor = "#2563eb";
+          e.currentTarget.style.transform = "translateY(-1px)";
+          e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.2)";
         }}
         onMouseOut={(e) => {
-          e.currentTarget.style.backgroundColor = "#007bff";
+          e.currentTarget.style.backgroundColor = "#3b82f6";
+          e.currentTarget.style.transform = "translateY(0)";
+          e.currentTarget.style.boxShadow = "0 2px 8px rgba(0, 0, 0, 0.15)";
         }}
       >
-        See Explantion (+ Fun Facts)
+        See Explanation (+ Fun Facts)
       </button>
     </div>
   );
@@ -229,7 +237,7 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
         height: "100vh",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "#f0f0f0",
+        background: "transparent",
         position: "relative",
         padding: "0",
         overflow: "hidden",
@@ -238,17 +246,18 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
       {/* Title with explanation button */}
       <div
         style={{
-          fontSize: "24px",
-          fontFamily: "monospace",
-          fontWeight: "bold",
-          color: "#333",
+          fontSize: "28px",
+          fontFamily: "'Inter', sans-serif",
+          fontWeight: "700",
+          color: "#1a202c",
           textAlign: "center",
-          padding: "10px 0",
-          height: "44px",
+          padding: "16px 0",
+          height: "60px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           position: "relative",
+          textShadow: "0 2px 4px rgba(0,0,0,0.05)",
         }}
       >
         {/* Question mark button on the left */}
@@ -387,24 +396,25 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
       {/* Helpful information div */}
       <div
         style={{
-          backgroundColor: "white",
-          color: "black",
-          padding: "8px 8px", // Reduced from "8px 32px"
+          backgroundColor: "rgba(255, 255, 255, 0.95)",
+          color: "#2d3748",
+          padding: "10px 14px",
           margin: "5px 0 5px 0px",
-          borderRadius: "6px",
-          border: "1px solid #ccc",
-          fontSize: "12px",
-          fontFamily: "Arial, sans-serif",
+          borderRadius: "10px",
+          border: "2px solid rgba(66, 153, 225, 0.3)",
+          fontSize: "13px",
+          fontFamily: "'Inter', sans-serif",
+          fontWeight: "500",
           textAlign: "center",
           maxWidth: "200px",
-          boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.12)",
           right: "175px",
-          top: "14px",
+          top: "18px",
           position: "absolute",
+          backdropFilter: "blur(10px)",
         }}
       >
         Stuck? Try the <i>Two Hat Riddle</i> ➜
-        {/* Arrow pointing to dropdown menu */}
       </div>
 
       {/* State indicator with success rate */}

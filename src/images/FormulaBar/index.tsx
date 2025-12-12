@@ -566,14 +566,17 @@ const FormulaBar: React.FC<
       style={{
         width,
         height: height + (errorMessage ? 30 : 0),
-        border: "2px solid #333",
-        padding: "8px",
-        backgroundColor: "#f5f5f5",
+        border: "none",
+        padding: "12px",
+        background: "rgba(255, 255, 255, 0.95)",
+        backdropFilter: "blur(10px)",
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
-        gap: "8px",
+        gap: "10px",
         position: "relative",
+        borderRadius: "16px",
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)",
       }}
     >
       <style>
@@ -585,18 +588,18 @@ const FormulaBar: React.FC<
         <div
           style={{
             position: "absolute",
-            top: "-32px",
-            left: "-2px",
-            right: "-2px",
+            top: "-36px",
+            left: "0",
+            right: "0",
             width: "auto",
-            backgroundColor: "#ffebee",
-            color: "#d32f2f",
-            border: "2px solid #d32f2f",
-            borderRadius: "0px",
-            padding: "6px 8px",
-            fontSize: "12px",
-            fontFamily: "monospace",
-            fontWeight: "bold",
+            backgroundColor: "#fee",
+            color: "#c33",
+            border: "2px solid #faa",
+            borderRadius: "12px",
+            padding: "8px 12px",
+            fontSize: "13px",
+            fontFamily: "'Inter', sans-serif",
+            fontWeight: "600",
             textAlign: "center",
             zIndex: 10,
             boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
@@ -610,20 +613,21 @@ const FormulaBar: React.FC<
       {/* Formula input with labels */}
       <div
         style={{
-          height: "32px",
+          height: "40px",
           display: "flex",
           alignItems: "center",
-          gap: "0px",
+          gap: "8px",
           flex: "0 0 auto",
         }}
       >
         <div
           style={{
-            backgroundColor: "#f5f5f5",
-            color: "black",
-            fontFamily: "monospace",
-            fontSize: "14px",
-            padding: "6px 8px",
+            backgroundColor: "transparent",
+            color: "#2d3748",
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: "15px",
+            fontWeight: "600",
+            padding: "8px 10px",
             display: "flex",
             alignItems: "center",
             userSelect: "none",
@@ -638,17 +642,19 @@ const FormulaBar: React.FC<
           style={{
             flex: 1,
             height: "100%",
-            border: "1px solid #666",
-            backgroundColor: showAsReadOnly ? "#f9f9f9" : "white",
-            padding: "6px",
-            fontFamily: "monospace",
-            fontSize: "14px",
+            border: "2px solid #e2e8f0",
+            backgroundColor: showAsReadOnly ? "#f7fafc" : "white",
+            padding: "8px 12px",
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: "15px",
             display: "flex",
             alignItems: "center",
             overflow: "hidden",
             cursor: showAsReadOnly ? "default" : "default",
             userSelect: "none",
             boxSizing: "border-box",
+            borderRadius: "8px",
+            transition: "all 0.2s ease",
           }}
         >
           <FormulaDisplay
@@ -661,11 +667,12 @@ const FormulaBar: React.FC<
 
         <div
           style={{
-            backgroundColor: "#f5f5f5",
-            color: "black",
-            fontFamily: "monospace",
-            fontSize: "14px",
-            padding: "6px 8px",
+            backgroundColor: "transparent",
+            color: "#2d3748",
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: "15px",
+            fontWeight: "600",
+            padding: "8px 10px",
             display: "flex",
             alignItems: "center",
             userSelect: "none",
@@ -680,23 +687,27 @@ const FormulaBar: React.FC<
           onClick={showAsReadOnly && onTryAgain ? onTryAgain : handleTest}
           disabled={!showAsReadOnly && !validation.isValid}
           style={{
-            marginLeft: "8px",
-            padding: "6px 12px",
+            marginLeft: "4px",
+            padding: "8px 16px",
             backgroundColor: showAsReadOnly
               ? "#dc3545"
               : validation.isValid
-              ? "#4CAF50"
-              : "#ccc",
-            color: showAsReadOnly || validation.isValid ? "white" : "#999",
-            border: "1px solid #666",
-            borderRadius: "3px",
+              ? "#10b981"
+              : "#cbd5e0",
+            color: showAsReadOnly || validation.isValid ? "white" : "#718096",
+            border: "none",
+            borderRadius: "8px",
             cursor:
               showAsReadOnly || validation.isValid ? "pointer" : "not-allowed",
-            fontFamily: "monospace",
-            fontSize: "12px",
-            fontWeight: "bold",
+            fontFamily: "'Inter', sans-serif",
+            fontSize: "13px",
+            fontWeight: "600",
             height: "100%",
             boxSizing: "border-box",
+            boxShadow: showAsReadOnly || validation.isValid
+              ? "0 2px 8px rgba(0, 0, 0, 0.15)"
+              : "none",
+            transition: "all 0.2s ease",
           }}
         >
           {showAsReadOnly ? "TRY AGAIN" : "TEST"}

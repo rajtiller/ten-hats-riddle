@@ -835,14 +835,17 @@ const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
       style={{
         width,
         height: height + (errorMessage ? 30 : 0),
-        border: "2px solid #333",
-        padding: "8px", // Increased padding for better spacing
-        backgroundColor: "#f5f5f5",
+        border: "none",
+        padding: "12px",
+        background: "rgba(255, 255, 255, 0.95)",
+        backdropFilter: "blur(10px)",
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
-        gap: "8px", // Increased gap between elements
+        gap: "10px",
         position: "relative",
+        borderRadius: "16px",
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)",
       }}
     >
       <style>

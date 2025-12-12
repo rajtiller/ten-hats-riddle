@@ -28,31 +28,34 @@ const ButtonGrid: React.FC<ButtonGridProps> = ({
     const isEnabled = isButtonEnabled(buttonValue);
 
     return {
-      padding: "6px 4px",
-      border: "1px solid #666",
-      backgroundColor: isEnabled ? "#e0e0e0" : "#ccc",
+      padding: "8px 6px",
+      border: "none",
+      backgroundColor: isEnabled ? "#f8fafc" : "#e2e8f0",
       cursor: isEnabled ? "pointer" : "not-allowed",
-      fontSize: "12px",
-      fontFamily: "monospace",
-      borderRadius: "3px",
-      minHeight: "28px",
+      fontSize: "13px",
+      fontFamily: "'JetBrains Mono', monospace",
+      fontWeight: "600",
+      borderRadius: "6px",
+      minHeight: "32px",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      color: isEnabled ? "black" : "#999",
-      opacity: isEnabled ? 1 : 0.5,
+      color: isEnabled ? "#2d3748" : "#a0aec0",
+      opacity: isEnabled ? 1 : 0.6,
+      boxShadow: isEnabled ? "0 1px 3px rgba(0, 0, 0, 0.1)" : "none",
+      transition: "all 0.15s ease",
     };
   };
 
   return (
-    <div style={{ display: "grid", gap: "2px", width: "100%", height: "100%" }}>
+    <div style={{ display: "grid", gap: "6px", width: "100%", height: "100%" }}>
       {buttons.map((row, rowIndex) => (
         <div
           key={rowIndex}
           style={{
             display: "grid",
             gridTemplateColumns: `repeat(${row.length}, 1fr)`,
-            gap: "2px",
+            gap: "6px",
             width: "100%",
           }}
         >
@@ -67,12 +70,16 @@ const ButtonGrid: React.FC<ButtonGridProps> = ({
                 style={getButtonStyle(buttonValue)}
                 onMouseOver={(e) => {
                   if (isEnabled) {
-                    e.currentTarget.style.backgroundColor = "#d0d0d0";
+                    e.currentTarget.style.backgroundColor = "#e2e8f0";
+                    e.currentTarget.style.transform = "translateY(-1px)";
+                    e.currentTarget.style.boxShadow = "0 2px 8px rgba(0, 0, 0, 0.15)";
                   }
                 }}
                 onMouseOut={(e) => {
                   if (isEnabled) {
-                    e.currentTarget.style.backgroundColor = "#e0e0e0";
+                    e.currentTarget.style.backgroundColor = "#f8fafc";
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow = "0 1px 3px rgba(0, 0, 0, 0.1)";
                   }
                 }}
               >

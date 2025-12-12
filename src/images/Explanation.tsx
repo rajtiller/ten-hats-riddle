@@ -54,29 +54,31 @@ const Explanation: React.FC<ExplanationProps> = ({
         height: "100vh",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "#f8f9fa",
-        padding: "20px",
+        background: "transparent",
+        padding: "24px",
         boxSizing: "border-box",
         overflow: "auto",
       }}
     >
       <div
         style={{
-          maxWidth: "800px",
+          maxWidth: "850px",
           margin: "0 auto",
-          backgroundColor: "white",
-          padding: "30px",
-          borderRadius: "8px",
-          boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+          background: "rgba(255, 255, 255, 0.95)",
+          backdropFilter: "blur(10px)",
+          padding: "40px",
+          borderRadius: "20px",
+          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12)",
         }}
       >
         <h1
           style={{
-            fontFamily: "monospace",
-            fontSize: "32px",
-            color: "#333",
+            fontFamily: "'Inter', sans-serif",
+            fontSize: "36px",
+            fontWeight: "700",
+            color: "#1a202c",
             textAlign: "center",
-            marginBottom: "20px",
+            marginBottom: "24px",
           }}
         >
           The Ten Hats Riddle

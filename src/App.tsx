@@ -48,7 +48,7 @@ function App() {
   return (
     <div
       style={{
-        backgroundColor: "white",
+        background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
         height: "100vh",
         width: "100vw",
         margin: 0,
@@ -67,16 +67,19 @@ function App() {
           value={selectedPage}
           onChange={handlePageChange}
           style={{
-            padding: "8px 8px",
+            padding: "10px 16px",
             fontSize: "14px",
-            borderRadius: "0px",
-            border: "1px solid red",
-            backgroundColor: "red",
+            borderRadius: "8px",
+            border: "2px solid #dc3545",
+            backgroundColor: "#dc3545",
             color: "white",
             textAlign: "center",
             textAlignLast: "center",
-            width: getDropdownWidth(), // Dynamic width
-            minWidth: "80px", // Ensure minimum width
+            width: getDropdownWidth(),
+            minWidth: "80px",
+            fontWeight: "600",
+            cursor: "pointer",
+            boxShadow: "0 2px 8px rgba(220, 53, 69, 0.25)",
           }}
         >
           <option value={0} style={{ textAlign: "center" }}>
