@@ -2,6 +2,11 @@ import React, { type JSX, useState } from "react";
 import { Person } from "./Person";
 import { type PersonHighlight } from "./FormulaBar/FormulaDisplay";
 
+/** Person art + ring radius on the ten-hat page (was 1.13). */
+export const TEN_HATS_GROUP_SCALE = 1.17;
+/** ViewBox margin around the ring in SVG units; lower = larger on screen when scaled to fit. */
+const TEN_HATS_VIEW_MARGIN = 62;
+
 interface GroupProps {
   numberOfPeople?: number;
   people?: Person[];
@@ -113,7 +118,8 @@ export class Group {
     hatColorNumbers?: number[]
   ): Person[] {
     const people: Person[] = [];
-    const sizeScale = this.numberOfPeople === 2 ? 1.5 : 1.13; // Larger for 2 people
+    const sizeScale =
+      this.numberOfPeople === 2 ? 1.5 : TEN_HATS_GROUP_SCALE;
 
     if (this.numberOfPeople === 2) {
       // Special layout for 2 people - vertical arrangement with more space
@@ -269,7 +275,6 @@ const GroupComponent: React.FC<GroupProps> = (props = {}) => {
   const [activeTooltip, setActiveTooltip] = useState<TooltipData | null>(null);
 
   const group = new Group(props);
-  const padding = 80;
 
   let canvasHeight, canvasWidth, viewBox: string;
   let viewBoxCssAspect: string | undefined;
@@ -280,10 +285,10 @@ const GroupComponent: React.FC<GroupProps> = (props = {}) => {
     canvasHeight = 500;
     viewBox = `-200 -200 400 400`;
   } else {
-    // Original canvas size for 10+ people
-    const scaledRadius = group.radius * 20;
-    canvasHeight = (scaledRadius + padding) * 2 + 40;
-    canvasWidth = (scaledRadius + padding) * 2 + 140;
+    // Match viewBox to the same layout radius used for people (radius × 20 × scale)
+    const layoutR = group.radius * 20 * TEN_HATS_GROUP_SCALE;
+    canvasHeight = (layoutR + TEN_HATS_VIEW_MARGIN) * 2 - 50;
+    canvasWidth = (layoutR + TEN_HATS_VIEW_MARGIN) * 2 + 140;
     const extraTopSpace = 60;
     const shiftUp = -4;
     const viewPad = 44;
