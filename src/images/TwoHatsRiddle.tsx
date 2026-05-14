@@ -18,6 +18,9 @@ interface TwoHatsRiddleProps {
   onNavigateToPage?: (pageIndex: number) => void;
 }
 
+/** Raise diagram + formula bar together so the bar clears the bottom of the viewport. */
+const TWO_HATS_VERTICAL_LIFT_PX = 52;
+
 const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
   const [appState, setAppState] = useState<AppState>("input");
   const [testResult, setTestResult] = useState<TestResult | null>(null);
@@ -725,7 +728,8 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
           alignItems: "center",
           justifyContent: "center",
           flex: 1,
-          paddingBottom: "80px", // Reduced from 140px to give more height to the people area
+          paddingBottom: "80px",
+          transform: `translateY(-${TWO_HATS_VERTICAL_LIFT_PX}px)`,
         }}
       >
         <Group
@@ -747,11 +751,11 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
         />
       </div>
 
-      {/* Bottom section - positioned absolutely at bottom */}
+      {/* Bottom section — lifted with the diagram by TWO_HATS_VERTICAL_LIFT_PX */}
       <div
         style={{
           position: "absolute",
-          bottom: "0",
+          bottom: TWO_HATS_VERTICAL_LIFT_PX,
           left: "0",
           right: "0",
           display: "flex",
