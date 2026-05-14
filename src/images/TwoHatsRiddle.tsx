@@ -751,35 +751,48 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
         />
       </div>
 
-      {/* Bottom section — lifted with the diagram by TWO_HATS_VERTICAL_LIFT_PX */}
+      {/* Gray strip fills to the bottom of the screen; inner padding keeps the card lifted */}
       <div
         style={{
           position: "absolute",
-          bottom: TWO_HATS_VERTICAL_LIFT_PX,
-          left: "0",
-          right: "0",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          backgroundColor: "#f0f0f0",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          backgroundColor: "#f0f0f0",
+          paddingBottom: "max(0px, env(safe-area-inset-bottom, 0px))",
+          boxSizing: "border-box",
         }}
       >
-        {appState === "input" ||
-        (appState === "results" && !testResult?.isCorrect) ? (
-          <TwoHatsFormulaBar
-            width={600}
-            height={120}
-            onTestResult={handleTestResult}
-            onPersonHighlight={
-              appState === "input" ? setPersonHighlight : undefined
-            }
-            initialFormula={appState === "results" ? currentFormula : undefined}
-            showAsReadOnly={appState === "results"}
-            onTryAgain={appState === "results" ? handleGuessAgain : undefined}
-          />
-        ) : (
-          <SuccessMessage />
-        )}
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            paddingTop: 8,
+            paddingBottom: TWO_HATS_VERTICAL_LIFT_PX,
+            boxSizing: "border-box",
+          }}
+        >
+          {appState === "input" ||
+          (appState === "results" && !testResult?.isCorrect) ? (
+            <TwoHatsFormulaBar
+              width={600}
+              height={120}
+              onTestResult={handleTestResult}
+              onPersonHighlight={
+                appState === "input" ? setPersonHighlight : undefined
+              }
+              initialFormula={appState === "results" ? currentFormula : undefined}
+              showAsReadOnly={appState === "results"}
+              onTryAgain={appState === "results" ? handleGuessAgain : undefined}
+            />
+          ) : (
+            <SuccessMessage />
+          )}
+        </div>
       </div>
     </div>
   );

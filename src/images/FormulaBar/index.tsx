@@ -10,6 +10,7 @@ import {
 import { testFormula } from "./testFunction";
 import FormulaDisplay, { type PersonHighlight } from "./FormulaDisplay";
 import ButtonGrid from "./ButtonGrid";
+import { FormulaErrorBanner } from "./FormulaErrorBanner";
 
 const FormulaBar: React.FC<
   FormulaBarProps & {
@@ -587,31 +588,7 @@ const FormulaBar: React.FC<
         {`@keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }`}
       </style>
 
-      {/* Inline in the panel so it never overlaps the people diagram */}
-      {showErrorBanner && (
-        <div
-          style={{
-            flex: "0 0 auto",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: "#fee",
-            color: "#c33",
-            border: "2px solid #faa",
-            borderRadius: "8px",
-            padding: "6px 10px",
-            fontSize: "13px",
-            fontFamily: "'Inter', sans-serif",
-            fontWeight: "600",
-            textAlign: "center",
-            boxSizing: "border-box",
-            lineHeight: 1.35,
-            wordBreak: "break-word",
-          }}
-        >
-          ⚠️ {bannerText}
-        </div>
-      )}
+      {showErrorBanner && <FormulaErrorBanner message={bannerText} />}
 
       {/* Formula input with labels */}
       <div

@@ -5,6 +5,7 @@ import TwoHatsFormulaDisplay, {
   type PersonHighlight,
 } from "./TwoHatsFormulaDisplay";
 import TwoHatsButtonGrid from "./TwoHatsButtonGrid";
+import { FormulaErrorBanner } from "./FormulaBar/FormulaErrorBanner";
 
 interface TwoHatsFormulaBarProps {
   width?: number;
@@ -828,13 +829,17 @@ const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
   });
 
   const validation = validateTwoHatsFormula(formula);
-  const displayError = validation.error && !errorMessage.startsWith("✅");
+  const showErrorBanner =
+    !!(validation.error || errorMessage) && !errorMessage.startsWith("✅");
+  const bannerText = validation.error || errorMessage;
 
   return (
     <div
       style={{
-        width,
-        height: height + (errorMessage ? 30 : 0),
+        width: "100%",
+        maxWidth: width,
+        minHeight: height,
+        flexShrink: 0,
         border: "none",
         padding: "12px",
         background: "rgba(255, 255, 255, 0.95)",
@@ -852,32 +857,7 @@ const TwoHatsFormulaBar: React.FC<TwoHatsFormulaBarProps> = ({
         {`@keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }`}
       </style>
 
-      {/* Error message above formula bar */}
-      {displayError && (
-        <div
-          style={{
-            position: "absolute",
-            top: "-32px", // Changed from "-35px" to be flush
-            left: "-2px", // Align with border of container below
-            right: "-2px", // Align with border of container below
-            width: "auto", // Let left/right positioning determine width
-            backgroundColor: "#ffebee",
-            color: "#d32f2f",
-            border: "2px solid #d32f2f", // Match border width of container below
-            borderRadius: "0px", // Remove border radius to be flush
-            padding: "6px 8px",
-            fontSize: "12px",
-            fontFamily: "monospace",
-            fontWeight: "bold",
-            textAlign: "center",
-            zIndex: 10,
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-            boxSizing: "border-box", // Include border in width calculation
-          }}
-        >
-          ⚠️ {validation.error}
-        </div>
-      )}
+      {showErrorBanner && <FormulaErrorBanner message={bannerText} />}
 
       {/* Formula input with labels */}
       <div
