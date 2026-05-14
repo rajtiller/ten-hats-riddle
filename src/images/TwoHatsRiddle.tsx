@@ -18,7 +18,7 @@ interface TwoHatsRiddleProps {
   onNavigateToPage?: (pageIndex: number) => void;
 }
 
-/** Raise diagram + formula bar together so the bar clears the bottom of the viewport. */
+/** Nudge the two people up so they clear the formula bar (formula bar sits flush with the bottom). */
 const TWO_HATS_VERTICAL_LIFT_PX = 52;
 
 const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
@@ -751,7 +751,7 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
         />
       </div>
 
-      {/* Gray strip fills to the bottom of the screen; inner padding keeps the card lifted */}
+      {/* Gray strip to screen bottom; formula card flush with bottom (safe area on outer wrapper) */}
       <div
         style={{
           position: "absolute",
@@ -772,7 +772,7 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
             display: "flex",
             justifyContent: "center",
             paddingTop: 8,
-            paddingBottom: TWO_HATS_VERTICAL_LIFT_PX,
+            paddingBottom: 0,
             boxSizing: "border-box",
           }}
         >
