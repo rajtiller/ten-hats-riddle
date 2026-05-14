@@ -446,7 +446,7 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
       {/* Hat Legend */}
       <HatLegend />
 
-      {/* Main: flex consumes space *above* footer (footer is not absolute, so no overlap) */}
+      {/* Main: reserved height above footer; diagram scales inside (no clipping) */}
       <div
         style={{
           display: "flex",
@@ -463,13 +463,13 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
       >
         <div
           style={{
-            flex: "0 1 auto",
+            flex: "1 1 0",
+            width: "100%",
+            height: "100%",
             minHeight: 0,
-            maxHeight: "100%",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            overflow: "hidden",
           }}
         >
           <Group
@@ -491,7 +491,7 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
         </div>
       </div>
 
-      {/* Footer in document flow so it always reserves space and nothing draws underneath */}
+      {/* Footer: transparent — formula card supplies its own background */}
       <div
         style={{
           flexShrink: 0,
@@ -500,9 +500,8 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
           alignItems: "center",
           justifyContent: "center",
           width: "100%",
-          backgroundColor: "#f0f0f0",
-          paddingBottom: "max(8px, env(safe-area-inset-bottom, 0px))",
-          paddingTop: "8px",
+          backgroundColor: "transparent",
+          padding: "0 8px max(4px, env(safe-area-inset-bottom, 0px))",
           boxSizing: "border-box",
         }}
       >

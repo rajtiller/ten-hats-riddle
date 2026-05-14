@@ -271,7 +271,8 @@ const GroupComponent: React.FC<GroupProps> = (props = {}) => {
   const group = new Group(props);
   const padding = 80;
 
-  let canvasHeight, canvasWidth, viewBox;
+  let canvasHeight, canvasWidth, viewBox: string;
+  let viewBoxCssAspect: string | undefined;
 
   if (group.numberOfPeople === 2) {
     // Canvas for 2 people - vertical arrangement
@@ -285,80 +286,121 @@ const GroupComponent: React.FC<GroupProps> = (props = {}) => {
     canvasWidth = (scaledRadius + padding) * 2 + 140;
     const extraTopSpace = 60;
     const shiftUp = -4;
+    const viewPad = 44;
+    const vbH = canvasHeight + extraTopSpace + viewPad;
+    viewBoxCssAspect = `${canvasHeight} / ${vbH}`;
     viewBox = `-${canvasHeight / 2} -${
-      canvasHeight / 2 + extraTopSpace + shiftUp
-    } ${canvasHeight} ${canvasHeight + extraTopSpace}`;
+      canvasHeight / 2 + extraTopSpace + shiftUp + viewPad * 0.5
+    } ${canvasHeight} ${vbH}`;
+  }
+
+  const svgBody = (
+    <>
+      {group.render()}
+
+      {group.people.map((person, index) => {
+        if (person.guess === undefined || person.guess === -1) return null;
+
+        // For two hats riddle, position guess boxes above the heads
+        let guessX, guessY;
+        if (group.numberOfPeople === 2) {
+          guessX = person.x; // Center above head
+          guessY = person.y - 80; // Position above head
+        } else {
+          guessX = person.x;
+          guessY = person.y - 63; // Original position for 10 hat version
+        }
+
+        const guessColor = person.getGuessColor(person.guess);
+        const textColor = person.getTextColor(guessColor);
+
+        return (
+          <g key={`top-guess-${index}`}>
+            <circle
+              cx={guessX}
+              cy={guessY - 6}
+              r="14"
+              fill={guessColor}
+              stroke="#333"
+              strokeWidth="2.1"
+              opacity="0.9"
+              onMouseEnter={() =>
+                setActiveTooltip({
+                  x: 0,
+                  y: 0,
+                  guess: person.guess!,
+                  guessColor,
+                  textColor,
+                  personNumber: person.personNumber,
+                  formula: person.formula,
+                  hatColors: person.hatColors,
+                  show: true,
+                })
+              }
+              onMouseLeave={() => setActiveTooltip(null)}
+              style={{ cursor: person.formula ? "pointer" : "default" }}
+            />
+            <text
+              x={guessX}
+              y={guessY - 2}
+              textAnchor="middle"
+              fontSize="17"
+              fontFamily="monospace"
+              fontWeight="bold"
+              fill={textColor}
+              style={{ pointerEvents: "none" }}
+            >
+              {person.guess}
+            </text>
+          </g>
+        );
+      })}
+
+      {activeTooltip && (
+        <TooltipComponent
+          tooltipData={activeTooltip}
+          onClose={() => setActiveTooltip(null)}
+        />
+      )}
+    </>
+  );
+
+  if (group.numberOfPeople === 2) {
+    return (
+      <div style={{ position: "relative" }}>
+        <svg width={canvasWidth} height={canvasHeight} viewBox={viewBox}>
+          {svgBody}
+        </svg>
+      </div>
+    );
   }
 
   return (
-    <div style={{ position: "relative" }}>
-      <svg width={canvasWidth} height={canvasHeight} viewBox={viewBox}>
-        {group.render()}
-
-        {group.people.map((person, index) => {
-          if (person.guess === undefined || person.guess === -1) return null;
-
-          // For two hats riddle, position guess boxes above the heads
-          let guessX, guessY;
-          if (group.numberOfPeople === 2) {
-            guessX = person.x; // Center above head
-            guessY = person.y - 80; // Position above head
-          } else {
-            guessX = person.x;
-            guessY = person.y - 63; // Original position for 10 hat version
-          }
-
-          const guessColor = person.getGuessColor(person.guess);
-          const textColor = person.getTextColor(guessColor);
-
-          return (
-            <g key={`top-guess-${index}`}>
-              <circle
-                cx={guessX}
-                cy={guessY - 6}
-                r="14"
-                fill={guessColor}
-                stroke="#333"
-                strokeWidth="2.1"
-                opacity="0.9"
-                onMouseEnter={() =>
-                  setActiveTooltip({
-                    x: 0,
-                    y: 0,
-                    guess: person.guess!,
-                    guessColor,
-                    textColor,
-                    personNumber: person.personNumber,
-                    formula: person.formula,
-                    hatColors: person.hatColors,
-                    show: true,
-                  })
-                }
-                onMouseLeave={() => setActiveTooltip(null)}
-                style={{ cursor: person.formula ? "pointer" : "default" }}
-              />
-              <text
-                x={guessX}
-                y={guessY - 2}
-                textAnchor="middle"
-                fontSize="17"
-                fontFamily="monospace"
-                fontWeight="bold"
-                fill={textColor}
-                style={{ pointerEvents: "none" }}
-              >
-                {person.guess}
-              </text>
-            </g>
-          );
-        })}
-
-        {activeTooltip && (
-          <TooltipComponent
-            tooltipData={activeTooltip}
-            onClose={() => setActiveTooltip(null)}
-          />
-        )}
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        minHeight: 0,
+        minWidth: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <svg
+        viewBox={viewBox}
+        preserveAspectRatio="xMidYMid meet"
+        style={{
+          display: "block",
+          aspectRatio: viewBoxCssAspect,
+          maxWidth: "100%",
+          maxHeight: "100%",
+          width: "auto",
+          height: "auto",
+        }}
+      >
+        {svgBody}
       </svg>
     </div>
   );
