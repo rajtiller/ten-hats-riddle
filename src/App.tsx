@@ -31,20 +31,6 @@ function App() {
     }
   }, [shouldAutoScroll, selectedPage]);
 
-  // Get dropdown width based on current page
-  const getDropdownWidth = () => {
-    switch (selectedPage) {
-      case 0:
-        return "140px"; // Ten Hats Riddle - medium width
-      case 1:
-        return "140px"; // Two Hats Riddle - same width
-      case 2:
-        return "80px"; // Solution - shorter
-      default:
-        return "140px";
-    }
-  };
-
   return (
     <div
       style={{
@@ -61,36 +47,23 @@ function App() {
     >
       {/* Dropdown in top right */}
       <div
-        style={{ position: "absolute", top: "20px", right: "30px", zIndex: 20 }}
+        style={{
+          position: "absolute",
+          top: "20px",
+          right: "30px",
+          zIndex: 20,
+          display: "flex",
+          justifyContent: "flex-end",
+        }}
       >
         <select
+          className="app-page-nav-select"
           value={selectedPage}
           onChange={handlePageChange}
-          style={{
-            padding: "10px 16px",
-            fontSize: "14px",
-            borderRadius: "8px",
-            border: "2px solid #dc3545",
-            backgroundColor: "#dc3545",
-            color: "white",
-            textAlign: "center",
-            textAlignLast: "center",
-            width: getDropdownWidth(),
-            minWidth: "80px",
-            fontWeight: "600",
-            cursor: "pointer",
-            boxShadow: "0 2px 8px rgba(220, 53, 69, 0.25)",
-          }}
         >
-          <option value={0} style={{ textAlign: "center" }}>
-            Ten Hats Riddle
-          </option>
-          <option value={1} style={{ textAlign: "center" }}>
-            Two Hats Riddle
-          </option>
-          <option value={2} style={{ textAlign: "center" }}>
-            Setup
-          </option>
+          <option value={0}>Ten Hats Riddle</option>
+          <option value={1}>Two Hats Riddle</option>
+          <option value={2}>Setup</option>
         </select>
       </div>
 
