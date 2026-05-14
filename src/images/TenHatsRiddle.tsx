@@ -172,7 +172,7 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
     <div
       style={{
         width: 600,
-        height: 120,
+        maxWidth: "min(600px, 100vw - 24px)",
         border: "none",
         padding: "12px",
         background: "rgba(16, 185, 129, 0.15)",
@@ -446,54 +446,71 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
       {/* Hat Legend */}
       <HatLegend />
 
-      {/* Main content area with Group - takes up remaining space */}
+      {/* Main: flex consumes space *above* footer (footer is not absolute, so no overlap) */}
       <div
         style={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          flex: 1,
-          paddingBottom: "140px", // Always same padding since formula bar area is always present
+          flex: "1 1 0",
+          minHeight: 0,
+          overflow: "hidden",
+          padding: "0 8px",
+          width: "100%",
+          boxSizing: "border-box",
         }}
       >
-        <Group
-          numberOfPeople={10}
-          radius={10}
-          hatColors={getHatColorsForState()}
-          showPersonNumbers={appState === "results"}
-          currentPersonIndex={currentPersonIndex}
-          personHighlight={appState === "input" ? personHighlight : null}
-          showIndexLabels={appState === "input"}
-          personGuesses={
-            appState === "results" ? testResult?.personGuesses : undefined
-          }
-          formula={appState === "results" ? currentFormula : undefined}
-          hatColorNumbers={
-            appState === "results" ? counterExampleNumbers : undefined
-          }
-        />
+        <div
+          style={{
+            flex: "0 1 auto",
+            minHeight: 0,
+            maxHeight: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            overflow: "hidden",
+          }}
+        >
+          <Group
+            numberOfPeople={10}
+            radius={10}
+            hatColors={getHatColorsForState()}
+            showPersonNumbers={appState === "results"}
+            currentPersonIndex={currentPersonIndex}
+            personHighlight={appState === "input" ? personHighlight : null}
+            showIndexLabels={appState === "input"}
+            personGuesses={
+              appState === "results" ? testResult?.personGuesses : undefined
+            }
+            formula={appState === "results" ? currentFormula : undefined}
+            hatColorNumbers={
+              appState === "results" ? counterExampleNumbers : undefined
+            }
+          />
+        </div>
       </div>
 
-      {/* Bottom section - positioned absolutely at bottom - ALWAYS PRESENT */}
+      {/* Footer in document flow so it always reserves space and nothing draws underneath */}
       <div
         style={{
-          position: "absolute",
-          bottom: "0",
-          left: "0",
-          right: "0",
+          flexShrink: 0,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
           backgroundColor: "#f0f0f0",
+          paddingBottom: "max(8px, env(safe-area-inset-bottom, 0px))",
+          paddingTop: "8px",
+          boxSizing: "border-box",
         }}
       >
-        {/* Formula bar area - always present but content changes */}
         {appState === "input" ||
         (appState === "results" && !testResult?.isCorrect) ? (
           <FormulaBar
             width={600}
-            height={120}
+            height={160}
             onTestResult={handleTestResult}
             onPersonHighlight={
               appState === "input" ? setPersonHighlight : undefined
@@ -503,7 +520,6 @@ const TenHatsRiddle: React.FC<TenHatsRiddleProps> = ({ onShowExplanation }) => {
             onTryAgain={appState === "results" ? handleGuessAgain : undefined}
           />
         ) : (
-          // Success message in same dimensions as FormulaBar
           <SuccessMessage />
         )}
       </div>

@@ -559,13 +559,17 @@ const FormulaBar: React.FC<
   });
 
   const validation = validateFormula(formula);
-  const displayError = validation.error && !errorMessage.startsWith("✅");
+  const showErrorBanner =
+    !!(validation.error || errorMessage) && !errorMessage.startsWith("✅");
+  const bannerText = validation.error || errorMessage;
 
   return (
     <div
       style={{
-        width,
-        height: height + (errorMessage ? 30 : 0),
+        width: "100%",
+        maxWidth: width,
+        minHeight: height,
+        flexShrink: 0,
         border: "none",
         padding: "12px",
         background: "rgba(255, 255, 255, 0.95)",
@@ -583,30 +587,29 @@ const FormulaBar: React.FC<
         {`@keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }`}
       </style>
 
-      {/* Error message above formula bar */}
-      {displayError && (
+      {/* Inline in the panel so it never overlaps the people diagram */}
+      {showErrorBanner && (
         <div
           style={{
-            position: "absolute",
-            top: "-36px",
-            left: "0",
-            right: "0",
-            width: "auto",
+            flex: "0 0 auto",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             backgroundColor: "#fee",
             color: "#c33",
             border: "2px solid #faa",
-            borderRadius: "12px",
-            padding: "8px 12px",
+            borderRadius: "8px",
+            padding: "6px 10px",
             fontSize: "13px",
             fontFamily: "'Inter', sans-serif",
             fontWeight: "600",
             textAlign: "center",
-            zIndex: 10,
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
             boxSizing: "border-box",
+            lineHeight: 1.35,
+            wordBreak: "break-word",
           }}
         >
-          ⚠️ {validation.error}
+          ⚠️ {bannerText}
         </div>
       )}
 
