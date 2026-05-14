@@ -411,12 +411,16 @@ const TwoHatsRiddle: React.FC<TwoHatsRiddleProps> = ({ onNavigateToPage }) => {
           fontWeight: "bold",
           color: "#333",
           textAlign: "center",
-          padding: "10px 0",
-          height: "44px",
+          paddingTop: "max(20px, env(safe-area-inset-top, 0px))",
+          paddingBottom: "12px",
+          paddingLeft: 0,
+          paddingRight: 0,
+          minHeight: "52px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           position: "relative",
+          flexShrink: 0,
         }}
       >
         {/* Question mark button on the left */}
