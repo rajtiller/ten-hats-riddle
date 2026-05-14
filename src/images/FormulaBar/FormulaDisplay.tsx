@@ -127,7 +127,7 @@ const FormulaDisplay: React.FC<FormulaDisplayProps> = ({
     if (formula.length === 0) {
       return (
         <span style={{ color: "#999", fontStyle: "italic" }}>
-          Click buttons to build your formula...
+          Build your formula here...
         </span>
       );
     }
